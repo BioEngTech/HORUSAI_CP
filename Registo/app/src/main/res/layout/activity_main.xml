@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/action_sign_in_short"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="119dp"
+                android:text="@string/action_sign_in" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="190dp"
+                android:layout_height="110dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="69dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/serious_panda" />
+
+            <EditText
+                android:id="@+id/pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="191dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="214dp"
+                android:ems="10"
+                android:hint="Username_:P"
+                android:inputType="textPersonName"
+                android:selectAllOnFocus="false"
+                android:singleLine="false" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
