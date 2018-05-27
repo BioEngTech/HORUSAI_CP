@@ -3,7 +3,6 @@ package com.example.daniel.seriousapp.JMS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jms.Connection;
 import javax.jms.JMSException;
 import android.app.Activity;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.example.daniel.seriousapp.R;
 import com.example.daniel.seriousapp.utils.ILogger;
 import com.example.daniel.seriousapp.utils.JMSWrapper;
-import com.kaazing.gateway.jms.client.JmsConnectionFactory;
 
 public class ActivityTest extends FragmentActivity {
 
