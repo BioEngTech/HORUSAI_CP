@@ -48,4 +48,20 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="email_id">Email ID</string>
 
+    <string name="send_label">Send</string>
+
+
+    <!-- CORE STUFF -->
+    <string name="URL_ADDRESS" translatable="false">wss://demos.kaazing.com/jms</string>
+    <string name="TOPIC_NAME" translatable="false">/topic/destination</string>
+    <string name="TOPIC_PREFIX" translatable="false">/topic/</string>
+    <string name="QUEUE_PREFIX" translatable="false">/queue/</string>
+
+    <!-- Labels -->
+    <string name="connected_state">Connected</string>
+    <string name="disconnected_state">Disconnected</string>
+    <string name="connecting">Connecting</string>
+    <string name="disconnecting">Disconnecting</string>
+    <string name="subscribe">Subscribe</string>
+
 </resources>

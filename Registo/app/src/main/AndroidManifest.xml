@@ -27,7 +27,8 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".ForgetandChangePasswordActivity" />
-        <activity android:name=".RegisterActivity">
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".JMS.ActivityTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
