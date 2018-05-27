@@ -110,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Email already taken sucker", Toast.LENGTH_SHORT).show();
                 }
             }
-        })
+        });
     }
 
 
