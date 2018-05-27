@@ -107,7 +107,7 @@ public class SigninActivity extends AppCompatActivity implements ValueEventListe
                                     }
 
                                 } else {
-                                    Intent intent = new Intent(SigninActivity.this, MenuPrincipal.class);
+                                    Intent intent = new Intent(SigninActivity.this, MapsActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }

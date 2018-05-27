@@ -50,5 +50,6 @@
     <string name="call_daniel">call Daniel</string>
     <string name="pass">Password</string>
     <string name="sign_in">Sign in</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

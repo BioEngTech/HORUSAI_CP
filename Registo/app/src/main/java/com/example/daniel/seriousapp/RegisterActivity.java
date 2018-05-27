@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Intent intent = new Intent(RegisterActivity.this, MenuPrincipal.class);
+                Intent intent = new Intent(RegisterActivity.this, MapsActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                         newPost.put("real_job"," ");
 
                         database.setValue(newPost);
-                        Intent intent = new Intent(RegisterActivity.this, MenuPrincipal.class);
+                        Intent intent = new Intent(RegisterActivity.this, MapsActivity.class);
                         startActivity(intent);
                         finish();
                     }
