@@ -143,14 +143,12 @@ public class JMSWrapper {
         });
     }
 
-    public void sendMessage(final Context context) {
+    public void sendMessage(final Context context, final String messageText) {
         handler.post(new Runnable() {
             public void run() {
                 try {
                     MessageProducer producer = session.createProducer(getDestination(context, session));
-                    Message message;
-
-                    message = session.createTextMessage("Madrid vs Liverpool");
+                    Message message = session.createTextMessage(messageText);
 
                     producer.send(message);
                     producer.close();

@@ -26,11 +26,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SigninActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".phone_call.phone_call"></activity>
         <activity
@@ -39,7 +34,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ForgetandChangePasswordActivity" />
         <activity android:name=".RegisterActivity"/>
-        <activity android:name=".JMS.ActivityTest"/>
+        <activity android:name=".JMS.ActivityTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
