@@ -8,5 +8,5 @@ import android.location.Location;
  */
 
 public interface ILocationMessage {
-    void sendLocation(Location location);
+    void sendJMSObject(Location location);
 }

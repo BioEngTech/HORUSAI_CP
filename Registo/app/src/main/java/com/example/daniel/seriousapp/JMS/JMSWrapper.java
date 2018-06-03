@@ -1,25 +1,38 @@
-package com.example.daniel.seriousapp.utils;
+package com.example.daniel.seriousapp.JMS;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.daniel.seriousapp.JMS.ActivityTest;
 import com.example.daniel.seriousapp.R;
+import com.example.daniel.seriousapp.utils.UserType;
 import com.kaazing.gateway.jms.client.JmsConnectionFactory;
 import com.kaazing.net.auth.BasicChallengeHandler;
 import com.kaazing.net.auth.ChallengeHandler;
 import com.kaazing.net.auth.LoginHandler;
 import com.kaazing.net.ws.WebSocketFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.net.PasswordAuthentication;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
@@ -31,6 +44,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
@@ -51,23 +65,27 @@ public class JMSWrapper {
     private Activity logActivity;
     private TextView logTextView;
 
+    private UserType userType = UserType.CARE_TAKER;
+
     public JMSWrapper(Activity logActivity) {
         this.logActivity = logActivity;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public void setLogTextView(TextView logTextView) {
         this.logTextView = logTextView;
     }
 
-    public JmsConnectionFactory createConnectionFactory() throws JMSException {
+    public void createConnectionFactory() throws JMSException {
         if (connectionFactory != null) {
-            return connectionFactory;
+            return;
         }
         connectionFactory = JmsConnectionFactory.createConnectionFactory();
         WebSocketFactory webSocketFactory = connectionFactory.getWebSocketFactory();
         webSocketFactory.setDefaultChallengeHandler(createChallengehandler());
-
-        return connectionFactory;
     }
 
     private ChallengeHandler createChallengehandler() {
@@ -83,18 +101,23 @@ public class JMSWrapper {
                 .setLoginHandler(loginHandler);
     }
 
-    private static Destination getDestination(Context context, Session session) throws JMSException {
-        String destinationName = context.getResources().getString(R.string.TOPIC_NAME);
-        Destination destination;
+    private static Destination getCareProviderDestination(Context context, Session session) throws JMSException {
+        return getDestination(context, context.getResources().getString(R.string.TOPIC_CARE_PROVIDER), session);
+    }
+
+    private static Destination getCareTakerDestination(Context context, Session session) throws JMSException {
+        return getDestination(context, context.getResources().getString(R.string.TOPIC_CARE_TAKER), session);
+    }
+
+    private static Destination getDestination(Context context, String destinationName, Session session) throws JMSException {
         if (destinationName.startsWith(context.getResources().getString(R.string.TOPIC_PREFIX))) {
-            destination = session.createTopic(destinationName);
+            return session.createTopic(destinationName);
         } else if (destinationName.startsWith(context.getResources().getString(R.string.QUEUE_PREFIX))) {
-            destination = session.createQueue(destinationName);
+            return session.createQueue(destinationName);
         } else {
             Toast.makeText(context, "Invalid destination name: \" + destinationName+\". Destination should start from '/topic/' or '/queue/'", Toast.LENGTH_SHORT).show();
             return null;
         }
-        return destination;
     }
 
     public void doJMSMagic(final Context context) {
@@ -110,8 +133,6 @@ public class JMSWrapper {
                     session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
                     Toast.makeText(context, context.getResources().getString(R.string.connected_state), Toast.LENGTH_SHORT).show();
-                    //TODO: Shady stuff here!
-//                    ((Activity) context).getWindow().findViewById(R.id.send_btn).setEnabled(true);
 
                     connection.setExceptionListener(new ExceptionListener() {
                         @Override
@@ -120,18 +141,28 @@ public class JMSWrapper {
                         }
                     });
 
-                    Destination destination = getDestination(context, session);
-                    if (destination == null) {
-                        return;
+                    Destination destination;
+                    ArrayDeque<MessageConsumer> consumersToDestination = new ArrayDeque<>();
+                    String topicName;
+                    switch (userType) {
+                        case CARE_TAKER:
+                            destination = getCareTakerDestination(context, session);
+                            topicName = context.getResources().getString(R.string.TOPIC_CARE_PROVIDER);
+                            break;
+                        case CARE_PROVIDER:
+                            destination = getCareProviderDestination(context, session);
+                            topicName = context.getResources().getString(R.string.TOPIC_CARE_TAKER);
+                            break;
+                        default:
+                            return;
                     }
 
-                    MessageConsumer consumer = session.createConsumer(destination);
-                    ArrayDeque<MessageConsumer> consumersToDestination = consumers.get(context.getResources().getString(R.string.TOPIC_NAME));
-
+                    consumersToDestination = consumers.get(topicName);
                     if (consumersToDestination == null) {
                         consumersToDestination = new ArrayDeque<>();
-                        consumers.put(context.getResources().getString(R.string.TOPIC_NAME), consumersToDestination);
+                        consumers.put(topicName, consumersToDestination);
                     }
+                    MessageConsumer consumer = session.createConsumer(destination);
                     consumersToDestination.add(consumer);
                     consumer.setMessageListener(new DestinationMessageListener());
 
@@ -143,12 +174,13 @@ public class JMSWrapper {
         });
     }
 
-    public void sendMessage(final Context context, final String messageText) {
+    public void sendMessage(final Context context, final JMSObject messageObject) {
         handler.post(new Runnable() {
             public void run() {
                 try {
-                    MessageProducer producer = session.createProducer(getDestination(context, session));
-                    Message message = session.createTextMessage(messageText);
+                    ObjectMessage message = session.createObjectMessage(messageObject);
+                    MessageProducer producer = session.createProducer(userType == UserType.CARE_TAKER ?
+                            getCareProviderDestination(context, session) : getCareTakerDestination(context, session));
 
                     producer.send(message);
                     producer.close();
@@ -171,11 +203,9 @@ public class JMSWrapper {
                 try {
                     connection.close();
                     sb.append(context.getResources().getString(R.string.disconnected_state)).append("\n");
-                    //TODO: Shady stuff here!
-//                    ((Activity) context).getWindow().findViewById(R.id.send_btn).setEnabled(false);
                 } catch (JMSException e) {
                     e.printStackTrace();
-                    sb.append("EXCEPTION: " + e.getMessage());
+                    sb.append("EXCEPTION: ").append(e.getMessage());
                 } finally {
                     connection = null;
                 }
@@ -190,6 +220,21 @@ public class JMSWrapper {
         public void onMessage(Message message) {
             sb.setLength(0);
             try {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    CharSequence name = "name";
+                    String description = "description";
+                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                    NotificationChannel channel = new NotificationChannel("001", name, importance);
+                    channel.setDescription(description);
+                    NotificationManager notificationManager = logActivity.getSystemService(NotificationManager.class);
+                    notificationManager.createNotificationChannel(channel);
+                }
+
+                Intent intent = new Intent(logActivity, JMSWrapper.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(logActivity, 0, intent, 0);
+
                 if (message instanceof TextMessage) {
                     sb.append("RECEIVED TextMessage: ").append(((TextMessage) message).getText()).append("\n");
                 } else if (message instanceof BytesMessage) {
@@ -198,8 +243,33 @@ public class JMSWrapper {
                     long len = bytesMessage.getBodyLength();
                     byte b[] = new byte[(int) len];
                     bytesMessage.readBytes(b);
+                    JMSObject object = (JMSObject) new ObjectInputStream(new ByteArrayInputStream(b)).readObject();
+                    Geocoder gcd = new Geocoder(logActivity, Locale.getDefault());
+                    List<Address> addresses = gcd.getFromLocation(object.getLocation().getLatitude(), object.getLocation().getLongitude(), 1);
 
-                    sb.append("RECEIVED BytesMessage: ").append(hexDump(b)).append("\n");
+                    if (addresses.size() > 0) {
+                        sb.append("City ");
+                        sb.append(addresses.get(0).getLocality()).append("\n");
+                    }
+                    sb.append("Event Scenario: ").append(object.getEventScenario().toString()).append("\n");
+                    if (object.getPatientBackground() != null)sb.append("Patient background: ").append(object.getPatientBackground()).append("\n");
+                    if (object.getExtraNotes() != null)sb.append("Extra notes: ").append(object.getExtraNotes());
+
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(logActivity.getBaseContext(), "001")
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentTitle("Alert in" + addresses.get(0).getLocality())
+                            .setContentText("Trouble Alert")
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(sb.toString()))
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(pendingIntent);
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(logActivity);
+                    // notificationId is a unique int for each notification that you must define
+                    notificationManager.notify(1, mBuilder.build());
+
+
+
                 } else if (message instanceof MapMessage) {
                     MapMessage mapMessage = (MapMessage) message;
                     Enumeration mapNames = mapMessage.getMapNames();

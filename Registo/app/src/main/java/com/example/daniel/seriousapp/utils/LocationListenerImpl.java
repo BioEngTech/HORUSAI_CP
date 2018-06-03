@@ -5,7 +5,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 
-import com.example.daniel.seriousapp.LocationUserActivity;
+import com.example.daniel.seriousapp.JMS.LocationUserActivity;
 
 /**
  * Created by joaosousa on 29/05/18.
@@ -15,7 +15,6 @@ public class LocationListenerImpl implements LocationListener {
     /* Singleton Pattern -> only one instance of LocationListener! */
     private static LocationListenerImpl instance;
     private Context mContext;
-    private int test = 0;
     private ILocationMessage locationMessage;
 
     /* Private constructor to prevent instantiation*/
@@ -37,7 +36,7 @@ public class LocationListenerImpl implements LocationListener {
     public void onLocationChanged(Location location) {
         //Only activities that extend LocationUserActivity!
         ((LocationUserActivity) mContext).setLocation(location);
-        ((LocationUserActivity) mContext).sendLocation(location);
+        ((LocationUserActivity) mContext).sendJMSObject(location);
     }
 
     @Override

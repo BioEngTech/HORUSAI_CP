@@ -1,4 +1,4 @@
-package com.example.daniel.seriousapp;
+package com.example.daniel.seriousapp.JMS;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,8 +11,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.daniel.seriousapp.R;
+import com.example.daniel.seriousapp.utils.EventScenario;
 import com.example.daniel.seriousapp.utils.ILocationMessage;
-import com.example.daniel.seriousapp.utils.JMSWrapper;
+import com.example.daniel.seriousapp.utils.LocationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -24,6 +26,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+
+import java.util.HashMap;
 
 /**
  * Created by joaosousa on 31/05/18.
@@ -65,11 +69,6 @@ public abstract class LocationUserActivity extends AppCompatActivity
 
         //Default behaviour
         setMyResultCallback(new DefaultResultCallback());
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
     }
 
     @Override
@@ -108,16 +107,16 @@ public abstract class LocationUserActivity extends AppCompatActivity
     }
 
     @Override
-    public void sendLocation(Location location) {
-        StringBuffer stringBuffer = new StringBuffer();
-        jmsWrapper.sendMessage(getApplicationContext(),
-                stringBuffer.append("Altitude").append(location.getAltitude()).append("\n")
-                        .append("Latitude").append(location.getLatitude()).append("\n")
-                        .append("Longitude").append(location.getLongitude()).append("\n")
-                        .toString());
+    public void sendJMSObject(Location location) {
+        jmsWrapper.sendMessage(getApplicationContext(), new JMSObject(new LocationWrapper(location), EventScenario.CRASH,
+        "He is a freaking alcoholic", "ALCOHOLIC dude"));
     }
 
-    protected void connectGoogleApiClient() {
+    protected synchronized void connectGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getBaseContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
         mGoogleApiClient.connect();
     }
 
@@ -164,7 +163,7 @@ public abstract class LocationUserActivity extends AppCompatActivity
 
         @Override
         public void afterResult() {
-            //Mock method
+            //Mock method body
         }
     }
 }
