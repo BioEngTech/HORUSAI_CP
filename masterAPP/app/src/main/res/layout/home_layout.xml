@@ -40,12 +40,8 @@
         android:id="@+id/rl2"
         android:layout_width="match_parent"
         android:layout_height="282dp"
-<<<<<<< HEAD
-        android:layout_marginTop="286dp"
-=======
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
->>>>>>> ReiGOIS
         android:orientation="vertical">
 
         <Button
@@ -55,11 +51,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="123dp"
-<<<<<<< HEAD
-            android:background="@drawable/rounded_green"
-=======
             android:background="@drawable/rounded_blue"
->>>>>>> ReiGOIS
             android:text="@string/register_text"
             android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView"
             android:textColor="@color/colorwhite"

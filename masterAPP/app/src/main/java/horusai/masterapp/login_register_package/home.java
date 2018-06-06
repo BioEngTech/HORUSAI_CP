@@ -57,12 +57,7 @@ public class home extends AppCompatActivity implements View.OnClickListener{
 
             Intent signupIntent = new Intent(home.this,telephone.class );
             startActivity(signupIntent);
-<<<<<<< HEAD
-            super.finish();
-
-=======
             finish();
->>>>>>> ReiGOIS
         }
 
         else if(v.getId()==R.id.home_layout_login_btn) {
@@ -71,11 +66,7 @@ public class home extends AppCompatActivity implements View.OnClickListener{
 
             Intent loginIntent = new Intent(home.this,login.class);
             startActivity(loginIntent);
-<<<<<<< HEAD
-            super.finish();
-=======
             finish();
->>>>>>> ReiGOIS
         }
 
     }

@@ -4,11 +4,7 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimaryDark">@color/colordark</item>
-<<<<<<< HEAD
-        <item name="colorAccent">@color/colorgreen</item>
-=======
         <item name="colorAccent">@color/colorblue</item>
->>>>>>> ReiGOIS
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 

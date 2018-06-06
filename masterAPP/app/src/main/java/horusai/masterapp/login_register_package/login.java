@@ -17,15 +17,6 @@ import horusai.masterapp.R;
 
 public class login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
-<<<<<<< HEAD
-    ImageView cross_pass;
-    EditText password_text;
-    ImageView cross_user;
-    EditText username_text;
-    Button login_btn;
-    Button signup_btn;
-    Button lostpass_btn;
-=======
     private ImageView cross_pass;
     private EditText password_text;
     private ImageView cross_email;
@@ -33,7 +24,6 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
     private Button login_btn;
     private Button signup_btn;
     private Button lostpass_btn;
->>>>>>> ReiGOIS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +35,9 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
         // Create objects
 
-<<<<<<< HEAD
-        cross_user = findViewById(R.id.login_layout_close_cross_username);
-        cross_pass = findViewById(R.id.login_layout_close_cross_pass);
-        username_text = findViewById(R.id.login_layout_username);
-=======
         cross_email = findViewById(R.id.login_layout_close_cross_email);
         cross_pass = findViewById(R.id.login_layout_close_cross_pass);
         email_text = findViewById(R.id.login_layout_username);
->>>>>>> ReiGOIS
         password_text = findViewById(R.id.login_layout_password);
         login_btn = findViewById(R.id.login_layout_login_btn);
         signup_btn = findViewById(R.id.login_layout_sign_up_btn);
@@ -65,38 +49,22 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
         signup_btn.setOnClickListener(this);
         login_btn.setOnClickListener(this);
         lostpass_btn.setOnClickListener(this);
-<<<<<<< HEAD
-        cross_user.setOnClickListener(this);
-=======
         cross_email.setOnClickListener(this);
->>>>>>> ReiGOIS
         cross_pass.setOnClickListener(this);
 
         // Make layout respond to focus
 
-<<<<<<< HEAD
-        username_text.setOnFocusChangeListener(this);
-=======
         email_text.setOnFocusChangeListener(this);
->>>>>>> ReiGOIS
         password_text.setOnFocusChangeListener(this);
 
         // Make edit_texts respond to writing
 
-<<<<<<< HEAD
-        username_text.addTextChangedListener(generalTextWatcher);
-=======
         email_text.addTextChangedListener(generalTextWatcher);
->>>>>>> ReiGOIS
         password_text.addTextChangedListener(generalTextWatcher);
 
         // Hiding cross button before start typing on EditText.
 
-<<<<<<< HEAD
-        cross_user.setVisibility(View.GONE);
-=======
         cross_email.setVisibility(View.GONE);
->>>>>>> ReiGOIS
         cross_pass.setVisibility(View.GONE);
 
         // Disable login button until something is written on username/password
@@ -120,28 +88,16 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Change user_cross visibility
 
-<<<<<<< HEAD
-                if (username_text.getText().hashCode() == s.hashCode())
-                {
-                    if (username_text.getText().length()==0){
-
-                        cross_user.setVisibility(View.GONE);
-=======
                 if (email_text.getText().hashCode() == s.hashCode())
                 {
                     if (email_text.getText().length()==0){
 
                         cross_email.setVisibility(View.GONE);
->>>>>>> ReiGOIS
                     }
 
                     else{
 
-<<<<<<< HEAD
-                        cross_user.setVisibility(View.VISIBLE);
-=======
                         cross_email.setVisibility(View.VISIBLE);
->>>>>>> ReiGOIS
 
                     }
                 }
@@ -169,11 +125,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Change login btn availability
 
-<<<<<<< HEAD
-                if (username_text.getText().length()!=0 && password_text.getText().length()!=0){
-=======
                 if (email_text.getText().length()!=0 && password_text.getText().length()!=0){
->>>>>>> ReiGOIS
 
                     login_btn.setEnabled(true);
                     login_btn.setAlpha(1f);
@@ -207,33 +159,21 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
             if(v.getId()==R.id.login_layout_sign_up_btn) {
 
-<<<<<<< HEAD
-                // Launch register activity
-
-                Intent registerIntent = new Intent(login.this,telephone.class);
-                startActivity(registerIntent);
-=======
                 // Launch phone(register) activity
 
                 Intent sign_up_Intent = new Intent(login.this,telephone.class);
                 startActivity(sign_up_Intent);
                 finish();
 
->>>>>>> ReiGOIS
             }
 
             else if(v.getId()==R.id.login_layout_forgot_pass) {
 
                 // Forgot Password
 
-<<<<<<< HEAD
-                Toast.makeText(login.this,"Forgot Password missing still!", Toast.LENGTH_SHORT).show();
-
-=======
                 Intent forgotpasswordIntent = new Intent(login.this,forgotPassword.class);
                 startActivity(forgotpasswordIntent);
                 finish();
->>>>>>> ReiGOIS
             }
 
             else if(v.getId()==R.id.login_layout_login_btn) {
@@ -244,21 +184,12 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
             }
 
-<<<<<<< HEAD
-            else if(v.getId()==R.id.login_layout_close_cross_username) {
-
-                // Clear username_text and cross.
-
-                username_text.getText().clear();
-                cross_user.setVisibility(View.GONE);
-=======
             else if(v.getId()==R.id.login_layout_close_cross_email) {
 
                 // Clear email_text and cross.
 
                 email_text.getText().clear();
                 cross_email.setVisibility(View.GONE);
->>>>>>> ReiGOIS
 
             }
 

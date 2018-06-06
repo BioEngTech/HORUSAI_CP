@@ -20,11 +20,6 @@
     <string name="by_registering_you_agree_to_the_terms_and_conditions_text">By registering, you agree to the Terms and Conditions.</string>
     <string name="continue_text">Continue</string>
     <string name="send_text">Send</string>
-<<<<<<< HEAD
-    <string name="confirmation_sent_notification_text">By clicking send, a confirmation code will be sent into your phone.</string>
-    <string name="phone_text">PHONE</string>
-    <string name="insert_phone_number_text">Insert phone number</string>
-=======
     <string name="confirmation_sent_phone_notification_text">By clicking send, a confirmation code will be sent into your phone.</string>
     <string name="phone_text">PHONE</string>
     <string name="insert_phone_number_text">Insert your phone number please</string>
@@ -38,5 +33,4 @@
     <string name="confirmation_sent_e_mail_notification_text">By clicking send, a link will be sent into your e-mail to enable you to regain acess to your account.</string>
     <string name="insert_your_e_mail_text">Insert your e-mail please</string>
 
->>>>>>> ReiGOIS
 </resources>

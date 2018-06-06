@@ -5,10 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-<<<<<<< HEAD
-=======
     android:focusable="true"
->>>>>>> ReiGOIS
     android:focusableInTouchMode="true"
     android:background="@drawable/bg"
     tools:context=".login_register_package.login">
@@ -39,34 +36,19 @@
             android:background="@color/transparent"
             android:drawablePadding="2dp"
             android:layout_gravity="center_vertical"
-<<<<<<< HEAD
-            android:drawableLeft="@drawable/person_outline_white"
-            android:drawableStart="@drawable/person_outline_white"
-            android:ems="10"
-            android:hint="@string/username_hint"
-=======
             android:drawableStart="@drawable/mail_outline_white"
             android:ems="10"
             android:hint="@string/e_mail_text"
->>>>>>> ReiGOIS
             android:inputType="textVisiblePassword"
             android:textColor="@color/colordark"
             android:textColorHint="@color/colorgray"
             android:textSize="18sp" />
 
         <ImageView
-<<<<<<< HEAD
-            android:id="@+id/login_layout_close_cross_username"
-            android:layout_width="21dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="2dp"
-=======
             android:id="@+id/login_layout_close_cross_email"
             android:layout_width="21dp"
             android:layout_height="25dp"
             android:layout_marginTop="1dp"
->>>>>>> ReiGOIS
             android:layout_marginStart="2dp"
             android:contentDescription="@string/close_cross_user_id"
             android:src="@drawable/close_cross_white" />
@@ -96,10 +78,6 @@
             android:drawablePadding="2dp"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-<<<<<<< HEAD
-            android:drawableLeft="@drawable/lock_outline_white"
-=======
->>>>>>> ReiGOIS
             android:drawableStart="@drawable/lock_outline_white"
             android:ems="10"
             android:hint="@string/password_hint"
@@ -113,10 +91,6 @@
             android:layout_width="21dp"
             android:layout_height="25dp"
             android:layout_marginTop="1dp"
-<<<<<<< HEAD
-            android:layout_marginLeft="2dp"
-=======
->>>>>>> ReiGOIS
             android:layout_marginStart="2dp"
             android:contentDescription="@string/close_cross_pass_id"
             android:src="@drawable/close_cross_white" />
@@ -138,20 +112,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="143dp"
-<<<<<<< HEAD
-        android:background="@drawable/rounded_green"
-=======
         android:background="@drawable/rounded_blue"
->>>>>>> ReiGOIS
         android:text="@string/log_in_btn_text"
         android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView"
         android:textColor="@color/colorwhite"
         android:textSize="20sp"
-<<<<<<< HEAD
-        app:spinning_bar_width="4dp"
-=======
         app:spinning_bar_width="2dp"
->>>>>>> ReiGOIS
         app:spinning_bar_color="@color/colorwhite"
         app:spinning_bar_padding="6dp"
         app:initialCornerAngle="10dp">
@@ -175,10 +141,6 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-<<<<<<< HEAD
-        android:layout_alignParentLeft="true"
-=======
->>>>>>> ReiGOIS
         android:layout_marginBottom="45dp"
         android:background="@color/colorwhite" />
 
@@ -202,20 +164,11 @@
             android:id="@+id/login_layout_sign_up_btn"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
-<<<<<<< HEAD
-            android:layout_marginLeft="1dp"
-            android:layout_marginStart="1dp"
-            android:background="#003afaaa"
-            android:text="@string/sign_up_btn_text"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textColor="#FF02A27F"
-=======
             android:layout_marginStart="1dp"
             android:background="@color/transparent"
             android:text="@string/sign_up_btn_text"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@color/colorblue"
->>>>>>> ReiGOIS
             android:textStyle="bold" />
 
     </LinearLayout>
