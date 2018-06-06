@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "658128558497",
+    "firebase_url": "https://vigi-930a9.firebaseio.com",
+    "project_id": "vigi-930a9",
+    "storage_bucket": "vigi-930a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658128558497:android:dbe8c5a29e3b8be6",
+        "android_client_info": {
+          "package_name": "horusai.masterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658128558497-drce5f5sst6t0uva546ii1eq7virj5j8.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "658128558497-drce5f5sst6t0uva546ii1eq7virj5j8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV3IhnKz6gRCaYvlX_O8YMKCjPl32zivw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

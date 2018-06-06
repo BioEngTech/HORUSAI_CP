@@ -1,0 +1,36 @@
+<resources>
+    <!--OVERALL INFO STRINGS-->
+    <string name="app_name">Vigi</string>
+    <string name="logo_image">logo_design</string>
+    <!--LOGIN/REGISTER STRINGS-->
+    <string name="app_name_text">VIGI</string>
+    <string name="username_hint">Username</string>
+    <string name="phone_number_hint">Phone Number</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_up_btn_text">Sign up here.</string>
+    <string name="forgotten_password_btn_text">Forgotten password?</string>
+    <string name="log_in_btn_text">Log in</string>
+    <string name="no_account_text">You dont have an account?</string>
+    <string name="already_have_an_account_text">Already have an account?</string>
+    <string name="e_mail_text">E-mail</string>
+    <string name="register_text">Register</string>
+    <string name="sign_in_here_btn">Sign in here.</string>
+    <string name="close_cross_pass_id">close_cross_pass</string>
+    <string name="close_cross_user_id">close_cross_user</string>
+    <string name="by_registering_you_agree_to_the_terms_and_conditions_text">By registering, you agree to the Terms and Conditions.</string>
+    <string name="continue_text">Continue</string>
+    <string name="send_text">Send</string>
+    <string name="confirmation_sent_phone_notification_text">By clicking send, a confirmation code will be sent into your phone.</string>
+    <string name="phone_text">PHONE</string>
+    <string name="insert_phone_number_text">Insert your phone number please</string>
+    <string name="try_again_text">Try again</string>
+    <string name="register_sucess">Welcome to Vigi</string>
+    <string name="confirmation_text">CONFIRMATION</string>
+    <string name="insert_code_text">Insert code</string>
+    <string name="resend_text_string">Resend text?</string>
+    <string name="want_to_change_phone_number_text">Want to change phone number?</string>
+    <string name="go_back_here_text">Go back here.</string>
+    <string name="confirmation_sent_e_mail_notification_text">By clicking send, a link will be sent into your e-mail to enable you to regain acess to your account.</string>
+    <string name="insert_your_e_mail_text">Insert your e-mail please</string>
+
+</resources>
