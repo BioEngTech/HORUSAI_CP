@@ -28,7 +28,11 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="265dp"
+<<<<<<< HEAD
         android:background="@color/colorwhite" />
+=======
+        android:background="@color/colordark" />
+>>>>>>> ReiGOIS
 
     <TextView
         android:id="@+id/telephone_layout_insert_text"
@@ -41,7 +45,11 @@
         android:text="@string/phone_text"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat"
+<<<<<<< HEAD
         android:textColor="@color/colorgreen"
+=======
+        android:textColor="@color/colordark"
+>>>>>>> ReiGOIS
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -57,7 +65,11 @@
         android:layout_width="265dp"
         android:layout_height="25dp"
         android:background="@color/transparent"
+<<<<<<< HEAD
         android:paddingLeft="5dp"
+=======
+        android:paddingStart="5dp"
+>>>>>>> ReiGOIS
         android:ems="10"
         android:hint="@string/insert_phone_number_text"
         android:inputType="phone"
@@ -82,7 +94,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="143dp"
+<<<<<<< HEAD
         android:background="@drawable/rounded_green"
+=======
+        android:background="@drawable/rounded_blue"
+>>>>>>> ReiGOIS
         android:text="@string/send_text"
         android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView"
         android:textColor="@color/colorwhite"
@@ -96,7 +112,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="98dp"
         android:gravity="center"
+<<<<<<< HEAD
         android:text="@string/confirmation_sent_notification_text"
+=======
+        android:text="@string/confirmation_sent_phone_notification_text"
+>>>>>>> ReiGOIS
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@android:color/background_light"
         android:textSize="13sp" />
@@ -128,12 +148,20 @@
             android:id="@+id/telephone_layout_sign_in_btn"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
+<<<<<<< HEAD
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:background="#003afaaa"
             android:text="@string/sign_in_here_btn"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="#FF02A27F"
+=======
+            android:layout_marginStart="1dp"
+            android:background="@color/transparent"
+            android:text="@string/sign_in_here_btn"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorblue"
+>>>>>>> ReiGOIS
             android:textStyle="bold" />
 
     </LinearLayout>

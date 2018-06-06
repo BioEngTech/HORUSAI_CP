@@ -35,7 +35,10 @@
             android:layout_height="25dp"
             android:background="@color/transparent"
             android:drawablePadding="2dp"
+<<<<<<< HEAD
             android:drawableLeft="@drawable/mail_outline_white"
+=======
+>>>>>>> ReiGOIS
             android:drawableStart="@drawable/mail_outline_white"
             android:layout_gravity="center_vertical"
             android:ems="10"
@@ -43,6 +46,7 @@
             android:inputType="textVisiblePassword"
             android:textColor="@color/colordark"
             android:textColorHint="@color/colorgray"
+<<<<<<< HEAD
             android:textSize="18sp" />
 
         <ImageView
@@ -51,6 +55,16 @@
             android:layout_height="25dp"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="2dp"
+=======
+            android:textSize="18sp"
+            tools:ignore="TextFields" />
+
+        <ImageView
+            android:id="@+id/register_layout_close_cross_email"
+            android:layout_width="21dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="1dp"
+>>>>>>> ReiGOIS
             android:layout_marginStart="2dp"
             android:contentDescription="@string/close_cross_user_id"
             android:src="@drawable/close_cross_white" />
@@ -80,7 +94,10 @@
             android:drawablePadding="2dp"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
+<<<<<<< HEAD
             android:drawableLeft="@drawable/lock_outline_white"
+=======
+>>>>>>> ReiGOIS
             android:drawableStart="@drawable/lock_outline_white"
             android:ems="10"
             android:hint="@string/password_hint"
@@ -94,7 +111,10 @@
             android:layout_width="21dp"
             android:layout_height="25dp"
             android:layout_marginTop="1dp"
+<<<<<<< HEAD
             android:layout_marginLeft="2dp"
+=======
+>>>>>>> ReiGOIS
             android:layout_marginStart="2dp"
             android:contentDescription="@string/close_cross_user_id"
             android:src="@drawable/close_cross_white" />
@@ -116,12 +136,20 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="143dp"
+<<<<<<< HEAD
             android:background="@drawable/rounded_green"
+=======
+            android:background="@drawable/rounded_blue"
+>>>>>>> ReiGOIS
             android:text="@string/register_text"
             android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView"
             android:textColor="@color/colorwhite"
             android:textSize="20sp"
+<<<<<<< HEAD
             app:spinning_bar_width="4dp"
+=======
+            app:spinning_bar_width="2dp"
+>>>>>>> ReiGOIS
             app:spinning_bar_color="@color/colorwhite"
             app:spinning_bar_padding="6dp"
             app:initialCornerAngle="10dp">
@@ -167,12 +195,20 @@
             android:id="@+id/register_layout_sign_in_btn"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
+<<<<<<< HEAD
             android:layout_marginLeft="1dp"
             android:layout_marginStart="1dp"
             android:background="#003afaaa"
             android:text="@string/sign_in_here_btn"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="#FF02A27F"
+=======
+            android:layout_marginStart="1dp"
+            android:background="@color/transparent"
+            android:text="@string/sign_in_here_btn"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorblue"
+>>>>>>> ReiGOIS
             android:textStyle="bold" />
 
     </LinearLayout>

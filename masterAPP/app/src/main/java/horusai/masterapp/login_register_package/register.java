@@ -2,11 +2,16 @@ package horusai.masterapp.login_register_package;
 
 import android.app.Activity;
 import android.content.Intent;
+<<<<<<< HEAD
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+=======
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+>>>>>>> ReiGOIS
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -38,7 +43,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     private TextView terms_and_conditions;
     private ImageView cross_pass;
     private EditText password_text;
+<<<<<<< HEAD
     private ImageView cross_user;
+=======
+    private ImageView cross_email;
+>>>>>>> ReiGOIS
     private EditText email_text;
     private CircularProgressButton register_btn;
     private Button signin_btn;
@@ -56,7 +65,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         // Create objects
 
+<<<<<<< HEAD
         cross_user = findViewById(R.id.register_layout_close_cross_username);
+=======
+        cross_email = findViewById(R.id.register_layout_close_cross_email);
+>>>>>>> ReiGOIS
         cross_pass = findViewById(R.id.register_layout_close_cross_pass);
         email_text = findViewById(R.id.register_layout_email);
         password_text = findViewById(R.id.register_layout_password);
@@ -68,7 +81,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         signin_btn.setOnClickListener(this);
         register_btn.setOnClickListener(this);
+<<<<<<< HEAD
         cross_user.setOnClickListener(this);
+=======
+        cross_email.setOnClickListener(this);
+>>>>>>> ReiGOIS
         cross_pass.setOnClickListener(this);
         terms_and_conditions.setOnClickListener(this);
 
@@ -84,7 +101,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         // Hiding cross button before start typing on EditText.
 
+<<<<<<< HEAD
         cross_user.setVisibility(View.GONE);
+=======
+        cross_email.setVisibility(View.GONE);
+>>>>>>> ReiGOIS
         cross_pass.setVisibility(View.GONE);
 
         // Disable login button until something is written on username/password
@@ -108,7 +129,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
+<<<<<<< HEAD
                 ds.setColor(getResources().getColor(R.color.colorgreen));
+=======
+                ds.setColor(getResources().getColor(R.color.colorblue));
+>>>>>>> ReiGOIS
             }
         };
 
@@ -136,12 +161,20 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             {
                 if (email_text.getText().length()==0){
 
+<<<<<<< HEAD
                     cross_user.setVisibility(View.GONE);
+=======
+                    cross_email.setVisibility(View.GONE);
+>>>>>>> ReiGOIS
                 }
 
                 else{
 
+<<<<<<< HEAD
                     cross_user.setVisibility(View.VISIBLE);
+=======
+                    cross_email.setVisibility(View.VISIBLE);
+>>>>>>> ReiGOIS
 
                 }
             }
@@ -162,6 +195,19 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                 }
             }
 
+<<<<<<< HEAD
+=======
+            // Change button color/state
+
+            if (result==-1) {
+
+                signin_btn.setEnabled(true);
+                register_btn.setBackground(getResources().getDrawable(R.drawable.rounded_blue));
+                register_btn.setText(getResources().getString(R.string.try_again_text));
+                register_btn.setTextSize(20);
+            }
+
+>>>>>>> ReiGOIS
         }
 
         @Override
@@ -205,15 +251,31 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
             // Launch login activity
 
+<<<<<<< HEAD
             Intent registerIntent = new Intent(register.this,login.class);
             startActivity(registerIntent);
             super.finish();
+=======
+            Intent loginIntent = new Intent(register.this,login.class);
+            startActivity(loginIntent);
+            finish();
+>>>>>>> ReiGOIS
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
 
         else if(v.getId()==R.id.register_layout_register_btn) {
 
+<<<<<<< HEAD
             register_btn.setBackground(getResources().getDrawable(R.drawable.rounded_green));
+=======
+            // Disable other texts/buttons
+
+            email_text.setEnabled(false);
+            password_text.setEnabled(false);
+            signin_btn.setEnabled(false);
+
+            // Start animation circle
+>>>>>>> ReiGOIS
 
             register_btn.startAnimation();
 
@@ -223,14 +285,27 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
             register_user();
 
+<<<<<<< HEAD
         }
 
         else if(v.getId()==R.id.register_layout_close_cross_username) {
+=======
+            email_text.setEnabled(true);
+            password_text.setEnabled(true);
+
+        }
+
+        else if(v.getId()==R.id.register_layout_close_cross_email) {
+>>>>>>> ReiGOIS
 
             // Clear username_text and cross.
 
             email_text.getText().clear();
+<<<<<<< HEAD
             cross_user.setVisibility(View.GONE);
+=======
+            cross_email.setVisibility(View.GONE);
+>>>>>>> ReiGOIS
 
         }
 
@@ -258,6 +333,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                 if (task.isSuccessful()) {
 
+<<<<<<< HEAD
                     register_btn.doneLoadingAnimation(0x02a27f, BitmapFactory.decodeResource(getResources(),
                             R.drawable.correct_progress));
                 }
@@ -316,15 +392,118 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                         case "ERROR_WEAK_PASSWORD":
                             error_text = "The given password is invalid.";
+=======
+                    register_btn.revertAnimation(new OnAnimationEndListener() {
+                        @Override
+                        public void onAnimationEnd() {
+
+                            register_btn.setTextSize(20);
+                            register_btn.setText(getResources().getString(R.string.register_sucess));
+                        }
+                    });
+                }
+                else {
+
+                    result=-1;
+
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                    if (errorCode.equals("ERROR_INVALID_CUSTOM_TOKEN")) {
+                        error_text = "The custom token format is incorrect. Please check the documentation.";
+                    }
+
+                    else if (errorCode.equals("ERROR_CUSTOM_TOKEN_MISMATCH")){
+                        error_text = "The custom token corresponds to a different audience.";
+
+                    }
+
+                    else if (errorCode.equals("ERROR_INVALID_CREDENTIAL")){
+
+                        error_text = "The supplied auth credential is malformed or has expired.";
+
+                    }
+
+                    else if (errorCode.equals("ERROR_INVALID_EMAIL")){
+
+                            error_text = "The email address is badly formatted.";
+
+                    }
+                    else if (errorCode.equals("ERROR_WRONG_PASSWORD")){
+
+                        error_text = "The password is invalid.";
+
+                    }
+                    else if (errorCode.equals("ERROR_USER_MISMATCH")){
+
+                        error_text = "The supplied credentials do not correspond to the previously signed in user.";
+
+                    }
+                    else if (errorCode.equals("ERROR_REQUIRES_RECENT_LOGIN")){
+
+                        error_text = "This operation is sensitive and requires recent authentication. Log in again before retrying this request.";
+
+                    }
+                    else if (errorCode.equals("ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")){
+
+                        error_text = "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.";
+
+                    }
+                    else if (errorCode.equals("ERROR_CREDENTIAL_ALREADY_IN_USE")){
+
+                        error_text = "This credential is already associated with a different user account.";
+
+                    }
+                    else if (errorCode.equals("ERROR_USER_DISABLED")){
+
+                        error_text = "The user account has been disabled by an administrator.";
+
+                    }
+                    else if (errorCode.equals("ERROR_USER_TOKEN_EXPIRED")){
+
+                        error_text = "The user's credential is no longer valid. The user must sign in again.";
+
+                    }
+                    else if (errorCode.equals("ERROR_EMAIL_ALREADY_IN_USE")){
+
+                        error_text = "The email address is already in use by another account.";
+
+                    }
+                    else if (errorCode.equals("ERROR_USER_NOT_FOUND")){
+
+                        error_text = "There is no user record corresponding to this identifier. The user may have been deleted.";
+
+
+                    }
+                    else if (errorCode.equals("ERROR_OPERATION_NOT_ALLOWED")){
+
+                        error_text = "This operation is not allowed. You must enable this service in the console.";
+
+                    }
+                    else if (errorCode.equals("ERROR_WEAK_PASSWORD")){
+
+                        error_text = "The given password is invalid.";
+
+                    }
+                    else if (errorCode.equals("ERROR_INVALID_USER_TOKEN")){
+
+                        error_text = "The user's credential is no longer valid. The user must sign in again.";
+
+>>>>>>> ReiGOIS
                     }
 
                     register_btn.revertAnimation(new OnAnimationEndListener() {
                         @Override
                         public void onAnimationEnd() {
 
+<<<<<<< HEAD
                             register_btn.setText(error_text);
                             register_btn.setBackground(getResources().getDrawable(R.drawable.rounded_red));
                             register_btn.setTextSize(15);
+=======
+                            register_btn.setTextSize(15);
+                            register_btn.setBackground(getResources().getDrawable(R.drawable.rounded_red));
+                            register_btn.setText(error_text);
+>>>>>>> ReiGOIS
                         }
                     });
                 }

@@ -27,6 +27,7 @@
         <!-- LOGIN ACTIVITY -->
         <activity
             android:name=".login_register_package.login"
+<<<<<<< HEAD
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
@@ -48,6 +49,24 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+=======
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!-- FORGOT_PASSWORD ACTIVITY -->
+        <activity android:name=".login_register_package.forgotPassword"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!-- ASK FOR PHONE ACTIVITY -->
+        <activity
+            android:name=".login_register_package.telephone"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!-- ASK FOR CODE ACTIVITY -->
+        <activity
+            android:name=".login_register_package.confirmationCode"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!-- REGISTER ACTIVITY -->
+        <activity
+            android:name=".login_register_package.register"
+            android:theme="@style/AppTheme.NoActionBar"/>
+>>>>>>> ReiGOIS
     </application>
 
 </manifest>

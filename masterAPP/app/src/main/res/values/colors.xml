@@ -2,9 +2,15 @@
 <resources>
     <color name="colorgreen">#02a27f</color>
     <color name="colordark">#0a0a0a</color>
+<<<<<<< HEAD
     <color name="colorblue">#01baed</color>
     <color name="colorwhite">#ffffff</color>
     <color name="colorgray">#c7c6c6</color>
+=======
+    <color name="colorblue">#0566e6</color>
+    <color name="colorwhite">#ffffff</color>
+    <color name="colorgray">#949494</color>
+>>>>>>> ReiGOIS
     <color name="colorred">#e65151</color>
     <color name="transparent">#00000000</color>
 
