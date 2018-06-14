@@ -21,7 +21,7 @@ public class home extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        String a =2;
+        int number = "dad"
 
         // Open home_layout
 
