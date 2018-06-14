@@ -20,6 +20,8 @@ public class home extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        String a =2;
 
         // Open home_layout
 
