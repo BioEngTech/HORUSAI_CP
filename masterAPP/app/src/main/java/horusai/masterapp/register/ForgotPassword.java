@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 import horusai.masterapp.R;
 
-public class forgotPassword extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class ForgotPassword extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
     private Button send_btn;
     private Button goback_btn;
@@ -54,7 +54,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
         cross_email.setVisibility(View.GONE);
 
-    // Disable login button until something is written on username/password
+    // Disable Login button until something is written on username/password
 
         send_btn.setEnabled(false);
         send_btn.setAlpha(0.4f);
@@ -136,9 +136,9 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
         else if(v.getId()==R.id.forgot_password_layout_go_back_btn) {
 
-            // Launch login activity
+            // Launch Login activity
 
-            Intent loginIntent = new Intent(forgotPassword.this,login.class);
+            Intent loginIntent = new Intent(ForgotPassword.this,Login.class);
             startActivity(loginIntent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

@@ -30,6 +30,11 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
+    //    implementation  'javax.mail:javax.mail-api:1.6.0'
+    //    implementation group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'

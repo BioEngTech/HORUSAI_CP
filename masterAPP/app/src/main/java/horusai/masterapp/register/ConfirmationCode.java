@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,20 +8,24 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-
-//import com.hbb20.CountryCodePicker;
+import android.widget.Toast;
 
 import horusai.masterapp.R;
 
-public class confirmationCode extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class ConfirmationCode extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
-    private Button continue_btn;
-    private Button goback_btn;
-    private EditText confirmation_code_text;
+    private Button continueBtn;
+    private Button goBackBtn;
+    private EditText confirmationCodeText;
+    private String expectedCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getIntent() != null && getIntent().getStringExtra("Code") != null) {
+            expectedCode = getIntent().getStringExtra("Code");
+        }
 
         // Open login_layout
 
@@ -29,19 +33,19 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
         // Create objects
 
-        continue_btn = findViewById(R.id.confirmation_layout_continue_btn);
-        goback_btn = findViewById(R.id.confirmation_layout_go_back_btn);
-        confirmation_code_text = findViewById(R.id.confirmation_layout_code);
+        continueBtn = findViewById(R.id.confirmation_layout_continue_btn);
+        goBackBtn = findViewById(R.id.confirmation_layout_go_back_btn);
+        confirmationCodeText = findViewById(R.id.confirmation_layout_code);
 
 
         // Make buttons and views respond to a click
 
-        goback_btn.setOnClickListener(this);
-        continue_btn.setOnClickListener(this);
+        goBackBtn.setOnClickListener(this);
+        continueBtn.setOnClickListener(this);
 
         // Make layout respond to focus
 
-        confirmation_code_text.setOnFocusChangeListener(this);
+        confirmationCodeText.setOnFocusChangeListener(this);
 
     }
 
@@ -62,9 +66,14 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
         if(v.getId()==R.id.confirmation_layout_continue_btn) {
 
-            // Launch registering activity
+            if (!confirmationCodeText.getText().toString().equals(expectedCode)) {
+                Toast.makeText(this, "Are you sure that is the code?", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            Intent registerIntent = new Intent(confirmationCode.this,register.class);
+            // Launch registering activity
+            Toast.makeText(this, "Success bro", Toast.LENGTH_SHORT).show();
+            Intent registerIntent = new Intent(ConfirmationCode.this,Register.class);
             startActivity(registerIntent);
             finish();
         }
@@ -73,7 +82,7 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
             // Launch phone activity
 
-            Intent phoneIntent = new Intent(confirmationCode.this,telephone.class);
+            Intent phoneIntent = new Intent(ConfirmationCode.this,Email.class);
             startActivity(phoneIntent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
