@@ -33,4 +33,7 @@
     <string name="confirmation_sent_e_mail_notification_text">By clicking send, a link will be sent into your e-mail to enable you to regain acess to your account.</string>
     <string name="insert_your_e_mail_text">Insert your e-mail please</string>
 
+    <!--HORUSAI E-MAIL-->
+    <string name="horus_ai_email">horusaiteste@gmail.com</string>
+    <string name="horus_ai_password">slbscp0406</string>
 </resources>

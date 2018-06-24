@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,11 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-//import com.hbb20.CountryCodePicker;
 
 import horusai.masterapp.R;
 
-public class telephone extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class Telephone extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
     private Button send_btn;
     private Button signin_btn;
@@ -63,7 +62,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
             // Launch confirm code activity
 
-            Intent sendIntent = new Intent(telephone.this,confirmationCode.class);
+            Intent sendIntent = new Intent(this,ConfirmationCode.class);
             startActivity(sendIntent);
             finish();
 
@@ -73,7 +72,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
             // Launch login activity
 
-            Intent loginIntent = new Intent(telephone.this,login.class);
+            Intent loginIntent = new Intent(this,Login.class);
             startActivity(loginIntent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

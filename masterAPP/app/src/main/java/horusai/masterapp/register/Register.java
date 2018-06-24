@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import br.com.simplepass.loading_button_lib.interfaces.OnAnimationEndListener;
 import horusai.masterapp.R;
 
-public class register extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener {
+public class Register extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener {
 
     private TextView terms_and_conditions;
     private ImageView cross_pass;
@@ -84,7 +84,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         cross_email.setVisibility(View.GONE);
         cross_pass.setVisibility(View.GONE);
 
-        // Disable login button until something is written on username/password
+        // Disable Login button until something is written on username/password
 
         register_btn.setEnabled(false);
         register_btn.setAlpha(0.4f);
@@ -99,7 +99,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void onClick(View widget) {
 
-                Toast.makeText(register.this,"Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this,"Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -174,7 +174,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         @Override
         public void afterTextChanged(Editable s) {
 
-            // Change register btn availability
+            // Change Register btn availability
 
             if (email_text.getText().length()!=0 && password_text.getText().length()!=0){
 
@@ -210,9 +210,9 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         if(v.getId()==R.id.register_layout_sign_in_btn) {
 
-            // Launch login activity
+            // Launch Login activity
 
-            Intent loginIntent = new Intent(register.this,login.class);
+            Intent loginIntent = new Intent(Register.this,Login.class);
             startActivity(loginIntent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -266,7 +266,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         String email =  email_text.getText().toString().trim();
         String password = password_text.getText().toString().trim();
 
-        authfire.createUserWithEmailAndPassword(email,password).addOnCompleteListener(register.this, new OnCompleteListener<AuthResult>() {
+        authfire.createUserWithEmailAndPassword(email,password).addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 

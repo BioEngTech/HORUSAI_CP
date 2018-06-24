@@ -16,7 +16,7 @@
 
         <!-- HOME ACTIVITY -->
         <activity
-            android:name=".login_register_package.home"
+            android:name=".register.Home"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,22 +26,22 @@
         </activity>
         <!-- LOGIN ACTIVITY -->
         <activity
-            android:name=".login_register_package.login"
+            android:name=".register.Login"
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- FORGOT_PASSWORD ACTIVITY -->
-        <activity android:name=".login_register_package.forgotPassword"
+        <activity android:name=".register.ForgotPassword"
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- ASK FOR PHONE ACTIVITY -->
         <activity
-            android:name=".login_register_package.telephone"
+            android:name=".register.Telephone"
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- ASK FOR CODE ACTIVITY -->
         <activity
-            android:name=".login_register_package.confirmationCode"
+            android:name=".register.ConfirmationCode"
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- REGISTER ACTIVITY -->
         <activity
-            android:name=".login_register_package.register"
+            android:name=".register.Register"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

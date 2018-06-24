@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import horusai.masterapp.R;
 
-public class login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class Login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
     private ImageView cross_pass;
     private EditText password_text;
@@ -67,7 +67,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
         cross_email.setVisibility(View.GONE);
         cross_pass.setVisibility(View.GONE);
 
-        // Disable login button until something is written on username/password
+        // Disable Login button until something is written on username/password
 
         login_btn.setEnabled(false);
         login_btn.setAlpha(0.4f);
@@ -123,7 +123,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
             @Override
             public void afterTextChanged(Editable s) {
 
-                // Change login btn availability
+                // Change Login btn availability
 
                 if (email_text.getText().length()!=0 && password_text.getText().length()!=0){
 
@@ -159,9 +159,9 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
             if(v.getId()==R.id.login_layout_sign_up_btn) {
 
-                // Launch phone(register) activity
+                // Launch phone(Register) activity
 
-                Intent sign_up_Intent = new Intent(login.this,telephone.class);
+                Intent sign_up_Intent = new Intent(Login.this, Telephone.class);
                 startActivity(sign_up_Intent);
                 finish();
 
@@ -171,7 +171,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Forgot Password
 
-                Intent forgotpasswordIntent = new Intent(login.this,forgotPassword.class);
+                Intent forgotpasswordIntent = new Intent(Login.this,ForgotPassword.class);
                 startActivity(forgotpasswordIntent);
                 finish();
             }
@@ -180,7 +180,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Try to Log In
 
-                Toast.makeText(login.this,"Welcome back to Vigi! Login successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this,"Welcome back to Vigi! Login successful", Toast.LENGTH_SHORT).show();
 
             }
 

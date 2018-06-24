@@ -7,7 +7,7 @@
     android:background="@drawable/bg"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    tools:context=".login_register_package.register"
+    tools:context=".register.Register"
     android:focusable="true">
 
     <TextView

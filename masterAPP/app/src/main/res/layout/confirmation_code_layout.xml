@@ -7,7 +7,7 @@
     android:background="@drawable/bg"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    tools:context=".login_register_package.register"
+    tools:context=".register.Register"
     android:focusable="true">
 
     <TextView
@@ -89,12 +89,11 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/login_layout_resend"
+        android:id="@+id/confirmation_layout_resend"
         android:layout_width="155dp"
         android:layout_height="32dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/view"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="105dp"
         android:background="@android:color/transparent"
         android:text="@string/resend_text_string"
         android:textAppearance="@style/TextAppearance.AppCompat"
@@ -106,7 +105,8 @@
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="45dp"
-        android:background="@color/colorwhite" />
+        android:background="@color/colorwhite"
+        android:id="@+id/view" />
 
 
 

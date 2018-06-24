@@ -1,4 +1,4 @@
-package horusai.masterapp.login_register_package;
+package horusai.masterapp.register;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import horusai.masterapp.R;
 
 
-public class home extends AppCompatActivity implements View.OnClickListener{
+public class Home extends AppCompatActivity implements View.OnClickListener{
 
     RelativeLayout rl1, rl2;
     Animation uptodown,downtoup;
@@ -55,16 +55,16 @@ public class home extends AppCompatActivity implements View.OnClickListener{
 
             // Launch sign up activity
 
-            Intent signupIntent = new Intent(home.this,telephone.class );
+            Intent signupIntent = new Intent(Home.this,Telephone.class );
             startActivity(signupIntent);
             finish();
         }
 
         else if(v.getId()==R.id.home_layout_login_btn) {
 
-            // Launch login activity
+            // Launch Login activity
 
-            Intent loginIntent = new Intent(home.this,login.class);
+            Intent loginIntent = new Intent(Home.this,Login.class);
             startActivity(loginIntent);
             finish();
         }
