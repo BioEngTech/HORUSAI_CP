@@ -11,15 +11,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import horusai.masterapp.R;
+import horusai.masterapp.email.MailSender;
 
 public class ForgotPassword extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
-    private Button send_btn;
-    private Button goback_btn;
-    private EditText email_text;
-    private ImageView cross_email;
+    private Button sendBtn;
+    private Button goBackBtn;
+    private EditText emailText;
+    private ImageView crossEmail;
+
+    private String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,33 +35,33 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
         // Create objects
 
-        send_btn = findViewById(R.id.forgot_password_layout_send_btn);
-        goback_btn = findViewById(R.id.forgot_password_layout_go_back_btn);
-        email_text = findViewById(R.id.forgot_password_layout_email);
-        cross_email = findViewById(R.id.forgot_password_layout_close_cross_email);
+        sendBtn = findViewById(R.id.forgot_password_layout_send_btn);
+        goBackBtn = findViewById(R.id.forgot_password_layout_go_back_btn);
+        emailText = findViewById(R.id.forgot_password_layout_email);
+        crossEmail = findViewById(R.id.forgot_password_layout_close_cross_email);
 
         // Make buttons and views respond to a click
 
-        goback_btn.setOnClickListener(this);
-        send_btn.setOnClickListener(this);
-        cross_email.setOnClickListener(this);
+        goBackBtn.setOnClickListener(this);
+        sendBtn.setOnClickListener(this);
+        crossEmail.setOnClickListener(this);
 
         // Make layout respond to focus
 
-        email_text.setOnFocusChangeListener(this);
+        emailText.setOnFocusChangeListener(this);
 
     // Make edit_texts respond to writing
 
-        email_text.addTextChangedListener(generalTextWatcher);
+        emailText.addTextChangedListener(generalTextWatcher);
 
     // Hiding cross button before start typing on EditText.
 
-        cross_email.setVisibility(View.GONE);
+        crossEmail.setVisibility(View.GONE);
 
     // Disable Login button until something is written on username/password
 
-        send_btn.setEnabled(false);
-        send_btn.setAlpha(0.4f);
+        sendBtn.setEnabled(false);
+        sendBtn.setAlpha(0.4f);
 
     }
 
@@ -75,16 +79,16 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Change email_cross visibility
 
-            if (email_text.getText().hashCode() == s.hashCode())
+            if (emailText.getText().hashCode() == s.hashCode())
             {
-                if (email_text.getText().length()==0){
+                if (emailText.getText().length()==0){
 
-                    cross_email.setVisibility(View.GONE);
+                    crossEmail.setVisibility(View.GONE);
                 }
 
                 else{
 
-                    cross_email.setVisibility(View.VISIBLE);
+                    crossEmail.setVisibility(View.VISIBLE);
 
                 }
             }
@@ -96,17 +100,17 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Change send btn availability
 
-            if (email_text.getText().length()!=0){
+            if (emailText.getText().length()!=0){
 
-                send_btn.setEnabled(true);
-                send_btn.setAlpha(1f);
+                sendBtn.setEnabled(true);
+                sendBtn.setAlpha(1f);
 
             }
 
             else{
 
-                send_btn.setEnabled(false);
-                send_btn.setAlpha(0.4f);
+                sendBtn.setEnabled(false);
+                sendBtn.setAlpha(0.4f);
 
             }
 
@@ -132,12 +136,26 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Send e-mail to user, and if he clicks the link on the e-mail the app opens the user's menu
 
+            String from = getResources().getString(R.string.horus_ai_email);
+            String password = getResources().getString(R.string.horus_ai_password);
+            String to = emailText.getText().toString();
+
+            MailSender.send(from, password, to);
+
+            // Launch confirm code activity
+            Intent sendIntent = new Intent(this, ConfirmationCode.class);
+            sendIntent.putExtra("Code", MailSender.getCode());
+//            sendIntent.putExtra("LoggedEmail", MailSender.getLoggedGmail(this));
+            startActivity(sendIntent);
+            finish();
+
         }
 
         else if(v.getId()==R.id.forgot_password_layout_go_back_btn) {
 
             // Launch Login activity
 
+            Toast.makeText(this, "Entao?", Toast.LENGTH_SHORT).show();
             Intent loginIntent = new Intent(ForgotPassword.this,Login.class);
             startActivity(loginIntent);
             finish();
@@ -148,8 +166,8 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Clear username_text and cross.
 
-            email_text.getText().clear();
-            cross_email.setVisibility(View.GONE);
+            emailText.getText().clear();
+            crossEmail.setVisibility(View.GONE);
 
         }
 

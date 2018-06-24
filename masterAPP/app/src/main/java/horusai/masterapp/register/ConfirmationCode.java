@@ -17,7 +17,9 @@ public class ConfirmationCode extends AppCompatActivity implements View.OnClickL
     private Button continueBtn;
     private Button goBackBtn;
     private EditText confirmationCodeText;
+
     private String expectedCode;
+    private String loggedEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class ConfirmationCode extends AppCompatActivity implements View.OnClickL
 
         if (getIntent() != null && getIntent().getStringExtra("Code") != null) {
             expectedCode = getIntent().getStringExtra("Code");
+//            loggedEmail = getIntent().getStringExtra("LoggedEmail");
         }
 
         // Open login_layout
@@ -82,10 +85,15 @@ public class ConfirmationCode extends AppCompatActivity implements View.OnClickL
 
             // Launch phone activity
 
-            Intent phoneIntent = new Intent(ConfirmationCode.this,Email.class);
+            Intent phoneIntent = new Intent(ConfirmationCode.this,ForgotPassword.class);
             startActivity(phoneIntent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+
+        else if(v.getId() == R.id.confirmation_layout_resend) {
+            //Resend code
+
         }
 
     }

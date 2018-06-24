@@ -38,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="239dp"
         android:gravity="center"
-        android:text="@string/email_text"
+        android:text="@string/phone_text"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/colordark"
@@ -53,13 +53,14 @@
         android:orientation="horizontal">
 
     <EditText
-        android:id="@+id/email_layout_text"
+        android:id="@+id/telephone_layout_number"
         android:layout_width="265dp"
         android:layout_height="25dp"
         android:background="@color/transparent"
         android:paddingStart="5dp"
         android:ems="10"
-        android:hint="@string/insert_email_text"
+        android:hint="@string/insert_phone_number_text"
+        android:inputType="phone"
         android:textColor="@color/colordark"
         android:textColorHint="@color/colorgray"
         android:textSize="20sp" />
@@ -75,7 +76,7 @@
         android:background="@drawable/rounded_white" />
 
     <Button
-        android:id="@+id/email_layout_send_btn"
+        android:id="@+id/telephone_layout_send_btn"
         android:layout_width="300dp"
         android:layout_height="53dp"
         android:layout_alignParentBottom="true"
@@ -95,7 +96,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="98dp"
         android:gravity="center"
-        android:text="@string/confirmation_sent_email_notification_text"
+        android:text="@string/confirmation_sent_phone_notification_text"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@android:color/background_light"
         android:textSize="13sp" />
@@ -124,7 +125,7 @@
             android:textColor="@color/colorwhite" />
 
         <Button
-            android:id="@+id/email_layout_sign_in_btn"
+            android:id="@+id/telephone_layout_sign_in_btn"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginStart="1dp"

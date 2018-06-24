@@ -161,7 +161,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Launch phone(Register) activity
 
-                Intent sign_up_Intent = new Intent(Login.this,Email.class);
+                Intent sign_up_Intent = new Intent(Login.this, Telephone.class);
                 startActivity(sign_up_Intent);
                 finish();
 

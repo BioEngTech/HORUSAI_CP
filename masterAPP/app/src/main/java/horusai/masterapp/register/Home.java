@@ -55,7 +55,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
 
             // Launch sign up activity
 
-            Intent signupIntent = new Intent(Home.this,Email.class );
+            Intent signupIntent = new Intent(Home.this,Telephone.class );
             startActivity(signupIntent);
             finish();
         }

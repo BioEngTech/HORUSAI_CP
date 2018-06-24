@@ -33,7 +33,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- ASK FOR PHONE ACTIVITY -->
         <activity
-            android:name=".register.Email"
+            android:name=".register.Telephone"
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- ASK FOR CODE ACTIVITY -->
         <activity
