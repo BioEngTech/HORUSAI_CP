@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@drawable/background_full"
+    tools:context=".initiation.login">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:id="@+id/initiationLogin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/initiationLogin_MainLayout"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="7.5dp"
+            android:paddingRight="7.5dp"
+            android:id="@+id/initiationLogin_HeaderLayout">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/initiationLogin_BackBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/arrow_left"
+                    android:contentDescription="@string/back_arrow_image" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:id="@+id/initiationLogin_SignInText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in_text"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorMain"
+                    android:textSize="26sp"
+                     />
+
+                </RelativeLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/initiationLogin_MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+
+                        <horusai.masterapp.utils.clearableNotLockableEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:background="@drawable/rectangle_main_border"
+                            android:id="@+id/initiationLogin_Username"
+                            android:imeOptions="actionNext"
+                            android:hint="@string/e_mail_text"
+                            android:ems="10"
+                            android:inputType="textVisiblePassword"
+                            android:textColor="@color/colorDark"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp">
+                        </horusai.masterapp.utils.clearableNotLockableEditText>
+
+                        <horusai.masterapp.utils.clearableNotLockableEditText
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:imeOptions="actionGo"
+                            android:background="@drawable/rectangle_main_border"
+                            android:id="@+id/initiationLogin_Password"
+                            android:hint="@string/password_hint"
+                            android:textColor="@color/colorDark"
+                            android:ems="10"
+                            android:maxLines="1"
+                            android:inputType="textPassword"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp">
+                        </horusai.masterapp.utils.clearableNotLockableEditText>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:background="@drawable/rectangle_main"
+                            android:id="@+id/initiationLogin_LoginBtn"
+                            android:textColor="@color/colorWhite"
+                            android:text="@string/log_in_btn_text"
+                            android:textSize="16sp"
+                            />
+
+                        <ImageView
+                            android:id="@+id/initiationLogin_Spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:contentDescription="@string/load_spinner"
+                            android:src="@drawable/white_spinner"
+                            android:visibility="invisible"
+                            />
+
+                    </FrameLayout>
+
+            <TextView
+                android:id="@+id/initiationLogin_ForgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@string/forgotten_password_btn_text"
+                android:textAppearance="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse"
+                android:textColor="@color/colorMain"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/initiationLogin_MainLayout"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/initiationLogin_FooterLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/initiationLogin_NoAccountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_account_text"
+                    android:textColor="@color/colorSoftDark"
+                    />
+
+                <TextView
+                    android:id="@+id/initiationLogin_SignUpBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/sign_up_btn_text"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorMain"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

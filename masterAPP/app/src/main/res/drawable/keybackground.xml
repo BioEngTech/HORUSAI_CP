@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:drawable="@drawable/rectangle_graystrong_keyboard"/>
+    <item android:state_pressed="true" android:drawable="@drawable/rectangle_graynormal_keyboard"/>
+    <item android:drawable="@drawable/rectangle_graystrong_keyboard"/>
+</selector>

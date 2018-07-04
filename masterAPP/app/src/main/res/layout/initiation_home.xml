@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".initiation.home">
+
+        <RelativeLayout
+            android:id="@+id/initiationHome_MainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/logo_square_content"
+                android:src="@drawable/logo_rectangle"
+                />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name_text"
+                    android:textAllCaps="true"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorDark"
+                    android:textSize="24sp"
+                    />
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/initiationHome_FooterLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/initiationHome_MainLayout"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="15dp"
+                android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/initiationHome_RegisterBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="45"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:background="@drawable/rectangle_main"
+                android:text="@string/register_text"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"/>
+
+                <Button
+                    android:id="@+id/initiationHome_LoginBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_weight="45"
+                    android:background="@drawable/rectangle_main_border"
+                    android:text="@string/log_in_btn_text"
+                    android:textColor="@color/colorMain"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>

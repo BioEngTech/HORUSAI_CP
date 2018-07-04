@@ -1,14 +1,17 @@
 <resources>
-
-    <!-- Base application theme. -->
-
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimaryDark">@color/colordark</item>
-        <item name="colorAccent">@color/colorblue</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:typeface">serif</item>
+        <item name="colorPrimaryDark">@color/colorMain</item>
+        <item name="colorAccent">@color/colorMain</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+        <item name="cardViewStyle">@style/CardView</item>
+
     </style>
 
-    <!--Custom animations-->
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
@@ -17,12 +20,6 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
-    <!--No Action Bar theme-->
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
-    </style>
 
 </resources>
