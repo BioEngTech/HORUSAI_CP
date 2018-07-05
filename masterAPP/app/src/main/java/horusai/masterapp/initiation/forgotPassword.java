@@ -2,21 +2,23 @@ package horusai.masterapp.initiation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import horusai.masterapp.R;
@@ -24,12 +26,14 @@ import horusai.masterapp.utils.mailSender;
 
 public class forgotPassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
-    private Button send_btn;
+    private ProgressBar fabProgressCircle;
+    private FloatingActionButton continueBtn;
     private EditText emailText;
-    private ImageView spin;
     private TextView errorText;
     private boolean error=false;
     private Toolbar myToolbar;
+
+    private static String TAG = "forgotPasswordClass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +55,18 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
         // Create objects
 
-        send_btn = findViewById(R.id.initiationForgotPassword_SendBtn);
+        continueBtn = findViewById(R.id.initiationForgotPassword_ContinueBtn);
         emailText = findViewById(R.id.initiationForgotPassword_Email);
-        spin = findViewById(R.id.initiationForgotPassword_Spinner);
         errorText = findViewById(R.id.initiationForgotPassword_Error);
+        fabProgressCircle = findViewById(R.id.initiationForgotPassword_ProgressCircle);
 
         // Make buttons and views respond to a click
 
-        send_btn.setOnClickListener(this);
+        continueBtn.setOnClickListener(this);
+
+        // Diable button at beggining
+
+        continueBtn.setEnabled(false);
 
         // Make editText respond to enter
 
@@ -78,7 +86,12 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(emailText, InputMethodManager.SHOW_IMPLICIT);
 
-            send_btn.performClick();
+
+            if (continueBtn.isEnabled()){
+
+                continueBtn.performClick();
+
+            }
 
             return true;
         }
@@ -96,7 +109,11 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                 case KeyEvent.ACTION_DOWN:
 
-                    send_btn.performClick();
+                    if (continueBtn.isEnabled()){
+
+                        continueBtn.performClick();
+
+                    }
 
                     break;
 
@@ -142,6 +159,17 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
         @Override
         public void afterTextChanged(Editable s) {
 
+            if (emailText.getText().length()!=0){
+                continueBtn.setEnabled(true);
+                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorMain));
+            }
+            else{
+
+                continueBtn.setEnabled(false);
+                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
+
+            }
+
         }
     };
 
@@ -150,15 +178,11 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
-        if(v.getId()==R.id.initiationForgotPassword_SendBtn) {  // Send e-mail to user, and if he clicks the link on the e-mail the app opens the user's menu
+        if(v.getId()==R.id.initiationForgotPassword_ContinueBtn) {  // Send e-mail to user, and if he clicks the link on the e-mail the app opens the user's menu
 
-            // Check if emailText is empty
+            // Check if emailText is still wrong
 
-            if(emailText.getText().length()==0){
-
-                emailText.setBackgroundResource(R.drawable.rectangle_red_border);
-
-                error=true;
+            if(errorText.getVisibility()==View.VISIBLE){
 
                 return;
             }
@@ -170,17 +194,20 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Start spinning loading
 
-            spinvisibility(spin,View.VISIBLE,send_btn,forgotPassword.this);
+            continueBtn.setImageResource(0);
+            fabProgressCircle.setVisibility(View.VISIBLE);
 
             // Send e-mail to user
 
-            String from = getResources().getString(R.string.horusai_email);
-            String password = getResources().getString(R.string.horusai_password);
-            String to = emailText.getText().toString();
+            final String from = getResources().getString(R.string.horusai_email);
+            final String password = getResources().getString(R.string.horusai_password);
+            final String to = emailText.getText().toString();
 
             // TODO check if the email is correct
 
             // TODO - erro que aparece no Log quando E-mail nao é valido "com.sun.mail.smtp.SMTPAddressFailedException: 553 5.1.2 The recipient address <luis> is not a valid RFC-5321 address. c188-v6sm966566wma.31 - gsmtp"
+
+            // TODO - erro que aparece no Log quando envio E-mail segunda vez - "java.lang.IllegalStateException: Cannot execute task: the task has already been executed (a task can be executed only once)"
 
             // TODO check if internet is working (throw exception)
 
@@ -188,26 +215,36 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                 mailSender.send(from, password, to);
 
-                spinvisibility(spin, View.INVISIBLE, send_btn, forgotPassword.this);
+                // Handler to give time for mail to send, 1 second in this case, and two make layout cool :)
 
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                // Launch change password activity
+                        fabProgressCircle.setVisibility(View.GONE);
+                        continueBtn.setImageResource(R.drawable.continue_arrow);
 
-                Intent sendIntent = new Intent(this, changePassword.class);
-                sendIntent.putExtra("Code", mailSender.getCode());
-                //sendIntent.putExtra("LoggedEmail", mailSender.getLoggedGmail(this));
-                startActivityForResult(sendIntent,1);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        // Launch change password activity
+
+                        Intent sendIntent = new Intent(forgotPassword.this, changePassword.class);
+                        sendIntent.putExtra("Code", mailSender.getCode());
+                        //sendIntent.putExtra("LoggedEmail", mailSender.getLoggedGmail(this));
+                        startActivityForResult(sendIntent,1);
+
+                    }
+                }, 1000);
 
 
             }catch (Exception e){ // If email is wrong or Net not working
 
-                spinvisibility(spin, View.INVISIBLE, send_btn, forgotPassword.this);
+                Log.d(TAG,e.toString());
+
 
                 errorText.setVisibility(View.VISIBLE);
-
-                errorText.setText("E-mail not valid");
-
+                
                 //errorText.setText("Internet connection failed");
 
                 errorText.setTextColor(getResources().getColor(R.color.colorRed));
@@ -217,6 +254,11 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
                 error = true;
 
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                fabProgressCircle.setVisibility(View.GONE);
+                continueBtn.setImageResource(R.drawable.continue_arrow);
+
+                emailText.requestFocus();
 
             }
 
@@ -236,21 +278,6 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
         return false;
     }
 
-    private static void spinvisibility(View spinView, int visibility, Button btn, Context context) {
-
-        if (visibility == View.INVISIBLE) {
-            btn.setEnabled(true); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            spinView.clearAnimation();
-            spinView.setVisibility(visibility);
-            btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        }
-        else if(visibility == View.VISIBLE) {
-            btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            btn.setTextColor(context.getResources().getColor(R.color.colorMain));
-            spinView.setVisibility(visibility);
-            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely) );
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

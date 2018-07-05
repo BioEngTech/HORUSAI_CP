@@ -1,6 +1,8 @@
 package horusai.masterapp.initiation;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,11 +12,9 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import horusai.masterapp.R;
@@ -23,13 +23,13 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
 
     private static String TAG = "changePassword";
 
+    private ProgressBar fabProgressCircle;
+    private FloatingActionButton confirmBtn;
     private TextView codeReceivedText;
     private TextView newPassword;
-    private Button confirmBtn;
     private String expectedCode;
     private Toolbar myToolbar;
     private String loggedEmail;
-    private ImageView spin;
     private TextView errorText;
     private boolean errorCode = false;
     private boolean errorPass = false;
@@ -62,7 +62,7 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
         codeReceivedText = findViewById(R.id.initiationChangePassword_CodeReceived);
         newPassword = findViewById(R.id.initiationChangePassword_NewPassword);
         confirmBtn = findViewById(R.id.initiationChangePassword_ConfirmBtn);
-        spin = findViewById(R.id.initiationChangePassword_Spinner);
+        fabProgressCircle = findViewById(R.id.initiationChangePassword_ProgressCircle);
 
         codeReceivedText.addTextChangedListener(generalTextWatcher);
 
@@ -71,6 +71,8 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
         newPassword.setOnKeyListener(this);
 
         confirmBtn.setOnClickListener(this);
+
+        confirmBtn.setEnabled(false);
 
     }
 
@@ -84,8 +86,12 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(newPassword, InputMethodManager.SHOW_IMPLICIT);
 
-            confirmBtn.performClick();
 
+            if (confirmBtn.isEnabled()){
+
+                confirmBtn.performClick();
+
+            }
             return true;
         }
         return false;
@@ -102,8 +108,11 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
 
                 case KeyEvent.ACTION_DOWN:
 
-                    confirmBtn.performClick();
+                    if (confirmBtn.isEnabled()){
 
+                        confirmBtn.performClick();
+
+                    }
                     break;
 
                 case KeyEvent.ACTION_UP:
@@ -158,6 +167,16 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
         @Override
         public void afterTextChanged(Editable s) {
 
+            if (codeReceivedText.getText().length()!=0 && newPassword.getText().length()!=0 ){
+                confirmBtn.setEnabled(true);
+                confirmBtn.setBackgroundTintList(changePassword.this.getResources().getColorStateList(R.color.colorMain));
+            }
+            else{
+
+                confirmBtn.setEnabled(false);
+                confirmBtn.setBackgroundTintList(changePassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
+            }
+
         }
     };
 
@@ -166,33 +185,9 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
 
         if(v.getId()== confirmBtn.getId()) {
 
-            // Check if any text is empty
+            // Check if error still there
 
-            if(codeReceivedText.getText().length()==0 && newPassword.getText().length()==0){
-
-                codeReceivedText.setBackgroundResource(R.drawable.rectangle_red_border);
-                newPassword.setBackgroundResource(R.drawable.rectangle_red_border);
-
-                errorCode=true;
-                errorPass=true;
-
-                return;
-            }
-
-            else if(codeReceivedText.getText().length()==0){
-
-                codeReceivedText.setBackgroundResource(R.drawable.rectangle_red_border);
-
-                errorCode=true;
-
-                return;
-            }
-
-            else if(newPassword.getText().length()==0){
-
-                newPassword.setBackgroundResource(R.drawable.rectangle_red_border);
-
-                errorPass=true;
+            if(errorText.getVisibility()==View.VISIBLE){
 
                 return;
             }
@@ -204,55 +199,73 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
 
             // Start spinning loading
 
-            spinvisibility(spin,View.VISIBLE,confirmBtn,changePassword.this);
+            confirmBtn.setImageResource(0);
+            fabProgressCircle.setVisibility(View.VISIBLE);
 
-            if (!codeReceivedText.getText().toString().equals(expectedCode)) { // Code received is wrong
+            // Handler 0.5 sec is just to show the spinner at least 1 second, to look cool :)
 
-                spinvisibility(spin, View.INVISIBLE, confirmBtn, changePassword.this);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-                errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Wrong code");
-                errorText.setTextColor(getResources().getColor(R.color.colorRed));
+                        if (!codeReceivedText.getText().toString().equals(expectedCode)) { // Code received is wrong
 
-                codeReceivedText.setBackgroundResource(R.drawable.rectangle_red_border);
+                            errorText.setVisibility(View.VISIBLE);
+                            errorText.setText("Wrong code");
+                            errorText.setTextColor(getResources().getColor(R.color.colorRed));
 
-                errorCode = true;
+                            codeReceivedText.setBackgroundResource(R.drawable.rectangle_red_border);
 
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            errorCode = true;
 
-            }
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // TODO verificar se palavra passe funciona para o firebase
+                            fabProgressCircle.setVisibility(View.GONE);
+                            confirmBtn.setImageResource(R.drawable.continue_arrow);
 
-            else if (false){ // Password Invalid
+                            codeReceivedText.requestFocus();
 
-                spinvisibility(spin, View.INVISIBLE, confirmBtn, changePassword.this);
+                        }
 
-                errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Password not valid");
-                errorText.setTextColor(getResources().getColor(R.color.colorRed));
+                        // TODO verificar se palavra passe funciona para o firebase
 
-                newPassword.setBackgroundResource(R.drawable.rectangle_red_border);
+                        else if (false){ // Password Invalid
 
-                errorPass = true;
+                            errorText.setVisibility(View.VISIBLE);
+                            errorText.setText("Password not valid");
+                            errorText.setTextColor(getResources().getColor(R.color.colorRed));
 
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            newPassword.setBackgroundResource(R.drawable.rectangle_red_border);
 
-            }
+                            errorPass = true;
 
-            else{
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                spinvisibility(spin, View.INVISIBLE, confirmBtn, changePassword.this);
+                            fabProgressCircle.setVisibility(View.GONE);
+                            confirmBtn.setImageResource(R.drawable.continue_arrow);
 
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            newPassword.requestFocus();
 
-                // TODO adicionar palavra passe ao firebase
+                        }
 
-                setResult(RESULT_OK);
+                        else{
 
-                finish();
+                            // TODO adicionar palavra passe ao firebase
 
-            }
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                            fabProgressCircle.setVisibility(View.GONE);
+                            confirmBtn.setImageResource(R.drawable.continue_arrow);
+
+                            setResult(RESULT_OK);
+
+                            finish();
+
+                        }
+
+                }
+            }, 500);
 
         }
 
@@ -270,20 +283,5 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
         return false;
     }
 
-    private static void spinvisibility(View spinView, int visibility, Button btn, Context context) {
-
-        if (visibility == View.INVISIBLE) {
-            btn.setEnabled(true); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            spinView.clearAnimation();
-            spinView.setVisibility(visibility);
-            btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        }
-        else if(visibility == View.VISIBLE) {
-            btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            btn.setTextColor(context.getResources().getColor(R.color.colorMain));
-            spinView.setVisibility(visibility);
-            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely) );
-        }
-    }
 }
 

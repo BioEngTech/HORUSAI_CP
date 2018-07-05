@@ -1,9 +1,10 @@
 package horusai.masterapp.initiation;
 
-import android.content.Context;
 import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,23 +14,21 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import horusai.masterapp.R;
 
 public class telephone extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
 
-    private Button continueBtn;
+    private ProgressBar fabProgressCircle;
+    private FloatingActionButton continueBtn;
     private EditText telephoneNumberText;
     private TextView telephoneError;
     private View telephoneTextBackgroundBorder;
     private Keyboard telephoneKeyboard;
     private KeyboardView telephoneKeyboardView;
-    private ImageView spin;
     private boolean error = false;
     private boolean keyActive = true;
     private Toolbar myToolbar;
@@ -83,11 +82,15 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
         telephoneNumberText = findViewById(R.id.initiationTelephone_Number);
         telephoneError = findViewById(R.id.initiationTelephone_Error);
         telephoneTextBackgroundBorder = findViewById(R.id.initiationTelephone_NumberBorder);
-        spin = findViewById(R.id.initiationTelephone_Spinner);
+        fabProgressCircle = findViewById(R.id.initiationTelephone_ProgressCircle);
 
         // Make buttons and views respond to a click
 
         continueBtn.setOnClickListener(this);
+
+        // Make button disable at beggining
+
+        continueBtn.setEnabled(false);
 
         // Disable default keyboard to open
 
@@ -105,6 +108,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
         // Make telephoneNumberText focused
 
         telephoneNumberText.requestFocus();
+
     }
 
     @Override
@@ -142,18 +146,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
         }
         else{
 
-            if (telephoneNumberText.getText().length() == 15){
-
-                telephoneTextBackgroundBorder.setBackgroundResource(R.drawable.rectangle_red_border);
-                telephoneError.setVisibility(View.VISIBLE);
-                telephoneError.setText(R.string.Max_length_possible_text);
-
-                error = true;
-
-            }
-            else{
-                editable.insert(start, Character.toString((char) primaryCode));
-            }
+            editable.insert(start, Character.toString((char) primaryCode));
 
         }
 
@@ -206,6 +199,17 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
         @Override
         public void afterTextChanged(Editable s) {
 
+            if (telephoneNumberText.getText().length()!=0){
+                continueBtn.setEnabled(true);
+                continueBtn.setBackgroundTintList(telephone.this.getResources().getColorStateList(R.color.colorMain));
+            }
+            else{
+
+                continueBtn.setEnabled(false);
+                continueBtn.setBackgroundTintList(telephone.this.getResources().getColorStateList(R.color.colorGrayNormal));
+
+            }
+
         }
     };
 
@@ -218,11 +222,9 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
             keyActive = false;
 
-            if(telephoneNumberText.getText().length()==0){
+            // Check if emailText is still wrong
 
-                telephoneTextBackgroundBorder.setBackgroundResource(R.drawable.rectangle_red_border);
-
-                error=true;
+            if(telephoneError.getVisibility()==View.VISIBLE){
 
                 keyActive = true;
 
@@ -234,40 +236,51 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Start spinning loading
+            continueBtn.setImageResource(0);
+            fabProgressCircle.setVisibility(View.VISIBLE);
 
-            spinvisibility(spin,View.VISIBLE, continueBtn,telephone.this);
+            // Handler 0.5 sec is just to show the spinner at least 1 second, to look cool :)
 
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-            if (telephoneNumberText.getText().toString().trim().equals("91")){ // if number valid
+                    if (telephoneNumberText.getText().toString().trim().equals("91")){ // if number valid
 
-                spinvisibility(spin, View.INVISIBLE, continueBtn, telephone.this);
+                        keyActive = true;
 
-                keyActive = true;
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        fabProgressCircle.setVisibility(View.GONE);
+                        continueBtn.setImageResource(R.drawable.continue_arrow);
 
-                // Launch confirm code activity
+                        // Launch confirm code activity
 
-                Intent sendIntent = new Intent(telephone.this,confirmationCode.class);
-                startActivityForResult(sendIntent,11);
+                        Intent sendIntent = new Intent(telephone.this,confirmationCode.class);
+                        startActivityForResult(sendIntent,11);
+
+                    }
+
+                    else{ // if number not valid
+
+                        telephoneTextBackgroundBorder.setBackgroundResource(R.drawable.rectangle_red_border);
+                        telephoneError.setVisibility(View.VISIBLE);
+
+                        keyActive = true;
+                        error = true;
+
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        fabProgressCircle.setVisibility(View.GONE);
+                        continueBtn.setImageResource(R.drawable.continue_arrow);
+
+                        telephoneNumberText.requestFocus();
+
+                    }
 
                 }
-
-                else{ // if number not valid
-
-                spinvisibility(spin, View.INVISIBLE, continueBtn, telephone.this);
-
-                telephoneTextBackgroundBorder.setBackgroundResource(R.drawable.rectangle_red_border);
-                telephoneError.setVisibility(View.VISIBLE);
-                telephoneError.setText(R.string.number_invalid_text);
-
-                keyActive = true;
-                error = true;
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                }
+            }, 500);
 
         }
 
@@ -283,22 +296,6 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
         }
 
         return false;
-    }
-
-    private static void spinvisibility(View spinView, int visibility, Button btn, Context context) {
-
-        if (visibility == View.INVISIBLE) {
-            btn.setEnabled(true); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            spinView.clearAnimation();
-            spinView.setVisibility(visibility);
-            btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        }
-        else if(visibility == View.VISIBLE) {
-            btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            btn.setTextColor(context.getResources().getColor(R.color.colorMain));
-            spinView.setVisibility(visibility);
-            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely) );
-        }
     }
 
     @Override

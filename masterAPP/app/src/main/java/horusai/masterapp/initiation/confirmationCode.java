@@ -1,9 +1,10 @@
 package horusai.masterapp.initiation;
 
-import android.content.Context;
 import android.content.Intent;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,20 +14,17 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import horusai.masterapp.R;
 
 public class confirmationCode extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
 
-    private Button continueBtn;
-    private ImageView spin;
+    private ProgressBar fabProgressCircle;
+    private FloatingActionButton continueBtn;
     private EditText numberOne;
     private EditText numberTwo;
     private EditText numberThree;
@@ -82,12 +80,12 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
         // Initiate views
 
         continueBtn = findViewById(R.id.initiationConfirmationCode_ContinueBtn);
-        spin = findViewById(R.id.initiationConfirmationCode_Spinner);
         numberOne = findViewById(R.id.initiationConfirmationCode_NumberOne);
         numberTwo = findViewById(R.id.initiationConfirmationCode_NumberTwo);
         numberThree = findViewById(R.id.initiationConfirmationCode_NumberThree);
         numberFour = findViewById(R.id.initiationConfirmationCode_NumberFour);
-        errorText = findViewById(R.id.initiationConfirmationCode_ErrorText);
+        errorText = findViewById(R.id.initiationConfirmationCode_Error);
+        fabProgressCircle = findViewById(R.id.initiationConfirmationCode_ProgressCircle);
 
         // Disable default keyboard to open
 
@@ -97,6 +95,10 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
         // Make views respond to a click
 
         continueBtn.setOnClickListener(this);
+
+        // Disable button at beggining
+
+        continueBtn.setEnabled(false);
 
         // Make edit_texts respond to writing and delete
 
@@ -112,6 +114,9 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
         numberThree.setOnKeyListener(this);
         numberFour.setOnKeyListener(this);
 
+        // Disable continue button
+
+        continueBtn.setEnabled(false);
 
         // Number_one_text focused
 
@@ -246,14 +251,16 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
             {
                 if (numberFour.getText().length()!=0){
 
-                    continueBtn.setEnabled(true);
-                    continueBtn.performClick();
                     numberFour.setEnabled(false);
+                    continueBtn.setEnabled(true);
+                    continueBtn.setBackgroundTintList(confirmationCode.this.getResources().getColorStateList(R.color.colorMain));
+                    continueBtn.performClick();
 
                 }
                 else if (numberFour.getText().length()==0){
 
                     continueBtn.setEnabled(false);
+                    continueBtn.setBackgroundTintList(confirmationCode.this.getResources().getColorStateList(R.color.colorGrayNormal));
 
                 }
             }
@@ -273,28 +280,36 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
         if(v.getId()== continueBtn.getId()) {
 
-            keyActive = false;
+                keyActive = false;
 
-            // Disable other views
+                // Disable other views
 
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            // Start spinning loading
+                // Start spinning loading
 
-            spinvisibility(spin,View.VISIBLE, continueBtn,confirmationCode.this);
+                continueBtn.setImageResource(0);
+                fabProgressCircle.setVisibility(View.VISIBLE);
 
+                // Handler 0.5 sec is just to show the spinner at least 1 second, to look cool :)
 
-            String code  = numberOne.getText().toString() + numberTwo.getText().toString()
-                            + numberThree.getText().toString() + numberFour.getText().toString();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                String code  = numberOne.getText().toString() + numberTwo.getText().toString()
+                                + numberThree.getText().toString() + numberFour.getText().toString();
 
                 if(code.equals("1234")) { // If code written is correct
-
-                spinvisibility(spin, View.INVISIBLE, continueBtn, confirmationCode.this);
 
                 keyActive = true;
 
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                fabProgressCircle.setVisibility(View.GONE);
+                continueBtn.setImageResource(R.drawable.continue_arrow);
 
                 setResult(RESULT_OK);
 
@@ -313,16 +328,23 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
                 errorText.setVisibility(View.VISIBLE);
 
-                spinvisibility(spin, View.INVISIBLE, continueBtn, confirmationCode.this);
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                keyActive = true;
+                fabProgressCircle.setVisibility(View.GONE);
+                continueBtn.setImageResource(R.drawable.continue_arrow);
 
                 numberOne.setEnabled(true);
                 numberOne.requestFocus();
 
+                keyActive = true;
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                 }
+
+                }
+            }, 500);
+
+
+
         }
 
     }
@@ -339,19 +361,4 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
         return false;
     }
 
-    private static void spinvisibility(View spinView, int visibility, Button btn, Context context) {
-
-        if (visibility == View.INVISIBLE) {
-            btn.setEnabled(true); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            spinView.clearAnimation();
-            spinView.setVisibility(visibility);
-            btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        }
-        else if(visibility == View.VISIBLE) {
-            btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            btn.setTextColor(context.getResources().getColor(R.color.colorMain));
-            spinView.setVisibility(visibility);
-            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely) );
-        }
-    }
 }
