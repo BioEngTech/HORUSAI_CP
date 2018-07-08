@@ -1,11 +1,10 @@
 <resources>
-    <!--OVERALL INFO STRINGS-->
-    <string name="app_name">Vigi</string>
-    <string name="logo_image">logo_design</string>
-    <!--LOGIN/REGISTER STRINGS-->
-    <string name="app_name_text">VIGI</string>
-    <string name="username_hint">Username</string>
-    <string name="phone_number_hint">Phone Number</string>
+
+    <!-- TODO: LOGIN/REGISTER STRINGS -->
+
+    <string name="logo_square_content">logo_design</string>
+    <string name="name_app_text">Vigi</string>
+    <string name="phone_number_hint">9123456789</string>
     <string name="password_hint">Password</string>
     <string name="sign_up_btn_text">Sign up here.</string>
     <string name="forgotten_password_btn_text">Forgotten password?</string>
@@ -15,22 +14,59 @@
     <string name="e_mail_text">E-mail</string>
     <string name="register_text">Register</string>
     <string name="sign_in_here_btn">Sign in here.</string>
-    <string name="close_cross_pass_id">close_cross_pass</string>
-    <string name="close_cross_user_id">close_cross_user</string>
-    <string name="by_registering_you_agree_to_the_terms_and_conditions_text">By registering, you agree to the Terms and Conditions.</string>
-    <string name="continue_text">Continue</string>
-    <string name="send_text">Send</string>
-    <string name="confirmation_sent_phone_notification_text">By clicking send, a confirmation code will be sent into your phone.</string>
-    <string name="phone_text">PHONE</string>
-    <string name="insert_phone_number_text">Insert your phone number please</string>
-    <string name="try_again_text">Try again</string>
-    <string name="register_sucess">Welcome to Vigi</string>
-    <string name="confirmation_text">CONFIRMATION</string>
-    <string name="insert_code_text">Insert code</string>
-    <string name="resend_text_string">Resend text?</string>
-    <string name="want_to_change_phone_number_text">Want to change phone number?</string>
-    <string name="go_back_here_text">Go back here.</string>
-    <string name="confirmation_sent_e_mail_notification_text">By clicking send, a link will be sent into your e-mail to enable you to regain acess to your account.</string>
-    <string name="insert_your_e_mail_text">Insert your e-mail please</string>
+    <string name="terms_and_conditions_text">Terms and Conditions</string>
+    <string name="verification_text">verification code</string>
+    <string name="load_spinner">load_spinner</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="ok_text">OK</string>
+    <string name="profile_text">Profile</string>
+    <string name="patient_text">Patient</string>
+    <string name="care_provider_text">Care Provider</string>
+    <string name="image_patient_content">image_patient</string>
+    <string name="image_cp_content">image_cp</string>
+    <string name="mr_text">Mr</string>
+    <string name="ms_text">Ms</string>
+    <string name="name_hint">Name</string>
+    <string name="male_text">Male</string>
+    <string name="female_text">Female</string>
+    <string name="image_female_content">image_female</string>
+    <string name="tick_male_content">tick_male</string>
+    <string name="tick_female_content">tick_female</string>
+    <string name="photo_image_content">photo_image</string>
+    <string name="back_arrow_image">back_arrow_image</string>
+    <string name="_351_text">+351</string>
+    <string name="pin_invalid_text">Code not valid</string>
+    <string name="telephone_number_text">Phone number</string>
+    <string name="date_of_birth_text">Date of Birth</string>
+    <string name="birth_hint_text">25/05/2018</string>
+    <string name="tick_image_content">tick_image</string>
+    <string name="password_retrieval_text">Password retrieval</string>
+    <string name="home_text">Home</string>
+    <string name="finish_text">Finish</string>
+    <string name="code_received_text">Code Received</string>
+    <string name="new_password_text">New Password</string>
+    <string name="change_password_text">Change Password</string>
+    <string name="sign_up_text">Sign Up</string>
+    <string name="number_not_valid_text">This number is not valid</string>
+
+    <!-- TODO: UTILS STRINGS -->
+
+    <string name="horusai_email">horusaiteste@gmail.com</string>
+    <string name="horusai_password">slbscp0406</string>
+
+    <!-- TODO: USER STRINGS -->
+
+    <string name="rating_fragment_text">Rating fragment</string>
+    <string name="events_fragment_text">Events fragment</string>
+    <string name="account_fragment_text">Account fragment</string>
+    <string name="anna_baker_example_name">Anna Baker</string>
+    <string name="photo_person_text">photo_person</string>
+    <string name="help_image_btn_content">help_image_btn</string>
+    <string name="appoint_image_btn_content">appoint_image_btn</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_rate">Ratings</string>
+    <string name="nav_events">Events</string>
+    <string name="nav_account">Account</string>
+    <string name="e_mail_not_valid_text">E-mail not valid</string>
 
 </resources>

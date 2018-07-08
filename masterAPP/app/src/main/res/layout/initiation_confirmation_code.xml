@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/initiationConfirmationCode"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".initiation.telephone">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/initiationConfirmationCode_Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorMain"
+        app:elevation="4dp"
+        android:theme="@style/ToolbarStyle">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verification_text"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp"
+            android:layout_gravity="center" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="57.5">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/initiationConfirmationCode_MainLayout"
+                android:layout_alignParentTop="true"
+                android:id="@+id/initiationConfirmationCode_HeaderLayout">
+
+                <ImageView
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/pin_code"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/initiationConfirmationCode_MainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/initiationConfirmationCode_NumberOne"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:enabled="false"
+                        android:maxLength="1"
+                        android:textColor="@color/colorDark"
+                        android:textSize="20sp"
+                        tools:ignore="LabelFor,TextFields" />
+
+                    <EditText
+                        android:id="@+id/initiationConfirmationCode_NumberTwo"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:enabled="false"
+                        android:maxLength="1"
+                        android:gravity="center"
+                        android:textColor="@color/colorDark"
+                        android:textSize="20sp"
+                        tools:ignore="LabelFor,TextFields" />
+
+                    <EditText
+                        android:id="@+id/initiationConfirmationCode_NumberThree"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:enabled="false"
+                        android:maxLength="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorDark"
+                        android:textSize="20sp"
+                        tools:ignore="LabelFor,TextFields" />
+
+                    <EditText
+                        android:id="@+id/initiationConfirmationCode_NumberFour"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:maxLength="1"
+                        android:gravity="center"
+                        android:enabled="false"
+                        android:textColor="@color/colorDark"
+                        android:textSize="20sp"
+                        tools:ignore="LabelFor,TextFields" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/initiationConfirmationCode_MainLayout"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/initiationTelephone_FooterLayout">
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/initiationConfirmationCode_Error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textSize="18sp"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/pin_invalid_text"
+                    android:textColor="@color/colorRed"
+                    android:visibility="invisible"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/initiationConfirmationCode_ContinueBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/continue_arrow"
+                        app:rippleColor="@color/transparent"
+                        app:elevation="0dp"
+                        app:fabSize="normal"
+                        app:backgroundTint="@color/colorGrayNormal"
+                        android:layout_centerInParent="true" />
+
+                    <ProgressBar
+                        android:id="@+id/initiationConfirmationCode_ProgressCircle"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true"
+                        android:theme="@style/ProgressBarStyle"
+                        android:visibility="gone"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="42.5"
+        android:gravity="center"
+        android:padding="6.5dp">
+
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/initiationConfirmationCode_KeyboardView"
+            android:background="@color/colorDefaultBackground"
+            android:keyBackground="@drawable/keybackground"
+            android:keyTextSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+
