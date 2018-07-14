@@ -25,7 +25,7 @@ import java.util.Calendar;
 
 import horusai.masterapp.R;
 
-public class sliderAdapter extends PagerAdapter implements View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class SliderAdapter extends PagerAdapter implements View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private Activity context;
     private LayoutInflater inflater;
@@ -50,7 +50,7 @@ public class sliderAdapter extends PagerAdapter implements View.OnFocusChangeLis
     private DatePickerDialog.OnDateSetListener dateSetListener;
 
 
-    public sliderAdapter(Activity context){
+    public SliderAdapter(Activity context){
 
         this.context = context;
 

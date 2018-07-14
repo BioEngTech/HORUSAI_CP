@@ -3,7 +3,6 @@ package horusai.masterapp.initiation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,9 +21,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import horusai.masterapp.R;
-import horusai.masterapp.utils.mailSender;
+import horusai.masterapp.utils.mail.GeneralMailValidator;
+import horusai.masterapp.utils.mail.MailSender;
 
-public class forgotPassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class ForgotPassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private ProgressBar fabProgressCircle;
     private FloatingActionButton continueBtn;
@@ -32,6 +32,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
     private TextView errorText;
     private boolean error=false;
     private Toolbar myToolbar;
+    private MailSender mailSender = new MailSender();
 
     private static String TAG = "forgotPasswordClass";
 
@@ -161,12 +162,12 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             if (emailText.getText().length()!=0){
                 continueBtn.setEnabled(true);
-                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorMain));
+                continueBtn.setBackgroundTintList(ForgotPassword.this.getResources().getColorStateList(R.color.colorMain));
             }
             else{
 
                 continueBtn.setEnabled(false);
-                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
+                continueBtn.setBackgroundTintList(ForgotPassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
 
             }
 
@@ -213,6 +214,10 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             try{ // Send E-mail
 
+                if (!GeneralMailValidator.isEmailValid(to)) {
+                    throw new Exception();
+                }
+
                 mailSender.send(from, password, to);
 
                 // Handler to give time for mail to send, 1 second in this case, and two make layout cool :)
@@ -229,9 +234,9 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                         // Launch change password activity
 
-                        Intent sendIntent = new Intent(forgotPassword.this, changePassword.class);
-                        sendIntent.putExtra("Code", mailSender.getCode());
-                        //sendIntent.putExtra("LoggedEmail", mailSender.getLoggedGmail(this));
+                        Intent sendIntent = new Intent(ForgotPassword.this, ChangePassword.class);
+                        sendIntent.putExtra("Code", MailSender.getCode());
+                        //sendIntent.putExtra("LoggedEmail", MailSender.getLoggedGmail(this));
                         startActivityForResult(sendIntent,1);
 
                     }

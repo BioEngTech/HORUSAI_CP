@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import horusai.masterapp.R;
 
-public class confirmationCode extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
+public class ConfirmationCode extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
 
     private ProgressBar fabProgressCircle;
     private FloatingActionButton continueBtn;
@@ -54,7 +54,7 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
         // Create the Keyboard
 
-        telephoneKeyboard = new Keyboard(confirmationCode.this,R.xml.keyboard);
+        telephoneKeyboard = new Keyboard(ConfirmationCode.this,R.xml.keyboard);
 
         // Lookup the KeyboardView
 
@@ -128,7 +128,7 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        View focusCurrent = confirmationCode.this.getWindow().getCurrentFocus();
+        View focusCurrent = ConfirmationCode.this.getWindow().getCurrentFocus();
 
         focusCurrent.requestFocus();
 
@@ -141,7 +141,7 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
         {
             // Get the EditText Focused
 
-            View focusCurrent = confirmationCode.this.getWindow().getCurrentFocus();
+            View focusCurrent = ConfirmationCode.this.getWindow().getCurrentFocus();
 
             if (!keyActive) return;
 
@@ -253,14 +253,14 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
                     numberFour.setEnabled(false);
                     continueBtn.setEnabled(true);
-                    continueBtn.setBackgroundTintList(confirmationCode.this.getResources().getColorStateList(R.color.colorMain));
+                    continueBtn.setBackgroundTintList(ConfirmationCode.this.getResources().getColorStateList(R.color.colorMain));
                     continueBtn.performClick();
 
                 }
                 else if (numberFour.getText().length()==0){
 
                     continueBtn.setEnabled(false);
-                    continueBtn.setBackgroundTintList(confirmationCode.this.getResources().getColorStateList(R.color.colorGrayNormal));
+                    continueBtn.setBackgroundTintList(ConfirmationCode.this.getResources().getColorStateList(R.color.colorGrayNormal));
 
                 }
             }
@@ -313,7 +313,7 @@ public class confirmationCode extends AppCompatActivity implements View.OnClickL
 
                 setResult(RESULT_OK);
 
-                Intent registerIntent = new Intent(confirmationCode.this,register.class);
+                Intent registerIntent = new Intent(ConfirmationCode.this,Register.class);
                 startActivity(registerIntent);
                 finish();
 

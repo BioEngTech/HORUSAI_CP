@@ -10,16 +10,16 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import horusai.masterapp.R;
-import horusai.masterapp.utils.bottomNavigationViewHelper;
+import horusai.masterapp.utils.BottomNavigationViewHelper;
 
-public class main extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private FrameLayout mainFrame;
-    private horusai.masterapp.user.ratingFragment ratingFragment;
-    private horusai.masterapp.user.homeFragment homeFragment;
-    private horusai.masterapp.user.eventsFragment eventsFragment;
-    private horusai.masterapp.user.accountFragment accountFragment;
+    private RatingFragment ratingFragment;
+    private HomeFragment homeFragment;
+    private EventsFragment eventsFragment;
+    private AccountFragment accountFragment;
 
     private static final String TAG = "MAIN";
 
@@ -30,12 +30,12 @@ public class main extends AppCompatActivity {
 
         mainFrame = findViewById(R.id.userMain_MainFrame);
         bottomNavigationView = findViewById(R.id.userMain_BottomNav);
-        bottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
-        homeFragment = new homeFragment();
-        ratingFragment = new ratingFragment();
-        eventsFragment = new eventsFragment();
-        accountFragment = new accountFragment();
+        homeFragment = new HomeFragment();
+        ratingFragment = new RatingFragment();
+        eventsFragment = new EventsFragment();
+        accountFragment = new AccountFragment();
 
         setFragment(homeFragment);
 

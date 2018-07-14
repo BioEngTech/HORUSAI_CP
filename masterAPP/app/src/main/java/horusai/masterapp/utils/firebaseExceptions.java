@@ -1,6 +1,6 @@
 package horusai.masterapp.utils;
 
-public class firebaseExceptions {
+public class FirebaseExceptions {
 
     private String errorText ="";
 

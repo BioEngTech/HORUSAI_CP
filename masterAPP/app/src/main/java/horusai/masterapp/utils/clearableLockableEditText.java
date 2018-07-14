@@ -10,23 +10,23 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class clearableLockableEditText extends AppCompatEditText implements View.OnTouchListener{
+public class ClearableLockableEditText extends AppCompatEditText implements View.OnTouchListener{
 
 	public String defaultValue = "";
 
 	final Drawable imgX = getResources().getDrawable(android.R.drawable.presence_offline); // X image
 
-	public clearableLockableEditText(Context context) {
+	public ClearableLockableEditText(Context context) {
 		super(context);
 		init();
 	}
 
-	public clearableLockableEditText(Context context, AttributeSet attrs, int defStyle) {
+	public ClearableLockableEditText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public clearableLockableEditText(Context context, AttributeSet attrs) {
+	public ClearableLockableEditText(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
@@ -53,7 +53,7 @@ public class clearableLockableEditText extends AppCompatEditText implements View
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-			clearableLockableEditText et = clearableLockableEditText.this;
+			ClearableLockableEditText et = ClearableLockableEditText.this;
 
 			// Is there an X showing?
 			if (et.getCompoundDrawables()[2] == null) return false;
@@ -62,7 +62,7 @@ public class clearableLockableEditText extends AppCompatEditText implements View
 			// Is touch on our clear button?
 			if (event.getX() > et.getWidth() - et.getPaddingRight() - imgX.getIntrinsicWidth()) {
 				et.setText("");
-				clearableLockableEditText.this.removeClearButton();
+				ClearableLockableEditText.this.removeClearButton();
 			}
 			return false;
 	}
@@ -74,7 +74,7 @@ public class clearableLockableEditText extends AppCompatEditText implements View
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-			clearableLockableEditText.this.manageClearButton();
+			ClearableLockableEditText.this.manageClearButton();
 		}
 
 		@Override

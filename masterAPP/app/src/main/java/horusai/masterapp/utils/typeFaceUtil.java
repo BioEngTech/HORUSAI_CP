@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.lang.reflect.Field;
 
-public class typeFaceUtil {
+public class TypeFaceUtil {
 
     public static void overrideFont(Context context, String defaultFontNameToOverride, String customFontFileNameInAssets) {
         try {

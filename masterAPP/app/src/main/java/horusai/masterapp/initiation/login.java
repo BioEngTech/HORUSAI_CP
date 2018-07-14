@@ -24,10 +24,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import horusai.masterapp.R;
-import horusai.masterapp.utils.errorDialog;
-import horusai.masterapp.utils.firebaseExceptions;
+import horusai.masterapp.utils.ErrorDialog;
+import horusai.masterapp.utils.FirebaseExceptions;
 
-public class login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class Login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private EditText passwordText;
     private EditText emailText;
@@ -128,14 +128,14 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
             if(v.getId()== signUpBtn.getId()) { // Implement unfocus
 
-                Intent configureTypeUserIntent = new Intent(login.this,configureTypeUser.class);
+                Intent configureTypeUserIntent = new Intent(Login.this,ConfigureTypeUser.class);
                 startActivity(configureTypeUserIntent);
                 finish();
                 overridePendingTransition(R.anim.slide_up,R.anim.not_movable);            }
 
             else if(v.getId()== lostPassBtn.getId()) { // Forgot Password
 
-                Intent forgotpasswordIntent = new Intent(login.this,forgotPassword.class);
+                Intent forgotpasswordIntent = new Intent(Login.this,ForgotPassword.class);
                 startActivity(forgotpasswordIntent);
             }
 
@@ -154,7 +154,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                 // Start spinning loading
 
-                spinvisibility(spin,View.VISIBLE, loginBtn,login.this);
+                spinvisibility(spin,View.VISIBLE, loginBtn,Login.this);
 
                 // Start Sign In
 
@@ -176,7 +176,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
             String email = emailText.getText().toString().trim();
             String password = passwordText.getText().toString().trim();
 
-            authfire.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>() {
+            authfire.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -189,14 +189,14 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                        firebaseExceptions exceptionThrowed = new firebaseExceptions();
+                        FirebaseExceptions exceptionThrowed = new FirebaseExceptions();
 
                         errorText = exceptionThrowed.exceptionType(errorCode);
 
-                        spinvisibility(spin, View.INVISIBLE, loginBtn, login.this);
+                        spinvisibility(spin, View.INVISIBLE, loginBtn, Login.this);
 
-                        errorDialog alert = new errorDialog();
-                        alert.showDialog(login.this, errorText);
+                        ErrorDialog alert = new ErrorDialog();
+                        alert.showDialog(Login.this, errorText);
 
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -210,10 +210,10 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
         }catch (IllegalArgumentException e){
 
-            spinvisibility(spin, View.INVISIBLE, loginBtn, login.this);
+            spinvisibility(spin, View.INVISIBLE, loginBtn, Login.this);
 
-            errorDialog alert = new errorDialog();
-            alert.showDialog(login.this, "Please enter a valid sign in");
+            ErrorDialog alert = new ErrorDialog();
+            alert.showDialog(Login.this, "Please enter a valid sign in");
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 

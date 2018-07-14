@@ -12,10 +12,10 @@ import horusai.masterapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class eventsFragment extends Fragment {
+public class EventsFragment extends Fragment {
 
 
-    public eventsFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 

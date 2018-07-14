@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import horusai.masterapp.R;
 
-public class configureTypeUser extends AppCompatActivity {
+public class ConfigureTypeUser extends AppCompatActivity {
 
     private ViewPager slideView;
     private LinearLayout dotLayout;
-    private sliderAdapter sliderAdapt;
+    private SliderAdapter sliderAdapt;
     private TextView[] dots;
     private Button finishBtn;
     private Button homeBtn;
@@ -41,7 +41,7 @@ public class configureTypeUser extends AppCompatActivity {
         homeBtn = findViewById(R.id.initiationConfigureTypeUser_BackBtn);
         signInBtn = findViewById(R.id.initiationConfigureTypeUser_SignInBtn);
 
-        sliderAdapt= new sliderAdapter(configureTypeUser.this);
+        sliderAdapt= new SliderAdapter(ConfigureTypeUser.this);
 
         slideView.setAdapter(sliderAdapt);
 
@@ -55,13 +55,13 @@ public class configureTypeUser extends AppCompatActivity {
 
                 if (!stillRegistering){
 
-                    Intent registerIntent = new Intent(configureTypeUser.this,telephone.class);
+                    Intent registerIntent = new Intent(ConfigureTypeUser.this,Telephone.class);
                     startActivityForResult(registerIntent,10);
 
                 }
                 else{
 
-                    Intent registerIntent = new Intent(configureTypeUser.this,register.class);
+                    Intent registerIntent = new Intent(ConfigureTypeUser.this,Register.class);
                     startActivity(registerIntent);
 
                 }
@@ -83,7 +83,7 @@ public class configureTypeUser extends AppCompatActivity {
 
                 // Launch log in
 
-                Intent loginIntent = new Intent(configureTypeUser.this,login.class);
+                Intent loginIntent = new Intent(ConfigureTypeUser.this,Login.class);
                 startActivity(loginIntent);
                 finish();
                 overridePendingTransition(R.anim.slide_up,R.anim.not_movable);
@@ -126,7 +126,7 @@ public class configureTypeUser extends AppCompatActivity {
 
             addDotsIndicator(position);
 
-            hideKeyboard(configureTypeUser.this);
+            hideKeyboard(ConfigureTypeUser.this);
 
             if(position==0){
 

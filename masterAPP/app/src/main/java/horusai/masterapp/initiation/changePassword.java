@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import horusai.masterapp.R;
 
-public class changePassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class ChangePassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
-    private static String TAG = "changePassword";
+    private static String TAG = "ChangePassword";
 
     private ProgressBar fabProgressCircle;
     private FloatingActionButton confirmBtn;
@@ -169,12 +169,12 @@ public class changePassword extends AppCompatActivity implements View.OnClickLis
 
             if (codeReceivedText.getText().length()!=0 && newPassword.getText().length()!=0 ){
                 confirmBtn.setEnabled(true);
-                confirmBtn.setBackgroundTintList(changePassword.this.getResources().getColorStateList(R.color.colorMain));
+                confirmBtn.setBackgroundTintList(ChangePassword.this.getResources().getColorStateList(R.color.colorMain));
             }
             else{
 
                 confirmBtn.setEnabled(false);
-                confirmBtn.setBackgroundTintList(changePassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
+                confirmBtn.setBackgroundTintList(ChangePassword.this.getResources().getColorStateList(R.color.colorGrayNormal));
             }
 
         }

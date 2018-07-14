@@ -30,11 +30,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import horusai.masterapp.R;
-import horusai.masterapp.user.main;
-import horusai.masterapp.utils.errorDialog;
-import horusai.masterapp.utils.firebaseExceptions;
+import horusai.masterapp.user.Main;
+import horusai.masterapp.utils.ErrorDialog;
+import horusai.masterapp.utils.FirebaseExceptions;
 
-public class register extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class Register extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private EditText passwordText;
     private EditText emailText;
@@ -85,13 +85,13 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void onClick(View widget) {
 
-                Toast.makeText(register.this,"Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this,"Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setColor(register.this.getResources().getColor(R.color.colorMain));
+                ds.setColor(Register.this.getResources().getColor(R.color.colorMain));
             }
         };
 
@@ -169,7 +169,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                 // Start spinning loading
 
-                spinvisibility(spin,View.VISIBLE, registerBtn,register.this);
+                spinvisibility(spin,View.VISIBLE, registerBtn,Register.this);
 
                 // Start Sign In
 
@@ -191,7 +191,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             String email = emailText.getText().toString().trim();
             String password = passwordText.getText().toString().trim();
 
-            authfire.createUserWithEmailAndPassword(email,password).addOnCompleteListener(register.this,new OnCompleteListener<AuthResult>() {
+            authfire.createUserWithEmailAndPassword(email,password).addOnCompleteListener(Register.this,new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -199,7 +199,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                     if (task.isSuccessful()) {
 
-                        Intent launchUserIntent = new Intent(register.this,main.class);
+                        Intent launchUserIntent = new Intent(Register.this,Main.class);
                         launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(launchUserIntent);
                         finish();
@@ -209,14 +209,14 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                        firebaseExceptions exceptionThrowed = new firebaseExceptions();
+                        FirebaseExceptions exceptionThrowed = new FirebaseExceptions();
 
                         errorText = exceptionThrowed.exceptionType(errorCode);
 
-                        spinvisibility(spin, View.INVISIBLE, registerBtn, register.this);
+                        spinvisibility(spin, View.INVISIBLE, registerBtn, Register.this);
 
-                        errorDialog alert = new errorDialog();
-                        alert.showDialog(register.this, errorText);
+                        ErrorDialog alert = new ErrorDialog();
+                        alert.showDialog(Register.this, errorText);
 
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -230,10 +230,10 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         }catch (IllegalArgumentException e){
 
-            spinvisibility(spin, View.INVISIBLE, registerBtn, register.this);
+            spinvisibility(spin, View.INVISIBLE, registerBtn, Register.this);
 
-            errorDialog alert = new errorDialog();
-            alert.showDialog(register.this, "Please enter a valid sign up");
+            ErrorDialog alert = new ErrorDialog();
+            alert.showDialog(Register.this, "Please enter a valid sign up");
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 

@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import horusai.masterapp.R;
 
 
-public class home extends AppCompatActivity implements View.OnClickListener{
+public class Home extends AppCompatActivity implements View.OnClickListener{
 
     RelativeLayout buttonsMove, logoMove;
     Animation upToDown, downToUp;
@@ -57,7 +57,7 @@ public class home extends AppCompatActivity implements View.OnClickListener{
 
             // Launch sign up activity
 
-            Intent configureTypeUserIntent = new Intent(home.this,configureTypeUser.class );
+            Intent configureTypeUserIntent = new Intent(Home.this,ConfigureTypeUser.class );
             startActivity(configureTypeUserIntent);
             overridePendingTransition(R.anim.slide_up,R.anim.not_movable);
 
@@ -65,9 +65,9 @@ public class home extends AppCompatActivity implements View.OnClickListener{
 
         else if(v.getId()==R.id.initiationHome_LoginBtn) {
 
-            // Launch login activity
+            // Launch Login activity
 
-            Intent loginIntent = new Intent(home.this,login.class);
+            Intent loginIntent = new Intent(Home.this,Login.class);
             startActivity(loginIntent);
             overridePendingTransition(R.anim.slide_up,R.anim.not_movable);
         }

@@ -1,4 +1,4 @@
-package horusai.masterapp.utils;
+package horusai.masterapp.utils.mail;
 
 import android.os.AsyncTask;
 
@@ -17,16 +17,15 @@ import javax.mail.internet.MimeMessage;
  * Created by joaosousa on 21/06/18.
  */
 
-public class mailSender extends javax.mail.Authenticator {
+public class MailSender extends javax.mail.Authenticator {
     private static String code = generateCode();
-    private static Send send = new Send();
 
     public static String getCode() {
         return code;
     }
 
-    public static void send(String from, String password, String to) {
-        send.execute(new String[]{from, password, to});
+    public void send(String from, String password, String to) {
+        new Send().execute(new String[]{from, password, to});
     }
 
 //    public static String getLoggedGmail(Context context) {
@@ -62,7 +61,7 @@ public class mailSender extends javax.mail.Authenticator {
 //        return null;
 //    }
 
-    public static class Send extends AsyncTask<String[], Integer, Void> {
+    public class Send extends AsyncTask<String[], Integer, Void> {
         private Session session = null;
 
         protected Void doInBackground(String[]... params) {

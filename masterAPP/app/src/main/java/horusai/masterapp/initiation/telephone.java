@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import horusai.masterapp.R;
 
-public class telephone extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
+public class Telephone extends AppCompatActivity implements View.OnClickListener,TextView.OnKeyListener,KeyboardView.OnKeyboardActionListener{
 
     private ProgressBar fabProgressCircle;
     private FloatingActionButton continueBtn;
@@ -53,7 +53,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
         // Create the Keyboard
 
-        telephoneKeyboard = new Keyboard(telephone.this,R.xml.keyboard);
+        telephoneKeyboard = new Keyboard(Telephone.this,R.xml.keyboard);
 
         // Lookup the KeyboardView
 
@@ -125,7 +125,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
     {
         // Get the EditText Focused
 
-        View focusCurrent = telephone.this.getWindow().getCurrentFocus();
+        View focusCurrent = Telephone.this.getWindow().getCurrentFocus();
 
         if (!keyActive) return;
 
@@ -201,12 +201,12 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
             if (telephoneNumberText.getText().length()!=0){
                 continueBtn.setEnabled(true);
-                continueBtn.setBackgroundTintList(telephone.this.getResources().getColorStateList(R.color.colorMain));
+                continueBtn.setBackgroundTintList(Telephone.this.getResources().getColorStateList(R.color.colorMain));
             }
             else{
 
                 continueBtn.setEnabled(false);
-                continueBtn.setBackgroundTintList(telephone.this.getResources().getColorStateList(R.color.colorGrayNormal));
+                continueBtn.setBackgroundTintList(Telephone.this.getResources().getColorStateList(R.color.colorGrayNormal));
 
             }
 
@@ -257,7 +257,7 @@ public class telephone extends AppCompatActivity implements View.OnClickListener
 
                         // Launch confirm code activity
 
-                        Intent sendIntent = new Intent(telephone.this,confirmationCode.class);
+                        Intent sendIntent = new Intent(Telephone.this,ConfirmationCode.class);
                         startActivityForResult(sendIntent,11);
 
                     }

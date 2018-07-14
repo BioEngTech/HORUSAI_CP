@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import horusai.masterapp.R;
 
-public class errorDialog {
+public class ErrorDialog {
 
 
     public void showDialog(Activity activity, String msg){
