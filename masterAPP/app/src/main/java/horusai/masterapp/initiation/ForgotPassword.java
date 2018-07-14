@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import horusai.masterapp.R;
+import horusai.masterapp.exception.NoNetworkException;
 import horusai.masterapp.utils.mail.GeneralMailValidator;
 import horusai.masterapp.utils.mail.MailSender;
 
@@ -204,53 +205,35 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
             final String password = getResources().getString(R.string.horusai_password);
             final String to = emailText.getText().toString();
 
-            // TODO check if the email is correct
+            try { // Send E-mail
 
-            // TODO - erro que aparece no Log quando E-mail nao é valido "com.sun.mail.smtp.SMTPAddressFailedException: 553 5.1.2 The recipient address <luis> is not a valid RFC-5321 address. c188-v6sm966566wma.31 - gsmtp"
+                if (!GeneralMailValidator.isEmailValid(to)) throw new Exception();
 
-            // TODO - erro que aparece no Log quando envio E-mail segunda vez - "java.lang.IllegalStateException: Cannot execute task: the task has already been executed (a task can be executed only once)"
+                final boolean success = mailSender.send(from, password, to);
 
-            // TODO check if internet is working (throw exception)
+                fabProgressCircle.setVisibility(View.GONE);
+                continueBtn.setImageResource(R.drawable.continue_arrow);
 
-            try{ // Send E-mail
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                if (!GeneralMailValidator.isEmailValid(to)) {
-                    throw new Exception();
-                }
+                if (!success) throw new NoNetworkException("Please connect to internet!");
 
-                mailSender.send(from, password, to);
+                // Launch change password activity
 
-                // Handler to give time for mail to send, 1 second in this case, and two make layout cool :)
+                Intent sendIntent = new Intent(ForgotPassword.this, ChangePassword.class);
+                sendIntent.putExtra("Code", MailSender.getCode());
+                //sendIntent.putExtra("LoggedEmail", MailSender.getLoggedGmail(this));
+                startActivityForResult(sendIntent,1);
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        fabProgressCircle.setVisibility(View.GONE);
-                        continueBtn.setImageResource(R.drawable.continue_arrow);
-
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                        // Launch change password activity
-
-                        Intent sendIntent = new Intent(ForgotPassword.this, ChangePassword.class);
-                        sendIntent.putExtra("Code", MailSender.getCode());
-                        //sendIntent.putExtra("LoggedEmail", MailSender.getLoggedGmail(this));
-                        startActivityForResult(sendIntent,1);
-
-                    }
-                }, 1000);
-
-
-            }catch (Exception e){ // If email is wrong or Net not working
+            } catch (Exception e){ // If email is wrong or Net not working
 
                 Log.d(TAG,e.toString());
 
-
                 errorText.setVisibility(View.VISIBLE);
-                
-                //errorText.setText("Internet connection failed");
+
+                if ("Please connect to internet!".equals(e.getMessage())){
+                    errorText.setText("Internet connection failed");
+                }
 
                 errorText.setTextColor(getResources().getColor(R.color.colorRed));
 
@@ -264,7 +247,6 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
                 continueBtn.setImageResource(R.drawable.continue_arrow);
 
                 emailText.requestFocus();
-
             }
 
         }

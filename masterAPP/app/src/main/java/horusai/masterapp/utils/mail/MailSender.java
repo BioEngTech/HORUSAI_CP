@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,6 +13,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import horusai.masterapp.initiation.ForgotPassword;
 
 /**
  * Created by joaosousa on 21/06/18.
@@ -24,8 +27,8 @@ public class MailSender extends javax.mail.Authenticator {
         return code;
     }
 
-    public void send(String from, String password, String to) {
-        new Send().execute(new String[]{from, password, to});
+    public Boolean send(String from, String password, String to) throws ExecutionException, InterruptedException {
+        return new Send().execute(new String[]{from, password, to}).get();
     }
 
 //    public static String getLoggedGmail(Context context) {
@@ -61,10 +64,10 @@ public class MailSender extends javax.mail.Authenticator {
 //        return null;
 //    }
 
-    public class Send extends AsyncTask<String[], Integer, Void> {
+    public class Send extends AsyncTask<String[], Integer, Boolean> {
         private Session session = null;
 
-        protected Void doInBackground(String[]... params) {
+        protected Boolean doInBackground(String[]... params) {
             String from = params[0][0];
             String password = params[0][1];
             String to = params[0][2];
@@ -95,11 +98,11 @@ public class MailSender extends javax.mail.Authenticator {
                 t.close();
 
             } catch(MessagingException e) {
-                e.printStackTrace();
+                return false;
             } catch(Exception e) {
                 e.printStackTrace();
             }
-            return null;
+            return true;
         }
     }
 }
