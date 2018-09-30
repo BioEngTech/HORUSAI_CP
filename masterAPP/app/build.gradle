@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.sonarqube'
+apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'org.sonarqube'
 
 android {
     compileSdkVersion 27
@@ -16,6 +17,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 }
 
@@ -37,8 +42,33 @@ dependencies {
     implementation files('libs/mail.jar')
 
     //Sonar
-    implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
+//    implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
 
 }
 
-apply plugin: 'com.google.gms.google-services'
+//sonarqube {
+//    properties {
+//        property "sonar.projectVersion", "1.0"
+//        //credential by default
+//        property "sonar.login", "admin"
+//        property "sonar.password", "admin"
+//        //your base project directory
+//        property "sonar.projectBaseDir", "."
+//        //define a key for your project. Everytime that you push a new version of code, SonarQube will compare it according yout projectKey (usually this key doesn't change along of the time)
+//        property "sonar.projectKey" "Vigi-Proj"
+//        //name that will appear in the list of your projects in sonarqube
+//        property "sonar.projectName", "Vigi"
+//        //project sources
+//        def compileDependencies = project.configurations.compile.files.collect {it.path}join(",")
+//        def compileOnlyDependencies = project.configurations.compileOnly.files.collect {it.path}join(",")
+//
+//        property "sonar.java.libraries", "$compileDependencies,$compileOnlyDependencies"
+//        property "sonar.test.libraries", "$compileDependencies,$compileOnlyDependencies"
+////        property "sonar.sources", "app/src/main/java"
+////        property "sonar.java.source", "app/src/main/java"
+//        //directory of project's binaries. Look inside your build/intermediates/class dir
+//        property "sonar.java.binaries", "app/build/intermediates/classes/prod/debug/com/example/android/architecture/blueprints/todoapp"
+//    }
+//
+//}
+
