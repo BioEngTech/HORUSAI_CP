@@ -13,7 +13,7 @@ public class GeneralMailValidator {
         add("@hotmail.com");
         add("@gmail.com");
         add("@sapo.pt");
-        add("yahoo.com");
+        add("@yahoo.com");
     }};
 
     protected static List<String> getAllowedEmails() {
