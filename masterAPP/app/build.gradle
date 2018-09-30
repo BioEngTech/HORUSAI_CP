@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.sonarqube'
 
 android {
     compileSdkVersion 27
@@ -34,6 +35,9 @@ dependencies {
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
+
+    //Sonar
+    implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
 
 }
 
