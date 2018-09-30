@@ -11,7 +11,7 @@
     android:focusableInTouchMode="true"
     android:focusable="true"
     android:padding="10dp"
-    tools:context=".initiation.configureTypeUser">
+    tools:context=".initiation.ConfigureTypeUser">
 
     <TextView
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"/>
 
-                    <horusai.masterapp.utils.clearableNotLockableEditText
+                    <horusai.masterapp.utils.ClearableNotLockableEditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
@@ -90,7 +90,7 @@
                         android:textColorHint="@color/colorGrayNormal"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp">
-                    </horusai.masterapp.utils.clearableNotLockableEditText>
+                    </horusai.masterapp.utils.ClearableNotLockableEditText>
 
                 </LinearLayout>
 

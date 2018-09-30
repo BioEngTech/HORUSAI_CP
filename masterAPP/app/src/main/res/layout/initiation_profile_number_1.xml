@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="top"
     android:padding="10dp"
-    tools:context=".initiation.configureTypeUser">
+    tools:context=".initiation.ConfigureTypeUser">
 
     <TextView
         android:layout_width="match_parent"

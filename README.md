@@ -1,8 +1,4 @@
 # HORUSAI
 
-Horus o olho que tudo vê, tipo Bruno de Carvalho e o terceiro olho
-
-AMO TE BRUNO
-
-RONALDo
+A mobile app intended to fill the needs of a better, faster and more efficient way to provide care for the people that needed it.
 
