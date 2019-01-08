@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userHomeFragment_ParentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <view
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </view>
+        <TextView
+            android:id="@+id/userHomeFragment_Day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="06"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorDark"/>
+        <TextView
+            android:id="@+id/userHomeFragment_Month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nov"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorDark"/>
+
+        <view
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </view>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userHomeFragment_Procedure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wound dressing"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorDark"/>
+
+        <TextView
+            android:id="@+id/userHomeFragment_CareProviderName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dr. Ana Sofia"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!--vigi.patient.utils.roundedImage
+        android:id="@+id/userHomeFragment_CareProviderImage"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/image_photo"/-->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userHomeFragment_Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3pm"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorDark"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
