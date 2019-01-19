@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".user.main">
-
+    tools:context=".user.chooseTreatment">
 
     <Button
-        android:id="@+id/featureOne"
+        android:id="@+id/featureTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Feature #1"/>
+        android:text="Feature #2"/>
 
     <Button
         android:id="@+id/next"

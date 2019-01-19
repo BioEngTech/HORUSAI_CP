@@ -5,19 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".user.main">
-
-
-    <Button
-        android:id="@+id/featureOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Feature #1"/>
+    tools:context=".user.bookAppointments">
 
     <Button
-        android:id="@+id/next"
+        android:id="@+id/featureThree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next page"/>
+        android:text="Feature #3"/>
+
+    <Button
+        android:id="@+id/featureFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feature #4"/>
+
+    <EditText
+        android:id="@+id/featureFive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Feature #5"
+        android:textColorHint="@color/colorGrayLight"/>
 
 </LinearLayout>
