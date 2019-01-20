@@ -1,21 +1,34 @@
 package vigi.patient.initiation;
-
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,37 +36,56 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.hbb20.CountryCodePicker;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import vigi.patient.R;
+import vigi.patient.mainclasses.patient;
 import vigi.patient.user.main;
+import vigi.patient.user.temporary_treatmentslist;
 import vigi.patient.utils.errorDialog;
 import vigi.patient.utils.exceptions.firebase;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class register extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class register extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, TextView.OnEditorActionListener, TextView.OnKeyListener {
 
     private static String TAG = "registerClass";
 
     private EditText passwordText;
     private EditText emailText;
     private FirebaseAuth authfire;
-    private String errorText;
+    private String errorText, code;
     private Button registerBtn;
     private ImageView spin;
     private TextView termsAndConditions;
@@ -66,6 +98,16 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     private String errorCode = "";
     private LinearLayout background;
     private AppCompatImageView photo;
+    CountryCodePicker ccp;
+    private static final int CAMERA = 1888;
+    private static final int GALLERY = 1889;
+    StorageReference storageRef, imagesRef;
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mRefPatient;
+    private String newpatientkey;
+    private String profilephotopath;
+    private Uri contentURI;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +131,14 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         myToolbar = findViewById(R.id.initiationRegister_toolbar);
         photo = findViewById(R.id.initiationRegister_ProfilePhoto);
         background = findViewById(R.id.initiationRegister_background);
+        ccp = findViewById(R.id.initiationRegister_ccp);
+
+        //Initialise firebase instances
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        imagesRef = storageRef.child("images/profiles");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRefPatient = mFirebaseDatabase.getReference("Patient");
 
         //remove scrollable indicator
 
@@ -132,7 +182,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if(!birthday.hasFocus()){
+                if (!birthday.hasFocus()) {
                     return;
                 }
 
@@ -142,9 +192,9 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(register.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateSetListener,year,month,day);
+                DatePickerDialog dialog = new DatePickerDialog(register.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateSetListener, year, month, day);
 
-                long hundred_ten_years = 1000*60*60*24*39600L;
+                long hundred_ten_years = 1000 * 60 * 60 * 24 * 39600L;
 
                 dialog.getDatePicker().setMinDate(cal.getTimeInMillis() - hundred_ten_years);
 
@@ -180,14 +230,14 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         String terms_conditions_text = "Terms and Conditions";
 
-        SpannableString ss = new SpannableString(terms_conditions_text);
+        final SpannableString ss = new SpannableString(terms_conditions_text);
 
 
         ClickableSpan click_terms_conditions = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
 
-                Toast.makeText(register.this,"Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(register.this, "Terms and Conditions are still missing.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -197,24 +247,25 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             }
         };
 
-        ss.setSpan(click_terms_conditions,0,terms_conditions_text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(click_terms_conditions, 0, terms_conditions_text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         termsAndConditions.setText(ss);
         termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         // TODO when user selects a country flag for his phone number, automatically change the hint on the right side according to the format of the number in that country
+        code = ccp.getSelectedCountryCode();
 
-        }
+    }
 
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            // Try to Register when enter is pressed in password text
+        // Try to Register when enter is pressed in password text
 
-            if (actionId == EditorInfo.IME_ACTION_GO) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
 
-                registerBtn.performClick();
+            registerBtn.performClick();
 
             return true;
         }
@@ -229,17 +280,15 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
 
-            switch (event.getAction()){
+            switch (event.getAction()) {
 
                 case KeyEvent.ACTION_DOWN:
 
-                    if (name.hasFocus()){
+                    if (name.hasFocus()) {
 
-                    birthday.performClick();
+                        birthday.performClick();
 
-                    }
-
-                    else if (passwordText.hasFocus()){
+                    } else if (passwordText.hasFocus()) {
 
                         registerBtn.performClick();
 
@@ -267,65 +316,166 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void onClick(View v) {
 
-            if(v.getId()== registerBtn.getId()) { // Try to Log In
+        if (v.getId() == registerBtn.getId()) { // Try to Log In
 
-                // Disable movement and start spinning loader
+            // Disable movement and start spinning loader
 
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                spinVisibility(spin,View.VISIBLE, registerBtn,register.this);
+            spinVisibility(spin, View.VISIBLE, registerBtn, register.this);
 
-                // Check if fields are filled
+            // Check if fields are filled
 
-                if (name.getText().toString().isEmpty() || phone.getText().toString().isEmpty() || birthday.getText().toString().isEmpty()){
-
+               /* if (name.getText().toString().isEmpty() || phone.getText().toString().isEmpty() || birthday.getText().toString().isEmpty()){
                     errorHandling(spin, background,registerBtn,register.this,"Please enter a valid sign up, all fields are required.");
-
                     return;
                 }
-
                 else if (false){
-
-                    // TODO check if phone number is plausible otherwise return error
-
-                    errorHandling(spin, background,registerBtn,register.this,"Please enter a valid phone number.");
-
-                    return;
-
-                }
-
-                else if (false){
-
                     // TODO check if birthday is plausible otherwise return error
-
                     errorHandling(spin, background,registerBtn,register.this,"Too young.");
-
                     return;
+                }*/
 
-                }
-
+            ccp.registerCarrierNumberEditText(phone);
+            if (ccp.isValidFullNumber()){
+                Log.d("NAMASTE Attempt", "to register");
                 // launch register function
-
                 registerAttempt();
-
+            }
+            else{
+                errorHandling(spin, background, registerBtn, register.this, "Please enter a valid phone number.");
+                return;
             }
 
-            else if(v.getId()== photo.getId()) { // Try to Log In
+        } else if (v.getId() == photo.getId()) { // Try to Log In
 
-                // TODO ask user to select a photo or to take one
+            // ask user to select a photo or to take one
+            showPictureDialog();
 
+        }
+    }
+
+    private void showPictureDialog() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera"};
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallery();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+
+    public void choosePhotoFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+
+    private void takePhotoFromCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (register.this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                ///method to get Images
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA);
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    Toast.makeText(register.this, "Your Permission is needed to get access the camera", Toast.LENGTH_LONG).show();
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
+
+            }
+        } else {
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA);
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                contentURI = data.getData();
+                Bitmap bitmap;
+
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                //TODO save image to firestore
+                Toast.makeText(register.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                 photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
+                photo.setImageURI(contentURI);
 
-                // TODO upload the photo to the inside of the circle like example below
-
-                photo.setImageResource(R.drawable.image_photo);
+             /*   try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentURI);
+                    BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
+                    photo.setBackground(ob);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
 
             }
+
+        } else if (requestCode == CAMERA) {
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+            //get uri
+            final FileOutputStream fos;
+            try {
+                fos = openFileOutput("my_new_image.jpg", Context.MODE_PRIVATE);
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                String path = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(), thumbnail, "Title", null);
+
+                Log.d("NAMASTE", "path is " + path);
+
+                //TODO photo from camera is not the same size as border
+                contentURI = Uri.parse(path);
+                photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
+                photo.setImageURI(contentURI);
+
+                Toast.makeText(register.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+
+            } catch (FileNotFoundException e) {
+                Toast.makeText(register.this, "Image wasn't saved!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+        }
     }
 
     private void registerAttempt() {
-
 
         try {
 
@@ -338,22 +488,85 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             String email = emailText.getText().toString().trim();
             String password = passwordText.getText().toString().trim();
 
-            authfire.createUserWithEmailAndPassword(email,password).addOnCompleteListener(register.this,new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+            authfire.createUserWithEmailAndPassword(email, password).addOnCompleteListener(register.this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if (task.isSuccessful()) {
 
-                        // TODO - mail and password were created , but the other elements also need to be added to firebase
+                        //create random key for new patient
 
-                        Intent launchUserIntent = new Intent(register.this,main.class);
-                        launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(launchUserIntent);
-                        finish();
+                        newpatientkey = mRefPatient.push().getKey();
+
+                        //save image in firestore
+
+                       /* final ProgressDialog pd = new ProgressDialog(register.this);
+                        pd.setTitle("uploading.....");
+                        pd.show();
+*/
+                        final StorageReference fileRef = imagesRef.child(newpatientkey + ".jpg");
+                        fileRef.putFile(contentURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    //pd.dismiss();
+                                    Toast.makeText(register.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
+
+                                    //save new patient data to firebase
+
+                                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            // Got the download URL for 'users/me/profile.png'
+                                            Log.d("NAMASTE uri", uri.toString());
+                                            Uri downloadUri = uri;
+                                            String profilephotopath = downloadUri.toString();
+
+                                            //define patient instance
+                                            patient patient = new patient();
+                                            patient.setName(name.getText().toString());
+                                            patient.setImage(profilephotopath); //get path to firestore
+                                            patient.setEmail(emailText.getText().toString());
+                                            String full_phonenumber= ccp.getSelectedCountryCode() +  phone.getText().toString();
+                                            Log.d("NAMASTE phonenumber",full_phonenumber);
+                                            patient.setPhonenumber(full_phonenumber);
+                                            patient.setUid(FirebaseAuth.getInstance().getCurrentUser().toString());
+
+                                            Log.d("NAMASTE newpatientkey", newpatientkey);
+
+                                            mRefPatient.child(newpatientkey).setValue(patient);
+
+                                            Intent launchUserIntent = new Intent(register.this, temporary_treatmentslist.class);
+                                            launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(launchUserIntent);
+                                            finish();
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            // Handle any errors
+                                            Toast.makeText(register.this, "Couldn't upload image successfully", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+
+
+                                } else {
+                                    String message = task.getException().toString();
+                                    Toast.makeText(register.this, message, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+
+
 
                     } else { // if task not successful
 
-                        try{
+                        try {
 
                             errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
@@ -361,12 +574,12 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                             errorText = exceptionThrowed.exceptionType(errorCode);
 
-                            errorHandling(spin, background,registerBtn,register.this,errorText);
+                            errorHandling(spin, background, registerBtn, register.this, errorText);
 
 
-                        }catch(ClassCastException e){
+                        } catch (ClassCastException e) {
 
-                            errorHandling(spin, background,registerBtn,register.this,"Internet connection is not available.");
+                            errorHandling(spin, background, registerBtn, register.this, "Internet connection is not available.");
 
                         }
 
@@ -376,9 +589,9 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
             });
 
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
 
-            errorHandling(spin, background,registerBtn,register.this,"Please enter a valid sign up, all fields are required.");
+            errorHandling(spin, background, registerBtn, register.this, "Please enter a valid sign up, all fields are required.");
 
         }
 
@@ -390,7 +603,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     public void onFocusChange(View v, boolean hasFocus) {
 
         if (!hasFocus && !name.hasFocus() && !phone.hasFocus() && !passwordText.hasFocus() && !emailText.hasFocus()) {
-            InputMethodManager input =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+            InputMethodManager input = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
             input.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
 
@@ -405,12 +618,11 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             spinView.clearAnimation();
             spinView.setVisibility(visibility);
             btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        }
-        else if(visibility == View.VISIBLE) {
+        } else if (visibility == View.VISIBLE) {
             btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
             btn.setTextColor(context.getResources().getColor(R.color.transparent));
             spinView.setVisibility(visibility);
-            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely) );
+            spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely));
         }
     }
 
@@ -418,7 +630,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
     private static void errorHandling(View spinView, View backgroundView, Button btn, Activity activity, String text) {
         backgroundView.performClick();
-        spinVisibility(spinView, View.INVISIBLE, btn , activity);
+        spinVisibility(spinView, View.INVISIBLE, btn, activity);
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         errorDialog alert = new errorDialog();
         alert.showDialog(activity, text);
@@ -432,7 +644,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
             case android.R.id.home:
                 setResult(RESULT_OK);
                 finish();
-                overridePendingTransition(R.anim.not_movable,R.anim.slide_down);
+                overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
                 return true;
         }
 
@@ -449,4 +661,3 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     }
 
 }
-
