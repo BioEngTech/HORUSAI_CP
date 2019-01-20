@@ -35,14 +35,14 @@ public class main extends AppCompatActivity {
 
         // disable shiftMode bottom navigation
 
-        bottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        //TODO commented by Daniel
+        //bottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         homeFragment = new homeFragment();
         ratingFragment = new healthFragment();
         eventsFragment = new eventsFragment();
         accountFragment = new accountFragment();
 
         setFragment(homeFragment);
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -82,6 +82,7 @@ public class main extends AppCompatActivity {
         });
 
 
+        //TODO ask for GPS permission and save that to firebase
 
 
     }

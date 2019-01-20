@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -49,18 +51,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.hbb20.CountryCodePicker;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import vigi.patient.R;
+import vigi.patient.main_classes.patient;
 import vigi.patient.user.main;
 import vigi.patient.utils.errorDialog;
 import vigi.patient.utils.exceptions.firebase;
@@ -89,6 +101,13 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     CountryCodePicker ccp;
     private static final int CAMERA = 1888;
     private static final int GALLERY = 1889;
+    StorageReference storageRef, imagesRef;
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mRefPatient;
+    private String newpatientkey;
+    private String profilephotopath;
+    private Uri contentURI;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +132,13 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         photo = findViewById(R.id.initiationRegister_ProfilePhoto);
         background = findViewById(R.id.initiationRegister_background);
         ccp = findViewById(R.id.initiationRegister_ccp);
+
+        //Initialise firebase instances
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        imagesRef = storageRef.child("images/profiles");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRefPatient = mFirebaseDatabase.getReference("Patient");
 
         //remove scrollable indicator
 
@@ -229,34 +255,6 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
         // TODO when user selects a country flag for his phone number, automatically change the hint on the right side according to the format of the number in that country
         code = ccp.getSelectedCountryCode();
-        Log.d("NAMASTE code", code);
-        phone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                //ccp.registerCarrierNumberEditText((EditText) code);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        ccp.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
-            @Override
-            public void onValidityChanged(boolean isValidNumber) {
-                Log.d("NAMASTE entrou", "ccp");
-                if (!isValidNumber) {
-                    Toast.makeText(register.this, "Invalid Phone Number", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
     }
 
@@ -347,26 +345,19 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                 }*/
 
             ccp.registerCarrierNumberEditText(phone);
-            Log.d("NAMASTE carrier number", phone.getText().toString());
-
-            ccp.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
-                @Override
-                public void onValidityChanged(boolean isValidNumber) {
-                    Log.d("NAMASTE entrou", "ccp after register");
-                    if (!isValidNumber) {
-                        errorHandling(spin, background, registerBtn, register.this, "Please enter a valid phone number.");
-                        return;
-                    }
-                }
-            });
-
-            // launch register function
-
-            registerAttempt();
+            if (ccp.isValidFullNumber()){
+                Log.d("NAMASTE Attempt", "to register");
+                // launch register function
+                registerAttempt();
+            }
+            else{
+                errorHandling(spin, background, registerBtn, register.this, "Please enter a valid phone number.");
+                return;
+            }
 
         } else if (v.getId() == photo.getId()) { // Try to Log In
 
-            // TODO ask user to select a photo or to take one
+            // ask user to select a photo or to take one
             showPictureDialog();
 
         }
@@ -443,7 +434,8 @@ public class register extends AppCompatActivity implements View.OnClickListener,
         }
         if (requestCode == GALLERY) {
             if (data != null) {
-                Uri contentURI = data.getData();
+                contentURI = data.getData();
+                Bitmap bitmap;
 
                 //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 //TODO save image to firestore
@@ -451,17 +443,42 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                 photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
                 photo.setImageURI(contentURI);
 
+             /*   try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentURI);
+                    BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
+                    photo.setBackground(ob);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
 
             }
 
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            BitmapDrawable ob = new BitmapDrawable(getResources(), thumbnail);
-            photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
-            //TODO set BitmapDrawable to profile picture dimensions
-            photo.setBackgroundDrawable(ob);
 
-            Toast.makeText(register.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+            //get uri
+            final FileOutputStream fos;
+            try {
+                fos = openFileOutput("my_new_image.jpg", Context.MODE_PRIVATE);
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                String path = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(), thumbnail, "Title", null);
+
+                Log.d("NAMASTE", "path is " + path);
+
+                //TODO photo from camera is not the same size as border
+                contentURI = Uri.parse(path);
+                photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
+                photo.setImageURI(contentURI);
+
+                Toast.makeText(register.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+
+            } catch (FileNotFoundException e) {
+                Toast.makeText(register.this, "Image wasn't saved!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
         }
     }
 
@@ -484,12 +501,75 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                     if (task.isSuccessful()) {
 
-                        // TODO - mail and password were created , but the other elements also need to be added to firebase
+                        //create random key for new patient
 
-                        Intent launchUserIntent = new Intent(register.this, main.class);
-                        launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(launchUserIntent);
-                        finish();
+                        newpatientkey = mRefPatient.push().getKey();
+
+                        //save image in firestore
+
+                       /* final ProgressDialog pd = new ProgressDialog(register.this);
+                        pd.setTitle("uploading.....");
+                        pd.show();
+*/
+                        final StorageReference fileRef = imagesRef.child(newpatientkey + ".jpg");
+                        fileRef.putFile(contentURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    //pd.dismiss();
+                                    Toast.makeText(register.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
+
+                                    //save new patient data to firebase
+
+                                    fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            // Got the download URL for 'users/me/profile.png'
+                                            Log.d("NAMASTE uri", uri.toString());
+                                            Uri downloadUri = uri;
+                                            String profilephotopath = downloadUri.toString();
+
+                                            //define patient instance
+
+                                            patient patient = new patient();
+                                            patient.setName(name.getText().toString());
+                                            patient.setImage(profilephotopath); //get path to firestore
+                                            patient.setEmail(emailText.getText().toString());
+                                            String full_phonenumber= ccp.getSelectedCountryCode() +  phone.getText().toString();
+                                            Log.d("NAMASTE phonenumber",full_phonenumber);
+                                            patient.setPhonenumber(full_phonenumber);
+
+                                            Log.d("NAMASTE newpatientkey", newpatientkey);
+
+                                            mRefPatient.child(newpatientkey).setValue(patient);
+
+                                            Intent launchUserIntent = new Intent(register.this, main.class);
+                                            launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(launchUserIntent);
+                                            finish();
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            // Handle any errors
+                                            Toast.makeText(register.this, "Couldn't upload image successfully", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+
+
+                                } else {
+                                    String message = task.getException().toString();
+                                    Toast.makeText(register.this, message, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+
+
 
                     } else { // if task not successful
 
