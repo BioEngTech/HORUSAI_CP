@@ -3,14 +3,12 @@ package vigi.patient.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import vigi.patient.R;
 
-public class main extends AppCompatActivity implements View.OnClickListener{
+public class Main extends AppCompatActivity implements View.OnClickListener{
 
     private Button featOne;
     private Button next;
@@ -41,7 +39,7 @@ public class main extends AppCompatActivity implements View.OnClickListener{
 
         } else if (view.getId() == next.getId()) {
 
-            Intent launchUserIntent = new Intent(main.this,chooseTreatment.class);
+            Intent launchUserIntent = new Intent(Main.this,ChooseTreatment.class);
             startActivity(launchUserIntent);
             finish();
         }

@@ -28,12 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import vigi.patient.R;
-import vigi.patient.user.main;
-import vigi.patient.utils.errorDialog;
-import vigi.patient.utils.exceptions.firebase;
+import vigi.patient.user.Main;
+import vigi.patient.utils.ErrorDialog;
+import vigi.patient.utils.exceptions.Firebase;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class Login extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private static String TAG = "loginClass";
 
@@ -160,14 +160,14 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
             if(v.getId()== signUpBtn.getId()) { // Sign up
 
 
-                Intent configureTypeUserIntent = new Intent(login.this,register.class);
+                Intent configureTypeUserIntent = new Intent(Login.this,Register.class);
                 startActivity(configureTypeUserIntent);
                 finish();
                 }
 
             else if(v.getId()== lostPassBtn.getId()) { // Forgot password
 
-                Intent forgotpasswordIntent = new Intent(login.this,forgotPassword.class);
+                Intent forgotpasswordIntent = new Intent(Login.this,ForgotPassword.class);
                 startActivity(forgotpasswordIntent);
             }
 
@@ -178,9 +178,9 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                spinVisibility(spin,View.VISIBLE, loginBtn,login.this);
+                spinVisibility(spin,View.VISIBLE, loginBtn,Login.this);
 
-                // launch login function
+                // launch Login function
 
                 loginAttempt();
 
@@ -192,7 +192,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
         try {
 
-            // Initialize firebase auth
+            // Initialize Firebase auth
 
             authfire = FirebaseAuth.getInstance();
 
@@ -201,13 +201,13 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
             String email = emailText.getText().toString().trim();
             String password = passwordText.getText().toString().trim();
 
-            authfire.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>() {
+            authfire.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                     if (task.isSuccessful()) {
 
-                        Intent launchUserIntent = new Intent(login.this,main.class);
+                        Intent launchUserIntent = new Intent(Login.this,Main.class);
                         launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(launchUserIntent);
                         finish();
@@ -218,16 +218,16 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
                             errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                            firebase exceptionThrowed = new firebase();
+                            Firebase exceptionThrowed = new Firebase();
 
                             errorText = exceptionThrowed.exceptionType(errorCode);
 
-                            errorHandling(spin,background,loginBtn,login.this,errorText);
+                            errorHandling(spin,background,loginBtn,Login.this,errorText);
 
 
                         }catch(ClassCastException e){
 
-                            errorHandling(spin,background,loginBtn,login.this,"Internet connection is not available.");
+                            errorHandling(spin,background,loginBtn,Login.this,"Internet connection is not available.");
 
                         }
 
@@ -239,7 +239,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
 
         }catch (IllegalArgumentException e){
 
-            errorHandling(spin,background,loginBtn,login.this,"Please enter a valid sign in, all fields are required.");
+            errorHandling(spin,background,loginBtn,Login.this,"Please enter a valid sign in, all fields are required.");
 
         }
 
@@ -280,7 +280,7 @@ public class login extends AppCompatActivity implements View.OnClickListener,Vie
         backgroundView.performClick();
         spinVisibility(spinView, View.INVISIBLE, btn , activity);
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        errorDialog alert = new errorDialog();
+        ErrorDialog alert = new ErrorDialog();
         alert.showDialog(activity, text);
     }
 

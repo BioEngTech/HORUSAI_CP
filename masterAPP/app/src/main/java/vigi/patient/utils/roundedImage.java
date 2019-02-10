@@ -14,17 +14,17 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-public class roundedImage extends AppCompatImageView {
+public class RoundedImage extends AppCompatImageView {
 
-    public roundedImage(Context context) {
+    public RoundedImage(Context context) {
         super(context);
     }
 
-    public roundedImage(Context context, AttributeSet attrs) {
+    public RoundedImage(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public roundedImage(Context context, AttributeSet attrs, int defStyle) {
+    public RoundedImage(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

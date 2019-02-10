@@ -1,7 +1,7 @@
 package vigi.patient.utils.exceptions;
 
-public class noNetworkException extends Exception {
-    public noNetworkException(String message) {
+public class NoNetworkException extends Exception {
+    public NoNetworkException(String message) {
         super(message);
     }
 }

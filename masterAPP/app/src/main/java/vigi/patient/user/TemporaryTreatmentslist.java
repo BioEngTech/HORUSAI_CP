@@ -27,12 +27,10 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
 import vigi.patient.R;
-import vigi.patient.mainclasses.service;
+import vigi.patient.mainclasses.Service;
 
-public class temporary_treatmentslist extends AppCompatActivity {
+public class TemporaryTreatmentslist extends AppCompatActivity {
     RecyclerView mRecyclerView;
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mRefServices;
@@ -67,15 +65,15 @@ public class temporary_treatmentslist extends AppCompatActivity {
         if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
             Log.d("NAMASTE storage", " permission");
         }
-        FirebaseRecyclerOptions<service> options =
-                new FirebaseRecyclerOptions.Builder<service>()
-                        .setQuery(mRefServices, service.class)
+        FirebaseRecyclerOptions<Service> options =
+                new FirebaseRecyclerOptions.Builder<Service>()
+                        .setQuery(mRefServices, Service.class)
                         .build();
 
-        FirebaseRecyclerAdapter<service, ViewHolderTreatment> fra = new FirebaseRecyclerAdapter<service, ViewHolderTreatment>(
+        FirebaseRecyclerAdapter<Service, ViewHolderTreatment> fra = new FirebaseRecyclerAdapter<Service, ViewHolderTreatment>(
                 options) {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolderTreatment holder, final int position, @NonNull service model) {
+            protected void onBindViewHolder(@NonNull ViewHolderTreatment holder, final int position, @NonNull Service model) {
 
                 Log.d("checker", "entrou");
                 holder.setService(getApplicationContext(),getRef(position).getKey(), model.getDescription(),model.getImage());
@@ -103,10 +101,10 @@ public class temporary_treatmentslist extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // do your
-                    Toast.makeText(temporary_treatmentslist.this, "GET_ACCOUNTS ALLOWED!!!",
+                    Toast.makeText(TemporaryTreatmentslist.this, "GET_ACCOUNTS ALLOWED!!!",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(temporary_treatmentslist.this, "GET_ACCOUNTS Denied",
+                    Toast.makeText(TemporaryTreatmentslist.this, "GET_ACCOUNTS Denied",
                             Toast.LENGTH_SHORT).show();
                 }
                 break;

@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import vigi.patient.R;
 
-public class bookAppointments extends AppCompatActivity implements View.OnClickListener{
+public class BookAppointments extends AppCompatActivity implements View.OnClickListener{
 
     private Button featThree;
     private Button featFour;

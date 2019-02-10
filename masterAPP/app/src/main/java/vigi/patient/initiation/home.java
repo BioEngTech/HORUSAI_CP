@@ -20,14 +20,14 @@ import android.widget.TextView;
 import vigi.patient.R;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class home extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     private static String TAG = "homeClass";
     private static int REQUESTCODE = 1;
 
     private ViewPager slideView;
     private LinearLayout dotLayout;
-    private sliderAdapter sliderAdapt;
+    private SliderAdapter sliderAdapt;
     private TextView[] dots;
     private Button loginBtn;
     private Button registerBtn;
@@ -56,7 +56,7 @@ public class home extends AppCompatActivity {
         background = findViewById(R.id.initiationHome);
         buttonsLayout = findViewById(R.id.initiationHome_buttonsLayout);
 
-        sliderAdapt = new sliderAdapter(home.this);
+        sliderAdapt = new SliderAdapter(Home.this);
 
         slideView.setAdapter(sliderAdapt);
 
@@ -100,7 +100,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent loginIntent = new Intent(home.this,login.class);
+                Intent loginIntent = new Intent(Home.this,Login.class);
                 startActivityForResult(loginIntent,REQUESTCODE);
                 overridePendingTransition(R.anim.slide_up,R.anim.not_movable);
             }
@@ -110,7 +110,7 @@ public class home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent registerIntent = new Intent(home.this,register.class);
+                Intent registerIntent = new Intent(Home.this,Register.class);
                 startActivityForResult(registerIntent,REQUESTCODE);
                 overridePendingTransition(R.anim.slide_up,R.anim.not_movable);
             }

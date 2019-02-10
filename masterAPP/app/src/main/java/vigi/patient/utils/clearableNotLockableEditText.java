@@ -12,7 +12,7 @@ import android.view.View;
 
 import vigi.patient.R;
 
-public class clearableNotLockableEditText extends AppCompatEditText implements View.OnTouchListener{
+public class ClearableNotLockableEditText extends AppCompatEditText implements View.OnTouchListener{
 
 	public String defaultValue = "";
 
@@ -20,17 +20,17 @@ public class clearableNotLockableEditText extends AppCompatEditText implements V
 
 	final Drawable imgX = getResources().getDrawable(R.drawable.icon_cancel_white); // X image
 
-	public clearableNotLockableEditText(Context context) {
+	public ClearableNotLockableEditText(Context context) {
 		super(context);
 		init();
 	}
 
-	public clearableNotLockableEditText(Context context, AttributeSet attrs, int defStyle) {
+	public ClearableNotLockableEditText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public clearableNotLockableEditText(Context context, AttributeSet attrs) {
+	public ClearableNotLockableEditText(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
@@ -57,7 +57,7 @@ public class clearableNotLockableEditText extends AppCompatEditText implements V
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-			clearableNotLockableEditText et = clearableNotLockableEditText.this;
+			ClearableNotLockableEditText et = ClearableNotLockableEditText.this;
 
 			// Is there an X showing?
 			if (et.getCompoundDrawables()[2] == null) return false;
@@ -66,7 +66,7 @@ public class clearableNotLockableEditText extends AppCompatEditText implements V
 			// Is touch on our clear button?
 			if (event.getX() > et.getWidth() - et.getPaddingRight() - imgX.getIntrinsicWidth()) {
 				et.setText("");
-				clearableNotLockableEditText.this.removeClearButton();
+				ClearableNotLockableEditText.this.removeClearButton();
 			}
 			return false;
 	}
@@ -78,7 +78,7 @@ public class clearableNotLockableEditText extends AppCompatEditText implements V
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-			clearableNotLockableEditText.this.manageClearButton();
+			ClearableNotLockableEditText.this.manageClearButton();
 		}
 
 		@Override

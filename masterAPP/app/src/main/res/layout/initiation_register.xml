@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:overScrollMode="never"
     android:background="@color/transparent"
-    tools:context=".initiation.register">
+    tools:context=".initiation.Register">
 
     <LinearLayout
         android:id="@+id/initiationRegister_background"
@@ -76,7 +76,7 @@
                     android:background="@drawable/utils_circle_border_white"
                     android:layout_gravity="start">
 
-                    <vigi.patient.utils.roundedImage
+                    <vigi.patient.utils.RoundedImage
                         android:id="@+id/initiationRegister_ProfilePhoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                         app:ccp_contentColor="@color/colorDark"
                         app:ccpDialog_showPhoneCode="true" />
 
-                    <vigi.patient.utils.clearableNotLockableEditText
+                    <vigi.patient.utils.ClearableNotLockableEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
@@ -143,7 +143,7 @@
                         android:inputType="phone"
                         android:paddingStart="0dp"
                         android:paddingEnd="10dp">
-                    </vigi.patient.utils.clearableNotLockableEditText>
+                    </vigi.patient.utils.ClearableNotLockableEditText>
 
                 </LinearLayout>
 
@@ -161,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-                <vigi.patient.utils.clearableNotLockableEditText
+                <vigi.patient.utils.ClearableNotLockableEditText
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:imeOptions="actionNext"
@@ -176,7 +176,7 @@
                     android:paddingStart="5dp"
                     android:paddingEnd="10dp">
 
-                </vigi.patient.utils.clearableNotLockableEditText>
+                </vigi.patient.utils.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -185,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-                <vigi.patient.utils.clearableNotLockableEditText
+                <vigi.patient.utils.ClearableNotLockableEditText
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:id="@+id/initiationRegister_birthday"
@@ -198,7 +198,7 @@
                     android:ems="10"
                     android:paddingStart="5dp"
                     android:paddingEnd="10dp">
-                </vigi.patient.utils.clearableNotLockableEditText>
+                </vigi.patient.utils.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-                <vigi.patient.utils.clearableNotLockableEditText
+                <vigi.patient.utils.ClearableNotLockableEditText
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:imeOptions="actionNext"
@@ -221,7 +221,7 @@
                     android:inputType="textVisiblePassword"
                     android:paddingStart="5dp"
                     android:paddingEnd="10dp">
-                </vigi.patient.utils.clearableNotLockableEditText>
+                </vigi.patient.utils.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-                <vigi.patient.utils.clearableNotLockableEditText
+                <vigi.patient.utils.ClearableNotLockableEditText
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:imeOptions="actionGo"
@@ -244,7 +244,7 @@
                     android:inputType="textVisiblePassword"
                     android:paddingStart="5dp"
                     android:paddingEnd="10dp">
-                </vigi.patient.utils.clearableNotLockableEditText>
+                </vigi.patient.utils.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 

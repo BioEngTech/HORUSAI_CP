@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import vigi.patient.R;
 
-public class chooseTreatment extends AppCompatActivity implements View.OnClickListener{
+public class ChooseTreatment extends AppCompatActivity implements View.OnClickListener{
 
     private Button featTwo;
     private Button next;
@@ -38,7 +38,7 @@ public class chooseTreatment extends AppCompatActivity implements View.OnClickLi
 
         } else if (view.getId() == next.getId()) {
 
-            Intent launchUserIntent = new Intent(chooseTreatment.this,bookAppointments.class);
+            Intent launchUserIntent = new Intent(ChooseTreatment.this,BookAppointments.class);
             startActivity(launchUserIntent);
             finish();
         }

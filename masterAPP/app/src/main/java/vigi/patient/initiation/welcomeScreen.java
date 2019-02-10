@@ -8,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import vigi.patient.R;
-import vigi.patient.user.main;
+import vigi.patient.user.Main;
 
 
 @SuppressWarnings("FieldCanBeLocal")
-public class welcomeScreen extends AppCompatActivity {
+public class WelcomeScreen extends AppCompatActivity {
 
     private static String TAG = "welcomeClass";
 
@@ -43,8 +43,8 @@ public class welcomeScreen extends AppCompatActivity {
 
     private void launchHomeActivity() {
 
-        Intent homeIntent = new Intent(welcomeScreen.this, main.class);
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(welcomeScreen.this, welcomeText,"welcomeToVigi");
+        Intent homeIntent = new Intent(WelcomeScreen.this, Main.class);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(WelcomeScreen.this, welcomeText,"welcomeToVigi");
         startActivity(homeIntent, options.toBundle());
     }
 

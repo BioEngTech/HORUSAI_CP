@@ -1,7 +1,6 @@
 package vigi.patient.initiation;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,11 +28,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
 import vigi.patient.R;
-import vigi.patient.utils.exceptions.firebase;
-import vigi.patient.utils.internetCheck;
+import vigi.patient.utils.exceptions.Firebase;
+import vigi.patient.utils.InternetCheck;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class forgotPassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+public class ForgotPassword extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
 
     private static String TAG = "forgotPasswordClass";
 
@@ -169,12 +168,12 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             if (emailText.getText().length()!=0){
                 continueBtn.setEnabled(true);
-                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorMain));
+                continueBtn.setBackgroundTintList(ForgotPassword.this.getResources().getColorStateList(R.color.colorMain));
             }
             else{
 
                 continueBtn.setEnabled(false);
-                continueBtn.setBackgroundTintList(forgotPassword.this.getResources().getColorStateList(R.color.colorGrayLight));
+                continueBtn.setBackgroundTintList(ForgotPassword.this.getResources().getColorStateList(R.color.colorGrayLight));
 
             }
 
@@ -190,9 +189,9 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             // Internet check
 
-            internetCheck checkNet = new internetCheck();
+            InternetCheck checkNet = new InternetCheck();
 
-            if (!checkNet.isInternetAvailable(forgotPassword.this)){
+            if (!checkNet.isInternetAvailable(ForgotPassword.this)){
 
                 if (internet.getVisibility()!=View.INVISIBLE) return;
 
@@ -234,7 +233,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
             String email = emailText.getText().toString().trim();
 
-            // Initialize firebase auth
+            // Initialize Firebase auth
 
             FirebaseAuth authfire = FirebaseAuth.getInstance();
 
@@ -253,7 +252,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                             errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
-                            firebase exceptionThrowed = new firebase();
+                            Firebase exceptionThrowed = new Firebase();
 
                             errorText = exceptionThrowed.exceptionType(errorCode);
 
@@ -261,7 +260,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                             emailInput.setError(errorText);
 
-                            loadingHandling(fabProgressCircle, emailText, continueBtn, forgotPassword.this);
+                            loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPassword.this);
 
 
                         } catch (ClassCastException e) {
@@ -283,7 +282,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                             }
 
-                            loadingHandling(fabProgressCircle, emailText, continueBtn, forgotPassword.this);
+                            loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPassword.this);
 
                         }
 
@@ -392,13 +391,13 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
 
                 final boolean success = mailClass.send(from, password, to);
 
-                if (!success) throw new noNetworkException("INTERNET CONNECTION ERROR");
+                if (!success) throw new NoNetworkException("INTERNET CONNECTION ERROR");
 
-                loadingHandling(fabProgressCircle, emailText, continueBtn, forgotPassword.this);
+                loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPassword.this);
 
                 // Launch change password activity
 
-                Intent sendIntent = new Intent(forgotPassword.this, changePassword.class);
+                Intent sendIntent = new Intent(ForgotPassword.this, changePassword.class);
                 sendIntent.putExtra("Code", mailClass.getCode());
                 startActivityForResult(sendIntent,REQUESTCODE);
 
@@ -409,7 +408,7 @@ public class forgotPassword extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String result) {
 
-            loadingHandling(fabProgressCircle, emailText, continueBtn, forgotPassword.this);
+            loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPassword.this);
         }
 
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import vigi.patient.R;
 
-public class errorDialog {
+public class ErrorDialog {
 
 
     public void showDialog(final Activity activity, String msg){

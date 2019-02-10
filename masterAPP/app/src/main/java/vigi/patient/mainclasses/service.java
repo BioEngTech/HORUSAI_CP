@@ -2,7 +2,7 @@ package vigi.patient.mainclasses;
 
 import java.util.ArrayList;
 
-public class service {
+public class Service {
 
     private String description;
     private ArrayList<String> job;

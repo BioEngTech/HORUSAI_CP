@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 
-public class internetCheck {
+public class InternetCheck {
 
         private  boolean connected = false;
 

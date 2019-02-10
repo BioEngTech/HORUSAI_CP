@@ -1,6 +1,6 @@
 package vigi.patient.mainclasses;
 
-public class patient {
+public class Patient {
 
     private String name;
     private String image;

@@ -11,11 +11,11 @@ import android.widget.RelativeLayout;
 
 import vigi.patient.R;
 
-public class sliderAdapter extends PagerAdapter{
+public class SliderAdapter extends PagerAdapter{
     private Activity context;
     private LayoutInflater inflater;
 
-    public sliderAdapter(Activity context){
+    public SliderAdapter(Activity context){
 
         this.context = context;
 

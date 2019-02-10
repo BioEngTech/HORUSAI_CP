@@ -1,6 +1,6 @@
 package vigi.patient.utils.exceptions;
 
-public class firebase {
+public class Firebase {
 
     private String errorText ="";
 
@@ -60,7 +60,7 @@ public class firebase {
 
             } else if (errorCode.equals("ERROR_OPERATION_NOT_ALLOWED")) {
 
-                errorText = "This operation is not allowed. You must enable this service in the console.";
+                errorText = "This operation is not allowed. You must enable this Service in the console.";
 
             } else if (errorCode.equals("ERROR_WEAK_PASSWORD")) {
 
