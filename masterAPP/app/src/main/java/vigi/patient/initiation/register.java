@@ -1,5 +1,8 @@
 package vigi.patient.initiation;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/feature/set_get_Treatments
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -72,8 +75,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import vigi.patient.R;
+<<<<<<< HEAD
 import vigi.patient.main_classes.patient;
+=======
+import vigi.patient.mainclasses.patient;
+>>>>>>> origin/feature/set_get_Treatments
 import vigi.patient.user.main;
+import vigi.patient.user.temporary_treatmentslist;
 import vigi.patient.utils.errorDialog;
 import vigi.patient.utils.exceptions.firebase;
 
@@ -288,6 +296,7 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                         birthday.performClick();
 
+
                     } else if (passwordText.hasFocus()) {
 
                         registerBtn.performClick();
@@ -329,19 +338,15 @@ public class register extends AppCompatActivity implements View.OnClickListener,
 
                /* if (name.getText().toString().isEmpty() || phone.getText().toString().isEmpty() || birthday.getText().toString().isEmpty()){
 
-                    errorHandling(spin, background,registerBtn,register.this,"Please enter a valid sign up, all fields are required.");
 
+               /* if (name.getText().toString().isEmpty() || phone.getText().toString().isEmpty() || birthday.getText().toString().isEmpty()){
+                    errorHandling(spin, background,registerBtn,register.this,"Please enter a valid sign up, all fields are required.");
                     return;
                 }
-
                 else if (false){
-
                     // TODO check if birthday is plausible otherwise return error
-
                     errorHandling(spin, background,registerBtn,register.this,"Too young.");
-
                     return;
-
                 }*/
 
             ccp.registerCarrierNumberEditText(phone);
@@ -452,6 +457,10 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                 }*/
 
             }
+        } else {
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA);
+        }
 
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
@@ -541,11 +550,14 @@ public class register extends AppCompatActivity implements View.OnClickListener,
                                             Log.d("NAMASTE phonenumber",full_phonenumber);
                                             patient.setPhonenumber(full_phonenumber);
 
+                                            patient.setUid(FirebaseAuth.getInstance().getCurrentUser().toString());
+
+
                                             Log.d("NAMASTE newpatientkey", newpatientkey);
 
                                             mRefPatient.child(newpatientkey).setValue(patient);
 
-                                            Intent launchUserIntent = new Intent(register.this, main.class);
+                                            Intent launchUserIntent = new Intent(register.this, temporary_treatmentslist.class);
                                             launchUserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             startActivity(launchUserIntent);
                                             finish();
@@ -668,4 +680,3 @@ public class register extends AppCompatActivity implements View.OnClickListener,
     }
 
 }
-

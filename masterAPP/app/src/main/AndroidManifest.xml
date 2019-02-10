@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".utils.fontFamilyInitiaton"
@@ -20,11 +23,13 @@
             android:name=".initiation.welcomeScreen"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <!-- TREATMENTS ACTIVITY -->
+        <activity
+            android:name=".user.temporary_treatmentslist"
+            android:screenOrientation="portrait">
+
         </activity>
         <!-- HOME ACTIVITY -->
         <activity
@@ -35,7 +40,13 @@
             android:name=".initiation.register"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSecondary"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!-- LOGIN ACTIVITY -->
         <activity
             android:name=".initiation.login"
@@ -56,13 +67,11 @@
             android:name=".oldUser.main"
             android:screenOrientation="portrait" /
         -->
-        <activity
-            android:name=".newUser.main"
-            android:screenOrientation="portrait" />
-        <activity android:name=".newUser.chooseAssistance" />
+
         <activity
             android:name=".user.main"
             android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".user.chooseTreatment" />
         <activity android:name=".user.bookAppointments"></activity>
