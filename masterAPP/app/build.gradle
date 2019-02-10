@@ -1,13 +1,11 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-//apply plugin: 'org.sonarqube'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
-        applicationId "horusai.masterapp"
-        minSdkVersion 15
-        targetSdkVersion 27
+        applicationId "vigi.patient"
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,57 +16,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-media-compat:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-media-compat:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.google.firebase:firebase-auth:16.0.2'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation files('libs/activation.jar')
-    implementation files('libs/additionnal.jar')
-    implementation files('libs/mail.jar')
-
-    //Sonar
-//    implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
-
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
+    // calendar for appointments
+    implementation 'com.hbb20:ccp:2.2.3'
+    // country flags
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    //implementation 'com.github.liefery:android-vertical-stepper-view:0.2.1'
+    //implementation 'com.github.vipulasri:timelineview:1.0.6'
+    //implementation 'com.shuhart.stepview:stepview:1.4.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
 }
 
-//sonarqube {
-//    properties {
-//        property "sonar.projectVersion", "1.0"
-//        //credential by default
-//        property "sonar.login", "admin"
-//        property "sonar.password", "admin"
-//        //your base project directory
-//        property "sonar.projectBaseDir", "."
-//        //define a key for your project. Everytime that you push a new version of code, SonarQube will compare it according yout projectKey (usually this key doesn't change along of the time)
-//        property "sonar.projectKey" "Vigi-Proj"
-//        //name that will appear in the list of your projects in sonarqube
-//        property "sonar.projectName", "Vigi"
-//        //project sources
-//        def compileDependencies = project.configurations.compile.files.collect {it.path}join(",")
-//        def compileOnlyDependencies = project.configurations.compileOnly.files.collect {it.path}join(",")
-//
-//        property "sonar.java.libraries", "$compileDependencies,$compileOnlyDependencies"
-//        property "sonar.test.libraries", "$compileDependencies,$compileOnlyDependencies"
-////        property "sonar.sources", "app/src/main/java"
-////        property "sonar.java.source", "app/src/main/java"
-//        //directory of project's binaries. Look inside your build/intermediates/class dir
-//        property "sonar.java.binaries", "app/build/intermediates/classes/prod/debug/com/example/android/architecture/blueprints/todoapp"
-//    }
-//
-//}
-
+apply plugin: 'com.google.gms.google-services'

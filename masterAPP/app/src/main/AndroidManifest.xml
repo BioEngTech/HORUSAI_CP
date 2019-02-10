@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="horusai.masterapp">
+    package="vigi.patient">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".utils.FontFamilyInitiaton"
+        android:name=".utils.fontFamilyInitiaton"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/ic_launcher_vigi"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/name_app_text"
-        android:roundIcon="@mipmap/ic_launcher_vigi_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <!-- HOME ACTIVITY -->
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
         <activity
-            android:name=".initiation.Home"
+            android:name=".initiation.welcomeScreen"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
@@ -26,60 +26,46 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- LOGIN ACTIVITY -->
+        <!-- HOME ACTIVITY -->
         <activity
-            android:name=".initiation.Login"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <!-- FORGOT_PASSWORD ACTIVITY -->
-        <activity
-            android:name=".initiation.ForgotPassword"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".initiation.Login" />
-        </activity>
-        <!-- CHANGE_PASSWORD ACTIVITY -->
-        <activity
-            android:name=".initiation.ChangePassword"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".initiation.ForgotPassword" />
-        </activity>
-        <!-- PROFILE ACTIVITY -->
-        <activity
-            android:name=".initiation.ConfigureTypeUser"
+            android:name=".initiation.home"
             android:screenOrientation="portrait" />
-        <!-- ASK FOR PHONE ACTIVITY -->
-        <activity
-            android:name=".initiation.Telephone"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".initiation.Home" />
-        </activity>
-        <!-- ASK FOR CODE ACTIVITY -->
-        <activity
-            android:name=".initiation.ConfirmationCode"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".initiation.Telephone" />
-        </activity>
         <!-- REGISTER ACTIVITY -->
         <activity
-            android:name=".initiation.Register"
+            android:name=".initiation.register"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <!-- USER HOME ACTIVITY -->
+            android:theme="@style/AppThemeSecondary"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <!-- LOGIN ACTIVITY -->
         <activity
-            android:name=".user.Main"
+            android:name=".initiation.login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <!-- FORGOT_PASSWORD ACTIVITY -->
+        <activity
+            android:name=".initiation.forgotPassword"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".initiation.login" />
+        </activity>
+        <!-- USER MAIN ACTIVITY -->
+        <!--
+            activity
+            android:name=".oldUser.main"
+            android:screenOrientation="portrait" /
+        -->
+        <activity
+            android:name=".newUser.main"
             android:screenOrientation="portrait" />
+        <activity android:name=".newUser.chooseAssistance" />
+        <activity
+            android:name=".user.main"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".user.chooseTreatment" />
+        <activity android:name=".user.bookAppointments"></activity>
     </application>
 
 </manifest>
