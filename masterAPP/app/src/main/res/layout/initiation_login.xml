@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:overScrollMode="never"
     android:background="@color/colorMain"
-    tools:context=".initiation.Login">
+    tools:context=".view.authentication.Login">
 
     <LinearLayout
         android:id="@+id/initiationLogin_background"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-            <vigi.patient.utils.ClearableNotLockableEditText
+            <vigi.care_provider.view.utils.editText.ClearableNotLockableEditText
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:imeOptions="actionNext"
@@ -80,7 +80,7 @@
                     android:inputType="textVisiblePassword"
                     android:paddingStart="5dp"
                     android:paddingEnd="10dp">
-            </vigi.patient.utils.ClearableNotLockableEditText>
+            </vigi.care_provider.view.utils.editText.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorWhite">
 
-                <vigi.patient.utils.ClearableNotLockableEditText
+                <vigi.care_provider.view.utils.editText.ClearableNotLockableEditText
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:imeOptions="actionGo"
@@ -104,7 +104,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="10dp"
                        >
-                </vigi.patient.utils.ClearableNotLockableEditText>
+                </vigi.care_provider.view.utils.editText.ClearableNotLockableEditText>
 
             </android.support.design.widget.TextInputLayout>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="vigi.patient">
+    package="vigi.care_provider">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".utils.FontFamilyInitiaton"
+        android:name="vigi.care_provider.view.utils.fonts.FontFamilyInitiation"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,24 +20,36 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label">
         <activity
-            android:name=".initiation.WelcomeScreen"
+            android:name=".view.init.WelcomeScreenActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
-
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/vigi” -->
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/vigi" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "example://vigi” -->
+                <data android:scheme="example"
+                    android:host="vigi" />
+            </intent-filter>
         </activity>
         <!-- TREATMENTS ACTIVITY -->
         <activity
-            android:name=".user.TemporaryTreatmentslist"
+            android:name=".view.patient.treatment.TreatmentsListActivity"
             android:screenOrientation="portrait">
 
         </activity>
         <!-- HOME ACTIVITY -->
         <activity
-            android:name=".initiation.Home"
+            android:name=".view.authentication.home.HomeAuthActivity"
             android:screenOrientation="portrait" />
         <!-- REGISTER ACTIVITY -->
         <activity
-            android:name=".initiation.Register"
+            android:name=".view.authentication.registration.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSecondary"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
@@ -47,34 +59,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!-- LOGIN ACTIVITY -->
         <activity
-            android:name=".initiation.Login"
+            android:name=".view.authentication.login.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <!-- FORGOT_PASSWORD ACTIVITY -->
         <activity
-            android:name=".initiation.ForgotPassword"
+            android:name=".view.authentication.login.forgot_password.ForgotPasswordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".initiation.Login" />
+                android:value=".view.authentication.login.LoginActivity" />
         </activity>
         <!-- USER MAIN ACTIVITY -->
         <!--
             activity
-            android:name=".oldUser.Main"
+            android:name=".oldUser.HomeAuthActivity"
             android:screenOrientation="portrait" /
         -->
 
         <activity
-            android:name=".user.Main"
+            android:name=".view.patient.home.HomePatientActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".user.ChooseTreatment" />
-        <activity android:name=".user.BookAppointments"></activity>
+        <activity android:name=".view.patient.treatment.ChooseTreatmentActivity" />
+        <activity android:name=".view.patient.appointment.BookAppointmentsActivity"/>
     </application>
 
 </manifest>

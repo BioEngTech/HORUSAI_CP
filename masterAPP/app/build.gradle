@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -40,6 +44,9 @@ dependencies {
     implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
     // country flags
     implementation 'com.hbb20:ccp:2.2.3'
+
+    //guava
+    api 'com.google.guava:guava:27.0.1-android'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
