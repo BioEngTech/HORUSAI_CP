@@ -1,4 +1,4 @@
-package vigi.care_provider.view.authentication.home;
+package vigi.care_provider.view.authentication.home.components;
 
 import android.app.Activity;
 import android.content.Context;

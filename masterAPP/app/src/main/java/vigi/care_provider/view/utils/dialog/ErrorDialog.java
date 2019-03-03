@@ -1,4 +1,4 @@
-package vigi.care_provider.view.dialog;
+package vigi.care_provider.view.utils.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -24,15 +24,10 @@ public class ErrorDialog {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
             // Create objects
-
             TextView msgError = dialog.findViewById(R.id.utilsErrorDialog_message);
-
-            // Set text
-
             msgError.setText(msg);
 
             // Set on click listener on try again button
-
             Button dialogButton = dialog.findViewById(R.id.utilsErrorDialog_okBtn);
             dialogButton.setOnClickListener(v -> dialog.dismiss());
 

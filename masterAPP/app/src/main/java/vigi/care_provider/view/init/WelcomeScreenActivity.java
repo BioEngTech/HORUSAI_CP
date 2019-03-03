@@ -14,7 +14,7 @@ import vigi.care_provider.view.authentication.home.HomeAuthActivity;
 @SuppressWarnings("FieldCanBeLocal")
 public class WelcomeScreenActivity extends AppCompatActivity {
 
-    private static String TAG = "welcomeClass";
+    private static String TAG = WelcomeScreenActivity.class.getName();
 
     private LinearLayout welcomeText;
 
