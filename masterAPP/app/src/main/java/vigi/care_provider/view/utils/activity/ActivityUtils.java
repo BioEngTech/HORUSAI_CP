@@ -1,11 +1,16 @@
 package vigi.care_provider.view.utils.activity;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.Arrays;
+
+import vigi.care_provider.view.authentication.home.HomeAuthActivity;
+import vigi.care_provider.view.init.WelcomeScreenActivity;
 
 public final class ActivityUtils {
 
@@ -17,10 +22,21 @@ public final class ActivityUtils {
      * @param to Class of Activity intended to open
      */
     public static void jumpToActivity(Activity from, Class<? extends Activity> to) {
-        Intent intentTo = new Intent(from.getBaseContext(), to);
+        Intent intentTo = new Intent(from, to);
         from.startActivity(intentTo);
     }
 
+    public static void jumpToActivity(Activity from, Class<? extends Activity> to, Bundle options) {
+        Intent intentTo = new Intent(from, to);
+        from.startActivity(intentTo, options);
+    }
+
+    /**
+     *
+     * @param from
+     * @param to
+     * @param flags
+     */
     public static void jumpToActivity(Activity from, Class<? extends Activity> to, int flags) {
         Intent intentTo = new Intent(from, to);
         intentTo.addFlags(flags);

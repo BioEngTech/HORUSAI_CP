@@ -68,11 +68,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, TextView.OnEditorActionListener, TextView.OnKeyListener {
 
-    private static String TAG = "registerClass";
+    private static String TAG = RegisterActivity.class.getName();
 
     private EditText passwordText;
     private EditText emailText;
-    private FirebaseAuth authFire;
     private String errorText, code;
     private Button registerBtn;
     private ImageView spin;
@@ -100,24 +99,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Open layout
         setContentView(R.layout.initiation_register);
 
-        // Objects
-        emailText = findViewById(R.id.initiationRegister_email);
-        passwordText = findViewById(R.id.initiationRegister_Password);
-        name = findViewById(R.id.initiationRegister_name);
-        phone = findViewById(R.id.initiationRegister_phoneNumber);
-        registerBtn = findViewById(R.id.initiationRegister_registerButton);
-        spin = findViewById(R.id.initiationRegister_spinner);
-        termsAndConditions = findViewById(R.id.initiationRegister_termsAndConditions);
-        scrollView = findViewById(R.id.initiationRegister_scrollview);
-        birthday = findViewById(R.id.initiationRegister_birthday);
-        myToolbar = findViewById(R.id.initiationRegister_toolbar);
-        photo = findViewById(R.id.initiationRegister_ProfilePhoto);
-        background = findViewById(R.id.initiationRegister_background);
-        ccp = findViewById(R.id.initiationRegister_ccp);
+        setupUiComponents();
 
         //Initialise FirebaseErrorCodes instances
         storageRef = FirebaseStorage.getInstance().getReference();
@@ -225,6 +209,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // TODO when user selects a country flag for his phone number, automatically change the hint on the right side according to the format of the number in that country
         code = ccp.getSelectedCountryCode();
+    }
+
+    public void setupUiComponents() {
+        emailText = findViewById(R.id.initiationRegister_email);
+        passwordText = findViewById(R.id.initiationRegister_Password);
+        name = findViewById(R.id.initiationRegister_name);
+        phone = findViewById(R.id.initiationRegister_phoneNumber);
+        registerBtn = findViewById(R.id.initiationRegister_registerButton);
+        spin = findViewById(R.id.initiationRegister_spinner);
+        termsAndConditions = findViewById(R.id.initiationRegister_termsAndConditions);
+        scrollView = findViewById(R.id.initiationRegister_scrollview);
+        birthday = findViewById(R.id.initiationRegister_birthday);
+        myToolbar = findViewById(R.id.initiationRegister_toolbar);
+        photo = findViewById(R.id.initiationRegister_ProfilePhoto);
+        background = findViewById(R.id.initiationRegister_background);
+        ccp = findViewById(R.id.initiationRegister_ccp);
     }
 
     @Override
@@ -397,7 +397,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void registerAttempt() {
         try {
             // Initialize FirebaseErrorCodes auth
-            authFire = FirebaseAuth.getInstance();
+            FirebaseAuth authFire = FirebaseAuth.getInstance();
 
             // Get EditText Strings
             String email = emailText.getText().toString().trim();

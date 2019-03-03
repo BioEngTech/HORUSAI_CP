@@ -144,10 +144,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             spinVisibility(this, spin, View.VISIBLE, loginBtn);
 
-            String email = getTrimmedText(emailText);
-            String password = getTrimmedText(passwordText);
-
-
+            performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
         });
 
         lostPassBtn.setOnClickListener(v -> jumpToActivity(this, ForgotPasswordActivity.class));
@@ -196,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     }
 
     @Override
-    public void performLogin(String email, String password) {
+    public void performLogin(AuthenticationService authService, String email, String password) {
         authService.login(email, password);
         authService.addLoginCompleteListener(this, new LoginCompleteListener());
     }

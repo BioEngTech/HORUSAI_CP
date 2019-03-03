@@ -12,6 +12,7 @@ public class FirebaseAuthService implements AuthenticationService {
 
     private FirebaseAuth authInstance;
     private Task<AuthResult> loginResultTask;
+    private Task<Void> generateNewPasswordTask;
 
     @Override
     public void init() {
@@ -26,6 +27,16 @@ public class FirebaseAuthService implements AuthenticationService {
     @Override
     public void addLoginCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener) {
         loginResultTask.addOnCompleteListener(activity, listener);
+    }
+
+    @Override
+    public void generateNewPassword(String user) {
+        generateNewPasswordTask = authInstance.sendPasswordResetEmail(user);
+    }
+
+    @Override
+    public void addGenerateNewPasswordCompleteListener(Activity activity, OnCompleteListener<Void> listener) {
+        generateNewPasswordTask.addOnCompleteListener(activity, listener);
     }
 
     @Override

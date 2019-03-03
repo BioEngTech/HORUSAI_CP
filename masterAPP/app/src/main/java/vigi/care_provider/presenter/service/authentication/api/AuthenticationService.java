@@ -3,7 +3,6 @@ package vigi.care_provider.presenter.service.authentication.api;
 import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 /**
@@ -17,6 +16,10 @@ public interface AuthenticationService {
     void login(String user, String password);
 
     void addLoginCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener);
+
+    void generateNewPassword(String user);
+
+    void addGenerateNewPasswordCompleteListener(Activity activity, OnCompleteListener<Void> listener);
 
     void logout();
 }
