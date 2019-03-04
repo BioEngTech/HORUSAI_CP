@@ -8,12 +8,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import vigi.care_provider.R;
+import vigi.care_provider.view.utils.activity.ActivityUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ErrorDialog {
+public class VigiErrorDialog {
+    private Activity activity;
 
-    public void showDialog(final Activity activity, String msg){
+    private VigiErrorDialog(){}
+
+    public VigiErrorDialog(Activity activity) {
+        this.activity = activity;
+    }
+
+    public void showDialog(String msg){
 
             final Dialog dialog = new Dialog(activity);
 

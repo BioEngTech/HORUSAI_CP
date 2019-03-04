@@ -37,7 +37,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     private void launchHomeAuthActivity() {
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(WelcomeScreenActivity.this,
                 welcomeText,"welcomeToVigi");
-        jumpToActivity(this, HomeAuthActivity.class, options.toBundle());
+        jumpToActivity(this, HomeAuthActivity.class, false, options.toBundle());
     }
 
 }

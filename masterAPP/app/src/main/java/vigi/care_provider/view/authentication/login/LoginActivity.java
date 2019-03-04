@@ -31,7 +31,7 @@ import vigi.care_provider.view.authentication.login.forgot_password.ForgotPasswo
 import vigi.care_provider.view.authentication.registration.RegisterActivity;
 import vigi.care_provider.view.patient.home.HomePatientActivity;
 import vigi.care_provider.R;
-import vigi.care_provider.view.utils.dialog.ErrorDialog;
+import vigi.care_provider.view.utils.dialog.VigiErrorDialog;
 import vigi.care_provider.presenter.error.codes.FirebaseErrorCodes;
 import vigi.care_provider.view.vigi.activity.VigiLoginActivity;
 
@@ -135,8 +135,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     @Override
     public void setupClickListeners() {
         signUpBtn.setOnClickListener(v -> {
-            jumpToActivity(this, RegisterActivity.class);
-            finish();
+            jumpToActivity(this, RegisterActivity.class, true);
         });
 
         loginBtn.setOnClickListener(v -> {
@@ -147,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
             performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
         });
 
-        lostPassBtn.setOnClickListener(v -> jumpToActivity(this, ForgotPasswordActivity.class));
+        lostPassBtn.setOnClickListener(v -> jumpToActivity(this, ForgotPasswordActivity.class, false));
     }
 
     // Spinning handling
@@ -202,9 +201,8 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         @Override
         public void onComplete(@NonNull Task task) {
             if (task.isSuccessful()) {
-                jumpToActivity(LoginActivity.this, HomePatientActivity.class,
+                jumpToActivity(LoginActivity.this, HomePatientActivity.class, true,
                         Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                finish();
             } else {
                 String errorText = "";
                 try {
@@ -216,7 +214,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
                 } finally {
                     background.performClick();
                     stopSpinningLoader(spin, loginBtn);
-                    new ErrorDialog().showDialog(LoginActivity.this, errorText);
+                    new VigiErrorDialog(LoginActivity.this).showDialog(errorText);
                 }
             }
         }

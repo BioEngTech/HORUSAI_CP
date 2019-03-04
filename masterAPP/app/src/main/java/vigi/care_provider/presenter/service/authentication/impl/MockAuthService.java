@@ -35,6 +35,16 @@ public class MockAuthService implements AuthenticationService {
     }
 
     @Override
+    public void register(String user, String password) {
+        //mock answer
+    }
+
+    @Override
+    public void addRegisterCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener) {
+        //mock answer
+    }
+
+    @Override
     public void logout() {
         //mock answer
     }
