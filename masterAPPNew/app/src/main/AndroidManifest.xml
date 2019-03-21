@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="vigi.patient">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:name=".view.utils.fonts.FontFamilyInitiation"
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/name_app_text"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
+        <!-- INIT WELCOME ACTIVITY -->
+        <activity
+            android:name=".view.init.WelcomeScreenActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <!--category android:name="android.intent.category.DEFAULT"/-->
+                <!-- Accepts URIs that begin with "http://www.example.com/vigi” -->
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/vigi" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "example://vigi” -->
+                <data android:scheme="example"
+                    android:host="vigi" />
+            </intent-filter>
+        </activity>
+        <!-- AUTH HOME ACTIVITY -->
+        <activity android:name=".view.authentication.home.HomeAuthActivity"
+            android:screenOrientation="portrait" />
+        <!-- AUTH REGISTER ACTIVITY -->
+        <activity android:name=".view.authentication.registration.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSecondary"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+        </activity>
+        <!-- AUTH LOGIN ACTIVITY -->
+        <activity android:name=".view.authentication.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <!-- AUTH FORGOT_PASSWORD ACTIVITY -->
+        <activity android:name=".view.authentication.login.forgot_password.ForgotPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+        </activity>
+        <!-- PATIENT HOME ACTIVITY -->
+        <activity android:name=".view.patient.home.HomePatientActivity"
+            android:screenOrientation="portrait"/>
+        <!-- PATIENT SELECT TREATMENTS ACTIVITY -->
+        <activity android:name=".view.patient.treatment.SelectTreatmentActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!-- PATIENT TREATMENT DETAILS ACTIVITY -->
+        <activity android:name=".view.patient.treatment.TreatmentDetailsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!-- PATIENT BOOK APPOINTMENTS ACTIVITY -->
+        <activity android:name=".view.patient.appointment.BookAppointmentsActivity"
+            android:screenOrientation="portrait"/>
+        <!-- PATIENT APPOINTMENT CONFIRMATION ACTIVITY -->
+        <activity android:name=".view.patient.appointment.AppointmentConfirmationActivity"
+            android:screenOrientation="portrait" />
+
+    </application>
+
+</manifest>

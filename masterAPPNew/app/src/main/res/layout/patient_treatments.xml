@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        app:theme="@style/ToolbarColoredBackArrow">
+    </android.support.v7.widget.Toolbar>
+
+    <Spinner
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/type"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="65dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@drawable/utils_dash_button" />
+
+    <TextView
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginEnd="80dp"
+        android:text="Change"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlueLight"/>
+
+    <android.support.v4.view.ViewPager
+        android:layout_below="@id/type"
+        android:layout_marginTop="25dp"
+        android:foregroundGravity="center"
+        android:id="@+id/view_pager"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
+        android:layout_marginBottom="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>
