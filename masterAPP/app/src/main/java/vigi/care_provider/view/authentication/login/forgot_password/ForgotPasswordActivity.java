@@ -27,7 +27,6 @@ import vigi.care_provider.presenter.connection.ConnectionEvaluator;
 import vigi.care_provider.presenter.error.codes.FirebaseErrorCodes;
 import vigi.care_provider.presenter.service.authentication.api.AuthenticationService;
 import vigi.care_provider.presenter.service.authentication.impl.FirebaseAuthService;
-import vigi.care_provider.view.vigi.activity.VigiActivity;
 import vigi.care_provider.view.vigi.activity.VigiGenerateNewPasswordActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -164,9 +163,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
 
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
-                0,                 // toXDelta
-                view.getHeight(),  // fromYDelta
-                0);                // toYDelta
+                0,                  // toXDelta
+                view.getHeight(),           // fromYDelta
+                0);               // toYDelta
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
@@ -177,9 +176,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
 
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
-                0,                 // toXDelta
-                0,                 // fromYDelta
-                view.getHeight()); // toYDelta
+                0,                  // toXDelta
+                0,               // fromYDelta
+                view.getHeight());         // toYDelta
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);

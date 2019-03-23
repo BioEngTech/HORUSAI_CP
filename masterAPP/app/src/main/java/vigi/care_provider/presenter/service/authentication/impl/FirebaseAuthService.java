@@ -8,6 +8,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import vigi.care_provider.presenter.service.authentication.api.AuthenticationService;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class FirebaseAuthService implements AuthenticationService {
 
     private FirebaseAuth authInstance;
@@ -21,8 +23,14 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void login(String user, String password) {
-        loginResultTask = authInstance.signInWithEmailAndPassword(user, password);
+    public boolean login(String user, String password) {
+        try {
+            loginResultTask = authInstance.signInWithEmailAndPassword(user, password);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -31,8 +39,14 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void generateNewPassword(String user) {
-        generateNewPasswordTask = authInstance.sendPasswordResetEmail(user);
+    public boolean generateNewPassword(String user) {
+        try {
+            generateNewPasswordTask = authInstance.sendPasswordResetEmail(user);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -41,8 +55,14 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void register(String user, String password) {
-        registerResultTask = authInstance.createUserWithEmailAndPassword(user, password);
+    public boolean register(String user, String password) {
+        try {
+            registerResultTask = authInstance.createUserWithEmailAndPassword(user, password);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -51,7 +71,13 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void logout() {
+    public String getCurrentUserString() {
+        checkNotNull(authInstance.getCurrentUser());
+        return authInstance.getCurrentUser().toString();
+    }
 
+    @Override
+    public boolean logout() {
+        return true;
     }
 }

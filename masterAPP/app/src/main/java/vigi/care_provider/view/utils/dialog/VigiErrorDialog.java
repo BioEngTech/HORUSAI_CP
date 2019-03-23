@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import vigi.care_provider.R;
-import vigi.care_provider.view.utils.activity.ActivityUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

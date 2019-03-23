@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name="vigi.care_provider.view.utils.fonts.FontFamilyInitiation"
+        android:name=".view.utils.fonts.FontFamilyInitiation"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

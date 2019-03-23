@@ -13,17 +13,19 @@ public interface AuthenticationService {
 
     void init();
 
-    void login(String user, String password);
+    boolean login(String user, String password);
 
     void addLoginCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener);
 
-    void generateNewPassword(String user);
+    boolean generateNewPassword(String user);
 
     void addGenerateNewPasswordCompleteListener(Activity activity, OnCompleteListener<Void> listener);
 
-    void register(String user, String password);
+    boolean register(String user, String password);
 
     void addRegisterCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener);
 
-    void logout();
+    String getCurrentUserString();
+
+    boolean logout();
 }

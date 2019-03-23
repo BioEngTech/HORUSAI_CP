@@ -15,10 +15,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -35,17 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.hbb20.CountryCodePicker;
 
 import java.io.FileNotFoundException;
@@ -55,15 +45,15 @@ import vigi.care_provider.model.entities.Patient;
 import vigi.care_provider.presenter.error.codes.FirebaseErrorCodes;
 import vigi.care_provider.presenter.service.authentication.api.AuthenticationService;
 import vigi.care_provider.presenter.service.authentication.impl.FirebaseAuthService;
-import vigi.care_provider.view.patient.treatment.TreatmentsListActivity;
+import vigi.care_provider.presenter.service.patient.api.PatientService;
+import vigi.care_provider.presenter.service.patient.impl.FirebasePatientService;
 import vigi.care_provider.R;
 
+import vigi.care_provider.view.patient.treatment.TreatmentsListActivity;
 import vigi.care_provider.view.utils.dialog.VigiDatePickerDialog;
 import vigi.care_provider.view.utils.dialog.VigiErrorDialog;
 import vigi.care_provider.view.utils.dialog.VigiPictureAlertDialog;
-import vigi.care_provider.view.utils.editText.EditTextUtils;
 import vigi.care_provider.view.utils.span.VigiClickableSpan;
-import vigi.care_provider.view.vigi.activity.VigiActivity;
 import vigi.care_provider.view.vigi.activity.VigiRegisterActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -90,16 +80,11 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     private String errorCode = "";
     private LinearLayout background;
     private AppCompatImageView photoImageView;
-    private String newPatientkey;
     private Uri contentURI;
     CountryCodePicker ccp;
 
     private AuthenticationService authService;
-
-    StorageReference storageRef, imagesRef;
-    FirebaseDatabase mFirebaseDatabase;
-    DatabaseReference mRefPatient;
-
+    private PatientService patientService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,12 +95,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         setupClickListeners();
 
         setupAuthService(authService);
-
-        //Initialise FirebaseErrorCodes instances
-        storageRef = FirebaseStorage.getInstance().getReference();
-        imagesRef = storageRef.child("images/profiles");
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRefPatient = mFirebaseDatabase.getReference("Patient");
+        setupPatientService(patientService);
 
         // TODO when user selects a country flag for his phoneText number, automatically change the hint on the right side according to the format of the number in that country
         String code = ccp.getSelectedCountryCode();
@@ -251,6 +231,11 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         authService.init();
     }
 
+    private void setupPatientService(PatientService patientService) {
+        patientService = new FirebasePatientService();
+        patientService.init();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 0 && userGrantedCameraAccess(grantResults)) {
@@ -275,11 +260,14 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
                 photoImageView.setBackgroundResource(0); // to delete the drawable that was inside the circle
                 photoImageView.setImageURI(contentURI);
             } else if (requestCode == CAMERA) {
+                checkNotNull(data.getExtras());
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                checkNotNull(thumbnail);
 
                 //get uri
                 final FileOutputStream fos;
                 try {
+
                     fos = openFileOutput("my_new_image.jpg", Context.MODE_PRIVATE);
                     thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
@@ -362,53 +350,19 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
-                //create random key for new Patient
-                newPatientkey = mRefPatient.push().getKey();
+                Patient patient = new Patient();
+                patient.setName(nameText.getText().toString());
+                patient.setImage(contentURI.toString());/*temporary value, is changed before actually saving object */
+                patient.setEmail(emailText.getText().toString());
+                patient.setPhoneNumber(ccp.getSelectedCountryCode() +  phoneText.getText().toString());
+                patient.setId(authService.getCurrentUserString());
 
-                //save image in firestore
-                final StorageReference fileRef = imagesRef.child(newPatientkey + ".jpg");
-                fileRef.putFile(contentURI).addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        //pd.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
+                patientService.createPatient(patient);
 
-                        //save new Patient data to FirebaseErrorCodes
-                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            // Got the download URL for 'users/me/profile.png'
-                            Log.d("NAMASTE uri", uri.toString());
-                            Uri downloadUri = uri;
-                            String profilephotopath = downloadUri.toString();
+                jumpToActivity(RegisterActivity.this, TreatmentsListActivity.class, true,
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                            //define Patient instance
-                            Patient patient = new Patient();
-                            patient.setName(nameText.getText().toString());
-                            patient.setImage(profilephotopath); //get path to firestore
-                            patient.setEmail(emailText.getText().toString());
-                            String full_phonenumber= ccp.getSelectedCountryCode() +  phoneText.getText().toString();
-                            Log.d("NAMASTE phonenumber",full_phonenumber);
-                            patient.setPhoneNumber(full_phonenumber);
-
-                            patient.setId(FirebaseAuth.getInstance().getCurrentUser().toString());
-
-                            Log.d("NAMASTE newPatientkey", newPatientkey);
-
-                            mRefPatient.child(newPatientkey).setValue(patient);
-
-                            jumpToActivity(RegisterActivity.this, TreatmentsListActivity.class, true,
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        }).addOnFailureListener(exception -> {
-                            // Handle any errors
-                            Toast.makeText(RegisterActivity.this, "Couldn't upload image successfully", Toast.LENGTH_SHORT).show();
-                        });
-
-                    } else {
-                        String message = task1.getException().toString();
-                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } else { // if task not successful
+            } else {
                 try {
                     errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 

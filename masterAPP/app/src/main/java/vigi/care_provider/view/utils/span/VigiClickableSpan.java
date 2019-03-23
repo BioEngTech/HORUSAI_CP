@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import vigi.care_provider.R;
-import vigi.care_provider.view.authentication.registration.RegisterActivity;
 
 public class VigiClickableSpan extends ClickableSpan {
     private Context context;

@@ -3,7 +3,6 @@ package vigi.care_provider.view.utils.dialog;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.graphics.drawable.ColorDrawable;
-import android.widget.DatePicker;
 
 import java.util.Calendar;
 
