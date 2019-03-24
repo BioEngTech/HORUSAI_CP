@@ -23,14 +23,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
-import java.util.Objects;
+
+import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.authentication.login.forgot_password.ForgotPasswordActivity;
 import vigi.patient.view.authentication.registration.RegisterActivity;
 import vigi.patient.view.patient.home.HomePatientActivity;
-import vigi.patient.view.utils.dialog.ErrorDialog;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
 import vigi.patient.R;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
+import vigi.patient.view.utils.dialog.VigiErrorDialog;
 import vigi.patient.view.vigi.activity.VigiLoginActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     private TextView lostPassBtn;
     private ImageView spin;
     private LinearLayout background;
+
 
     private AuthenticationService authService;
 
@@ -73,10 +75,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         signUpBtn = findViewById(R.id.sign_up_button);
         lostPassBtn = findViewById(R.id.forgot_pass_button);
         spin = findViewById(R.id.spinner);
-        scrollView = findViewById(R.id.scroll_view);
-        myToolbar = findViewById(R.id.toolbar);
         background = findViewById(R.id.background);
-        myToolbar = findViewById(R.id.toolbar);
 
         removeScrollableIndicator();
         customizeActionBar();
@@ -84,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     }
 
     private void setupPasswordTextComponent() {
-        passwordText = findViewById(R.id.initiationLogin_password);
+        passwordText = findViewById(R.id.password);
         passwordText.setOnFocusChangeListener((passwordView, b) -> hideKeyboardFrom(passwordView, emailText));
         // Setup input type of password programmatically to avoid getting bold
         passwordText.setTransformationMethod(new PasswordTransformationMethod());
@@ -112,12 +111,12 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     }
 
     private void removeScrollableIndicator() {
-        ScrollView scrollView = findViewById(R.id.initiationLogin_scrollView);
+        ScrollView scrollView = findViewById(R.id.scrollView);
         scrollView.setVerticalScrollBarEnabled(false);
     }
 
     private void customizeActionBar() {
-        android.support.v7.widget.Toolbar myToolbar = findViewById(R.id.initiationLogin_toolbar);
+        android.support.v7.widget.Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
     }
 

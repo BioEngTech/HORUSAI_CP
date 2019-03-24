@@ -30,7 +30,7 @@ import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.vigi.activity.VigiGenerateNewPasswordActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static vigi.care_provider.view.utils.editText.EditTextUtils.getTrimmedText;
+import static vigi.patient.view.utils.editText.EditTextUtils.getTrimmedText;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements VigiGenerateNewPasswordActivity {
 

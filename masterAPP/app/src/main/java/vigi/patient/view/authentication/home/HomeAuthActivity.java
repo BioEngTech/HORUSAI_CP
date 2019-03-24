@@ -20,7 +20,6 @@ import vigi.patient.view.authentication.home.viewHolder.HomeAuthSliderAdapter;
 import vigi.patient.view.authentication.registration.RegisterActivity;
 import vigi.patient.view.authentication.login.LoginActivity;
 import vigi.patient.view.authentication.home.components.HomeAuthAnimatorListener;
-import vigi.patient.view.authentication.home.components.HomeAuthSliderAdapter;
 import vigi.patient.view.vigi.activity.VigiActivity;
 import vigi.patient.view.vigi.web.VigiHtml;
 import vigi.patient.R;

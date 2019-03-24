@@ -37,10 +37,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.hbb20.CountryCodePicker;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Calendar;
-import java.util.Objects;
 
 import vigi.patient.model.entities.Patient;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
@@ -50,12 +50,13 @@ import vigi.patient.presenter.service.patient.api.PatientService;
 import vigi.patient.presenter.service.patient.impl.FirebasePatientService;
 import vigi.patient.R;
 import vigi.patient.view.authentication.login.LoginActivity;
-import vigi.patient.view.patient.treatment.TreatmentsListActivity;
+import vigi.patient.view.patient.home.HomePatientActivity;
 import vigi.patient.view.utils.dialog.VigiDatePickerDialog;
 import vigi.patient.view.utils.dialog.VigiErrorDialog;
 import vigi.patient.view.utils.span.VigiClickableSpan;
 import vigi.patient.view.utils.dialog.VigiPictureAlertDialog;
 import vigi.patient.view.vigi.activity.VigiRegisterActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static vigi.patient.view.utils.activity.ActivityUtils.CAMERA;
@@ -73,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     private EditText emailText;
     private String errorText;
     private Button registerBtn;
+    private TextView signInText;
     private ImageView spin;
     private CircleImageView photo;
     private TextView termsAndConditions;
@@ -91,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.initiation_register);
+        setContentView(R.layout.authentication_register);
 
         setupUiComponents();
         setupClickListeners();
@@ -108,10 +110,11 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         emailText = findViewById(R.id.email);
         passwordText = findViewById(R.id.password);
         nameText = findViewById(R.id.name);
-        phoneText = findViewById(R.id.phoneNumber);
-        registerBtn = findViewById(R.id.registerButton);
+        phoneText = findViewById(R.id.phone_number);
+        registerBtn = findViewById(R.id.register_button);
+        signInText = findViewById(R.id.sign_in_button);
         spin = findViewById(R.id.spinner);
-        termsAndConditions = findViewById(R.id.termsAndConditions);
+        termsAndConditions = findViewById(R.id.terms_and_conditions);
         birthdayText = findViewById(R.id.birthday);
         photoBorder = findViewById(R.id.profile_photo_view);
         photo = findViewById(R.id.profile_photo);
@@ -182,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
     @Override
     public void setupClickListeners() {
-        signInBtn.setOnClickListener(v -> jumpToActivity(RegisterActivity.this, LoginActivity.class, true);
+        signInText.setOnClickListener(v -> jumpToActivity(RegisterActivity.this, LoginActivity.class, true));
         registerBtn.setOnClickListener(v -> {
             // Disable movement and start spinning loader
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -197,10 +200,10 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
                 errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please select a photo.");
             } else if (!ccp.isValidFullNumber()){
                 errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid phone number.");
-            } else if (birthday.getText().length()==0 || name.getText().length() == 0 || emailText.getText.length == 0 || passwordText.getText().length == 0){
+            } else if (birthdayText.getText().length()==0 || nameText.getText().length() == 0 || emailText.getText().length() == 0 || passwordText.getText().length() == 0){
                 errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid sign up, all fields are required.");
             } else {
-                registerAttempt();
+                performRegister(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
             }
         });
 
@@ -219,12 +222,12 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     }
 
     private void removeScrollableIndicator() {
-        ScrollView scrollView = findViewById(R.id.initiationRegister_scrollview);
+        ScrollView scrollView = findViewById(R.id.scrollview);
         scrollView.setVerticalScrollBarEnabled(false);
     }
 
     private void customizeActionBar() {
-        Toolbar myToolbar = findViewById(R.id.initiationRegister_toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
     }
 
@@ -368,7 +371,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
                 patientService.createPatient(patient);
 
-                jumpToActivity(RegisterActivity.this, TreatmentsListActivity.class, true,
+                jumpToActivity(RegisterActivity.this, HomePatientActivity.class, true,
                         Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
             } else {
