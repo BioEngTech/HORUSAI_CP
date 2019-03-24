@@ -1,7 +1,6 @@
 package vigi.patient.presenter.service.authentication.impl;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -10,16 +9,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
-import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
+import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 import vigi.patient.view.authentication.login.LoginActivity;
-import vigi.patient.view.patient.home.HomePatientActivity;
 import vigi.patient.view.utils.dialog.VigiErrorDialog;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static vigi.patient.view.utils.activity.ActivityUtils.jumpToActivity;
 
 public class FirebaseAuthService implements AuthenticationService {
 
@@ -34,16 +32,27 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public boolean login(String user, String password, Activity... activities) {
+    public boolean login(String user, String password) throws AuthenticationException {
+        final String[] errorText = new String[1];
+
         try{
             loginResultTask = authInstance.signInWithEmailAndPassword(user, password);
-            if (activities!=null){
-                addLoginCompleteListener(activities[0],new LoginCompleteListener());
-            }
 
-            return true;
-        }catch (Exception e){
-            return false;
+            loginResultTask.addOnCompleteListener(task -> {
+                try {
+                    onCompleteLogin(task);
+                } catch (AuthenticationException e) {
+                    errorText[0] = e.getMessage();
+                }
+            }).wait();
+
+            if (errorText[0].isEmpty()) {
+                return true;
+            } else {
+                throw new AuthenticationException(errorText[0]);
+            }
+        } catch (Exception e){
+            throw new AuthenticationException(e.getMessage());
         }
     }
 
@@ -53,24 +62,18 @@ public class FirebaseAuthService implements AuthenticationService {
 
     }
 
-    private class LoginCompleteListener implements OnCompleteListener<AuthResult> {
-        @Override
-        public void onComplete(@NonNull Task task) {
-            if (task.isSuccessful()) {
-                jumpToActivity(LoginActivity.this, HomePatientActivity.class, true,
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-            } else {
-                String errorText = "";
-                try {
-                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                    errorText = FirebaseErrorCodes.exceptionType(errorCode);
-                } catch (ClassCastException e){
-                    errorText = "Internet connection is not available.";
-                } finally {
-                    background.performClick();
-                    stopSpinningLoader(spin, loginBtn);
-                    new VigiErrorDialog(LoginActivity.this).showDialog(errorText);
-                }
+    private boolean onCompleteLogin(Task<AuthResult> task) throws AuthenticationException {
+        if (task.isSuccessful()) {
+            return true;
+        } else {
+            String errorText = "";
+            try {
+                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                errorText = FirebaseErrorCodes.exceptionType(errorCode);
+            } catch (ClassCastException e){
+                errorText = "Internet connection is not available.";
+            } finally {
+                throw new AuthenticationException(errorText);
             }
         }
     }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 
+import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 
 public class MockAuthService implements AuthenticationService {
@@ -15,7 +16,7 @@ public class MockAuthService implements AuthenticationService {
     }
 
     @Override
-    public boolean login(String user, String password) {
+    public boolean login(String user, String password) throws AuthenticationException {
         return true;
     }
 

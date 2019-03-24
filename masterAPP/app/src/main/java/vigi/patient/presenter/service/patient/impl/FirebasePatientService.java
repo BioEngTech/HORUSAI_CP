@@ -67,11 +67,10 @@ public class FirebasePatientService implements PatientService {
         imageStorageReference = storageReference.child(currentReference.getKey() + FirebaseConstants.JPG_EXTENSION);
         UploadTask uploadTask = imageStorageReference.putFile(Uri.parse(patient.getImage()));
 
-        CompletableFuture<StorageTask> completableFuture
-                = CompletableFuture.supplyAsync(() -> uploadTask.addOnCompleteListener(new OnImageUploadCompleteListener()));
+        uploadTask.addOnCompleteListener(new OnImageUploadCompleteListener()).wait();
 
         //Wait for it to end
-        completableFuture.get();
+        //completableFuture.get();
     }
 
     private class OnImageUploadCompleteListener implements OnCompleteListener {

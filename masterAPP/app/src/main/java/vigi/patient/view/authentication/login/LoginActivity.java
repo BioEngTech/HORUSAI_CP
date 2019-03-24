@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 
+import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.authentication.login.forgot_password.ForgotPasswordActivity;
 import vigi.patient.view.authentication.registration.RegisterActivity;
@@ -200,12 +201,12 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     @Override
     public void performLogin(AuthenticationService authService, String email, String password) {
 
-        if (authService.login(email, password)){
-            authService.addLoginCompleteListener(this, new LoginCompleteListener());
-        }else{
+        try {
+            authService.login(email, password);
+        } catch (AuthenticationException e) {
             background.performClick();
             stopSpinningLoader(spin, loginBtn);
-            new VigiErrorDialog(LoginActivity.this).showDialog("Internet connection is not available.");
+            new VigiErrorDialog(LoginActivity.this).showDialog(e.getMessage());
         }
     }
 
