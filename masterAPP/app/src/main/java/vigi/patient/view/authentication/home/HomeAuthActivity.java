@@ -33,8 +33,6 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
 
     private ViewPager slideView;
     private LinearLayout dotLayout;
-    private HomeAuthSliderAdapter adapter;
-    private TextView[] dots;
     private Button loginBtn;
     private Button registerBtn;
     private ProgressBar circleView;
@@ -81,6 +79,7 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
         sliderImages.add(1,getResources().getDrawable(R.drawable.image_staff));
         sliderDescriptions.add(1,"Explore our amazing staff, always ready to assist you");
         sliderImageSizes.add(1,100);
+
         HomeAuthSliderAdapter adapter = new HomeAuthSliderAdapter(this,sliderImages,sliderDescriptions,sliderImageSizes);
 
         slideView.setAdapter(adapter);
@@ -90,7 +89,7 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
     private void addDotsIndicator(int position){
         dotLayout.removeAllViews();
 
-        IntStream.range(0, 3).forEach(i -> {
+        IntStream.range(0, 2).forEach(i -> {
             TextView dot = new TextView(HomeAuthActivity.this);
             dot.setText(VigiHtml.fromHtml("&#8226;"));
             dot.setTextSize(24);
@@ -144,7 +143,7 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
 
     private void goToActivityOverridingTransition(Class<? extends Activity> activity) {
         Intent registerIntent = new Intent(HomeAuthActivity.this, activity);
-        startActivityForResult(registerIntent, REQUESTCODE);
+        startActivity(registerIntent);
         overridePendingTransition(R.anim.slide_up, R.anim.not_movable);
     }
 

@@ -1,5 +1,6 @@
 package vigi.patient.view.authentication.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,8 +51,6 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     private TextView lostPassBtn;
     private ImageView spin;
     private LinearLayout background;
-
-
     private AuthenticationService authService;
 
     @Override
@@ -60,8 +59,9 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         setContentView(R.layout.authentication_login);
 
         setupUiComponents();
+        setupClickListeners();
 
-        setupAuthService(authService);
+        setupAuthService();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     }
 
     private void removeScrollableIndicator() {
-        ScrollView scrollView = findViewById(R.id.scrollView);
+        ScrollView scrollView = findViewById(R.id.scroll_view);
         scrollView.setVerticalScrollBarEnabled(false);
     }
 
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupAuthService(AuthenticationService authService) {
+    private void setupAuthService() {
         authService = new FirebaseAuthService();
         authService.init();
     }
@@ -143,7 +143,11 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             spinVisibility(this, spin, View.VISIBLE, loginBtn);
 
-            performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
+            if (emailText.getText().length() == 0 || passwordText.getText().length() == 0){
+                new VigiErrorDialog(LoginActivity.this).showDialog("Please enter a valid sign up, all fields are required.");
+            } else{
+                performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
+            }
         });
 
         lostPassBtn.setOnClickListener(v -> jumpToActivity(this, ForgotPasswordActivity.class, false));
@@ -188,6 +192,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
     }
 
+
     @Override
     public void performLogin(AuthenticationService authService, String email, String password) {
         authService.login(email, password);
@@ -206,7 +211,6 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                     errorText = FirebaseErrorCodes.exceptionType(errorCode);
                 } catch (ClassCastException e){
-                    //TODO: is this exception the right one?
                     errorText = "Internet connection is not available.";
                 } finally {
                     background.performClick();
