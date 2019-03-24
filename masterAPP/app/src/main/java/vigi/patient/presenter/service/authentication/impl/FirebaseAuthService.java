@@ -1,14 +1,11 @@
 package vigi.patient.presenter.service.authentication.impl;
 
-import android.support.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -26,12 +23,8 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void login(String user, String password) throws AuthenticationException {
-        try{
-            loginResultTask = authInstance.signInWithEmailAndPassword(user, password);
-        } catch (Exception e){
-            throw new AuthenticationException(e.getMessage());
-        }
+    public void login(String user, String password){
+        loginResultTask = authInstance.signInWithEmailAndPassword(user, password);
     }
 
     @Override
@@ -40,12 +33,8 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void generateNewPassword(String user) throws AuthenticationException{
-        try {
-            generateNewPasswordTask = authInstance.sendPasswordResetEmail(user);
-        } catch (Exception e) {
-            throw new AuthenticationException(e.getMessage());
-        }
+    public void generateNewPassword(String user){
+        generateNewPasswordTask = authInstance.sendPasswordResetEmail(user);
     }
 
     @Override
@@ -54,12 +43,8 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void register(String user, String password) throws AuthenticationException{
-        try {
-            registerResultTask = authInstance.createUserWithEmailAndPassword(user, password);
-        } catch (Exception e) {
-            throw new AuthenticationException(e.getMessage());
-        }
+    public void register(String user, String password) {
+        registerResultTask = authInstance.createUserWithEmailAndPassword(user, password);
     }
 
     @Override
@@ -74,6 +59,6 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void logout() throws AuthenticationException {
+    public void logout(){
     }
 }

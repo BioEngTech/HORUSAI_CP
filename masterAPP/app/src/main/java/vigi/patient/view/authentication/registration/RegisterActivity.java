@@ -1,6 +1,5 @@
 package vigi.patient.view.authentication.registration;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,14 +36,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.hbb20.CountryCodePicker;
 
-import org.w3c.dom.Text;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import vigi.patient.model.entities.Patient;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
-import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.presenter.service.patient.api.PatientService;
@@ -73,7 +69,6 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
     private EditText passwordText;
     private EditText emailText;
-    private String errorText;
     private Button registerBtn;
     private TextView signInText;
     private ImageView spin;
@@ -82,7 +77,6 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     private EditText birthdayText;
     private EditText nameText;
     private EditText phoneText;
-    private String errorCode = "";
     private LinearLayout background;
     private RelativeLayout photoBorder;
     private Uri contentURI;
@@ -98,12 +92,8 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
         setupUiComponents();
         setupClickListeners();
-
-        setupAuthService(authService);
-        setupPatientService(patientService);
-
-        // TODO when user selects a country flag for his phoneText number, automatically change the hint on the right side according to the format of the number in that country
-        String code = ccp.getSelectedCountryCode();
+        setupAuthService();
+        setupPatientService();
     }
 
     @Override
@@ -188,21 +178,29 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     public void setupClickListeners() {
         signInText.setOnClickListener(v -> jumpToActivity(RegisterActivity.this, LoginActivity.class, true));
         registerBtn.setOnClickListener(v -> {
+
+            // Register the number
+            ccp.registerCarrierNumberEditText(phoneText);
+
             // Disable movement and start spinning loader
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            spinVisibility(this, spin, View.VISIBLE, registerBtn);
 
-            spinVisibility(spin, View.VISIBLE, registerBtn, RegisterActivity.this);
-
-            ccp.registerCarrierNumberEditText(phoneText);
 
             //  Check if photo was selected, check if phone is valid, and check if birthday and name are filled
             if (photo.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.ic_camera_white_24dp).getConstantState())) {
-                errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please select a photo.");
+                background.performClick();
+                stopSpinningLoader(spin, registerBtn);
+                new VigiErrorDialog(RegisterActivity.this).showDialog("Please select a photo.");
             } else if (!ccp.isValidFullNumber()){
-                errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid phone number.");
-            } else if (birthdayText.getText().length()==0 || nameText.getText().length() == 0 || emailText.getText().length() == 0 || passwordText.getText().length() == 0){
-                errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid sign up, all fields are required.");
+                background.performClick();
+                stopSpinningLoader(spin, registerBtn);
+                new VigiErrorDialog(RegisterActivity.this).showDialog("Please enter a valid phone number.");
+            } else if (birthdayText.getText().length()==0){
+                background.performClick();
+                stopSpinningLoader(spin, registerBtn);
+                new VigiErrorDialog(RegisterActivity.this).showDialog("Please enter a valid sign up, all fields are required.");
             } else {
                 performRegister(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
             }
@@ -210,7 +208,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
         //TODO translations in strings.xml
         photoBorder.setOnClickListener(v -> new VigiPictureAlertDialog(this)
-                .showDialog("Select photoImageView from gallery", "Capture photoImageView from camera"));
+                .showDialog("Select photo from gallery", "Capture photo from camera"));
     }
 
     //Should this be generic to reuse?
@@ -239,12 +237,12 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupAuthService(AuthenticationService authService) {
+    private void setupAuthService() {
         authService = new FirebaseAuthService();
         authService.init();
     }
 
-    private void setupPatientService(PatientService patientService) {
+    private void setupPatientService() {
         patientService = new FirebasePatientService();
         patientService.init();
     }
@@ -286,9 +284,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
                     String path = MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(), thumbnail, "Title", null);
 
-                    Log.d("NAMASTE", "path is " + path);
-
-                    //TODO photoImageView from camera is not the same size as border
+                    //TODO photo from camera is not the same size as border
                     contentURI = Uri.parse(path);
                     photo.setBackgroundResource(0); // to delete the drawable that was inside the circle
                     photo.setImageURI(contentURI);
@@ -304,27 +300,23 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     }
 
     // Spinning handling
-    private static void spinVisibility(View spinView, int visibility, Button btn, Context context) {
+    private static void spinVisibility(Context context, View spinView, int visibility, Button btn) {
         if (visibility == View.INVISIBLE) {
-            btn.setEnabled(true); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
+            btn.setEnabled(true);
             spinView.clearAnimation();
             spinView.setVisibility(visibility);
-            btn.setTextColor(context.getResources().getColor(R.color.colorWhite));
-        } else if (visibility == View.VISIBLE) {
-            btn.setEnabled(false); // SPINNER ONLY APPEARS ON THE FRAME LAYOUT IF "btn" IS SET TO DISABLE
-            btn.setTextColor(context.getResources().getColor(R.color.transparent));
+            btn.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
+        } else if(visibility == View.VISIBLE) {
+            btn.setEnabled(false);
+            btn.setTextColor(ContextCompat.getColor(context, R.color.transparent));
             spinView.setVisibility(visibility);
             spinView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate_indefinitely));
         }
     }
 
-    // Stop spinning loader, enable movement and launch error dialog
-    private void errorHandling(View spinView, View backgroundView, Button btn, Activity activity, String text) {
-        backgroundView.performClick();
-        spinVisibility(spinView, View.INVISIBLE, btn, activity);
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        VigiErrorDialog alert = new VigiErrorDialog(this);
-        alert.showDialog(text);
+    private void stopSpinningLoader(View spinView, Button btn) {
+        spinVisibility(this, spinView, View.INVISIBLE, btn);
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     // Action when back arrow is pressed
@@ -332,7 +324,6 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                setResult(RESULT_OK);
                 finish();
                 overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
                 return true;
@@ -343,7 +334,6 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     // Action when back navigation button is pressed
     @Override
     public void onBackPressed() {
-        setResult(RESULT_OK);
         finish();
         overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
     }
@@ -354,10 +344,9 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
             authService.register(email, password);
             authService.addRegisterCompleteListener(new RegisterCompleteListener());
         } catch (IllegalArgumentException e) {
-            errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid sign up, all fields are required.");
-        } catch (AuthenticationException e) {
-            errorHandling(spin, background, registerBtn, RegisterActivity.this, "Something went wrong :(\nTry again or contact support");
-        }
+            background.performClick();
+            stopSpinningLoader(spin, registerBtn);
+            new VigiErrorDialog(RegisterActivity.this).showDialog("Please enter a valid sign up, all fields are required.");        }
     }
 
     private class RegisterCompleteListener implements OnCompleteListener<AuthResult> {
@@ -365,30 +354,31 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
+
                 Patient patient = new Patient();
                 patient.setName(nameText.getText().toString());
                 patient.setImage(contentURI.toString());/*temporary value, is changed before actually saving object */
                 patient.setEmail(emailText.getText().toString());
                 patient.setPhoneNumber(ccp.getSelectedCountryCode() +  phoneText.getText().toString());
                 patient.setId(authService.getCurrentUserString());
+                // TODO create and save birthday aswell
 
                 patientService.createPatient(patient);
 
                 jumpToActivity(RegisterActivity.this, HomePatientActivity.class, true,
                         Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            } else {
+            }  else {
+                String errorText = "";
                 try {
-                    errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
-                    FirebaseErrorCodes exceptionThrowed = new FirebaseErrorCodes();
-
-                    errorText = exceptionThrowed.exceptionType(errorCode);
-
-                    errorHandling(spin, background, registerBtn, RegisterActivity.this, errorText);
-                } catch (ClassCastException e) {
-
-                    errorHandling(spin, background, registerBtn, RegisterActivity.this, "Internet connection is not available.");
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    errorText = FirebaseErrorCodes.exceptionType(errorCode);
+                } catch (ClassCastException e){
+                    errorText = "Internet connection is not available.";
+                } finally {
+                    background.performClick();
+                    stopSpinningLoader(spin, registerBtn);
+                    new VigiErrorDialog(RegisterActivity.this).showDialog(errorText);
                 }
             }
         }

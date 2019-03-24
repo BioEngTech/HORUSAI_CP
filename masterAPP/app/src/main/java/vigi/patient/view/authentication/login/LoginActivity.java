@@ -1,6 +1,5 @@
 package vigi.patient.view.authentication.login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,14 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
 
-import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.authentication.login.forgot_password.ForgotPasswordActivity;
 import vigi.patient.view.authentication.registration.RegisterActivity;
@@ -146,13 +142,8 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             spinVisibility(this, spin, View.VISIBLE, loginBtn);
 
-            if (emailText.getText().length() == 0 || passwordText.getText().length() == 0){
-                background.performClick();
-                stopSpinningLoader(spin, loginBtn);
-                new VigiErrorDialog(LoginActivity.this).showDialog("Please enter a valid sign up, all fields are required.");
-            } else{
-                performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
-            }
+            performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
+
         });
 
         lostPassBtn.setOnClickListener(v -> jumpToActivity(this, ForgotPasswordActivity.class, false));
@@ -203,17 +194,10 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         try {
             authService.login(email, password);
             authService.addLoginCompleteListener(new LoginCompleteListener());
-        } catch (AuthenticationException e) {
-            String errorText = "";
-            try {
-                errorText = FirebaseErrorCodes.exceptionType(e.getMessage());
-            } catch (ClassCastException cce){
-                errorText = "Internet connection is not available.";
-            } finally {
-                background.performClick();
-                stopSpinningLoader(spin, loginBtn);
-                new VigiErrorDialog(LoginActivity.this).showDialog(errorText);
-            }
+        } catch (IllegalArgumentException e) {
+            background.performClick();
+            stopSpinningLoader(spin, loginBtn);
+            new VigiErrorDialog(LoginActivity.this).showDialog("Please enter a valid sign up, all fields are required.");
         }
     }
 

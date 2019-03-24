@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuthException;
 import vigi.patient.R;
 import vigi.patient.presenter.connection.ConnectionEvaluator;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
-import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.vigi.activity.VigiGenerateNewPasswordActivity;
@@ -44,7 +43,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
     private EditText emailText;
     private TextInputLayout emailInput;
     private TextView internetTextView;
-
     private boolean emailError = false;
     AuthenticationService authService;
 
@@ -52,12 +50,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authentication_forgot_password);
-
         setupUiComponents();
-
-        authService = new FirebaseAuthService();
-        authService.init();
-
+        setupAuthService();
+        setupClickListeners();
     }
 
     @Override
@@ -98,6 +93,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
 
         customizeActionBar();
         customizeToolBar();
+    }
+
+    private void setupAuthService() {
+        authService = new FirebaseAuthService();
+        authService.init();
     }
 
     private void customizeActionBar() {
@@ -150,9 +150,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
         try {
             authService.generateNewPassword(user);
             authService.addGenerateNewPasswordCompleteListener(new GenerateNewPasswordCompleteListener());
-        } catch (AuthenticationException e) {
-            //TODO: Improvement needed!
-            Toast.makeText(this, "Deu coco!", Toast.LENGTH_SHORT).show();
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG,"Email is empty");
         }
     }
 
@@ -234,11 +233,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
                     String errorText = FirebaseErrorCodes.exceptionType(errorCode);
                     setEmailError(true);
                     emailInput.setError(errorText);
-
                     loadingHandling(fabProgressCircle, emailText, continueBtn);
                 } catch (ClassCastException e) {
-                    //TODO: is this exception the right one?
-                    // Internet problem
                     if (internetTextView.getVisibility() != View.INVISIBLE) {
                         internetTextView.setVisibility(View.VISIBLE);
                     } else {
