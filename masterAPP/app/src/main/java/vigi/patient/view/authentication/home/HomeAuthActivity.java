@@ -1,15 +1,13 @@
 package vigi.patient.view.authentication.home;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.transition.ChangeBounds;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,12 +19,18 @@ import java.util.ArrayList;
 import vigi.patient.view.authentication.home.viewHolder.HomeAuthSliderAdapter;
 import vigi.patient.view.authentication.registration.RegisterActivity;
 import vigi.patient.view.authentication.login.LoginActivity;
+import vigi.patient.view.authentication.home.components.HomeAuthAnimatorListener;
+import vigi.patient.view.authentication.home.components.HomeAuthSliderAdapter;
+import vigi.patient.view.vigi.activity.VigiActivity;
+import vigi.patient.view.vigi.web.VigiHtml;
 import vigi.patient.R;
 
-@SuppressWarnings("FieldCanBeLocal")
-public class HomeAuthActivity extends AppCompatActivity {
+import java.util.stream.IntStream;
 
-    private static String TAG = Activity.class.getName();
+public class HomeAuthActivity extends AppCompatActivity implements VigiActivity {
+
+    private static String TAG = HomeAuthActivity.class.getName();
+    private static int REQUESTCODE = 1;
 
     private ViewPager slideView;
     private LinearLayout dotLayout;
@@ -34,8 +38,6 @@ public class HomeAuthActivity extends AppCompatActivity {
     private TextView[] dots;
     private Button loginBtn;
     private Button registerBtn;
-    private Animation downToUp;
-    private Animation rightToLeft;
     private ProgressBar circleView;
     private ValueAnimator animator;
     private LinearLayout background;
@@ -51,7 +53,18 @@ public class HomeAuthActivity extends AppCompatActivity {
         // Open layout
         setContentView(R.layout.authentication_home);
 
-        // Views
+        setupUiComponents();
+
+        addDotsIndicator(0);
+
+        setupAnimations();
+        setupClickListeners();
+
+        background.requestFocus();
+    }
+
+    @Override
+    public void setupUiComponents() {
         slideView = findViewById(R.id.slide_view);
         dotLayout = findViewById(R.id.dot_layout);
         loginBtn = findViewById(R.id.login_button);
@@ -60,6 +73,8 @@ public class HomeAuthActivity extends AppCompatActivity {
         background = findViewById(R.id.background);
         buttonsLayout = findViewById(R.id.buttons_layout);
 
+        HomeAuthPageChangeListener viewListener = new HomeAuthPageChangeListener();
+
         // Set up images and descriptions to show on the slider
         sliderImages.add(0,getResources().getDrawable(R.drawable.image_medical_kit));
         sliderDescriptions.add(0,"Get the help you need, right in the corner.");
@@ -67,22 +82,34 @@ public class HomeAuthActivity extends AppCompatActivity {
         sliderImages.add(1,getResources().getDrawable(R.drawable.image_staff));
         sliderDescriptions.add(1,"Explore our amazing staff, always ready to assist you");
         sliderImageSizes.add(1,100);
+        HomeAuthSliderAdapter adapter = new HomeAuthSliderAdapter(this,sliderImages,sliderDescriptions,sliderImageSizes);
 
-        // Set up slide show
-        adapter = new HomeAuthSliderAdapter(this,sliderImages,sliderDescriptions,sliderImageSizes);
         slideView.setAdapter(adapter);
         slideView.addOnPageChangeListener(viewListener);
-        addDotsIndicator(0);
+    }
 
-        // Set up animations
+    private void addDotsIndicator(int position){
+        dotLayout.removeAllViews();
+
+        IntStream.range(0, 3).forEach(i -> {
+            TextView dot = new TextView(HomeAuthActivity.this);
+            dot.setText(VigiHtml.fromHtml("&#8226;"));
+            dot.setTextSize(24);
+            dot.setTextColor(ContextCompat.getColor(HomeAuthActivity.this,
+                    i == position ? R.color.colorMain : R.color.colorBlueSoft));
+            dotLayout.addView(dot);
+        });
+    }
+
+    private void setupAnimations() {
         ChangeBounds bounds = new ChangeBounds();
         bounds.setDuration(800);
         getWindow().setSharedElementEnterTransition(bounds);
 
-        downToUp = AnimationUtils.loadAnimation(this,R.anim.slide_up);
+        Animation downToUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
         downToUp.setDuration(800);
 
-        rightToLeft = AnimationUtils.loadAnimation(this,R.anim.slide_in_left);
+        Animation rightToLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
         rightToLeft.setDuration(1000);
 
         buttonsLayout.setAnimation(downToUp);
@@ -92,12 +119,7 @@ public class HomeAuthActivity extends AppCompatActivity {
         animator = ValueAnimator.ofInt(0, circleView.getMax());
         animator.setDuration(1200);
         animator.addUpdateListener(animation -> circleView.setProgress((Integer)animation.getAnimatedValue()));
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-            }
-        });
+        animator.addListener(new HomeAuthAnimatorListener());
         animator.start();
 
         loginBtn.setOnClickListener(v -> {
@@ -115,27 +137,19 @@ public class HomeAuthActivity extends AppCompatActivity {
         background.requestFocus();
     }
 
-    public void addDotsIndicator(int position){
-
-        dots = new TextView[sliderImages.size()];
-        dotLayout.removeAllViews();
-
-        for(int i = 0; i< dots.length; i++){
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(24);
-            dots[i].setTextColor(getResources().getColor(R.color.colorBlueSoft));
-
-            dotLayout.addView(dots[i]);
-        }
-
-        if(dots.length > 0){
-            dots[position].setTextColor(getResources().getColor(R.color.colorMain));
-        }
-
+    @Override
+    public void setupClickListeners() {
+        loginBtn.setOnClickListener(ignoredView -> goToActivityOverridingTransition(LoginActivity.class));
+        registerBtn.setOnClickListener(ignoredView -> goToActivityOverridingTransition(RegisterActivity.class));
     }
 
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+    private void goToActivityOverridingTransition(Class<? extends Activity> activity) {
+        Intent registerIntent = new Intent(HomeAuthActivity.this, activity);
+        startActivityForResult(registerIntent, REQUESTCODE);
+        overridePendingTransition(R.anim.slide_up, R.anim.not_movable);
+    }
+
+    private class HomeAuthPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 

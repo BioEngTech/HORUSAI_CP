@@ -2,7 +2,6 @@ package vigi.patient.view.init;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +10,13 @@ import vigi.patient.R;
 
 import vigi.patient.view.authentication.home.HomeAuthActivity;
 
+import static vigi.patient.view.utils.activity.ActivityUtils.jumpToActivity;
+
+
 @SuppressWarnings("FieldCanBeLocal")
 public class WelcomeScreenActivity extends AppCompatActivity {
 
-    private static String TAG = Activity.class.getName();
+    private static String TAG = WelcomeScreenActivity.class.getName();
 
     private LinearLayout welcomeText;
 
@@ -34,9 +36,9 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     }
 
     private void launchHomeAuthActivity() {
-        Intent homeIntent = new Intent(WelcomeScreenActivity.this, HomeAuthActivity.class);
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(WelcomeScreenActivity.this, welcomeText,"welcomeToVigi");
-        startActivity(homeIntent, options.toBundle());
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(WelcomeScreenActivity.this,
+                welcomeText,"welcomeToVigi");
+        jumpToActivity(this, HomeAuthActivity.class, false, options.toBundle());
     }
 
 }

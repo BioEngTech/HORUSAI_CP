@@ -39,7 +39,7 @@
     <string name="home_slide_one_text">Get the help you need, right in the corner.</string>
     <string name="home_care_image">home_care</string>
     <string name="home_slide_three_text">Get daily assistance at your house.</string>
-    <string name="error_text">error</string>
+    <string name="error_text">emailError</string>
     <string name="please_enter_your_e_mail_text">Please enter your e-mail</string>
     <string name="email_afterwards_text">An e-mail will be sent to you afterwards!</string>
 

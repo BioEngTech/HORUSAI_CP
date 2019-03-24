@@ -7,6 +7,8 @@ package vigi.patient.model.entities;
  */
 public class Patient {
 
+    //TODO: Add birthday date
+
     private String id;
     private String name;
     private String image;

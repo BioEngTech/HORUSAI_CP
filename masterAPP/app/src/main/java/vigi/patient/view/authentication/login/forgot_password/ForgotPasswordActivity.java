@@ -1,6 +1,5 @@
 package vigi.patient.view.authentication.login.forgot_password;
 
-import android.app.Activity;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -8,8 +7,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,196 +15,119 @@ import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import vigi.patient.R;
-
 
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
+import vigi.patient.R;
 import vigi.patient.presenter.connection.ConnectionEvaluator;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
+import vigi.patient.presenter.service.authentication.api.AuthenticationService;
+import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
+import vigi.patient.view.vigi.activity.VigiGenerateNewPasswordActivity;
 
-public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener,TextView.OnKeyListener{
+import static com.google.common.base.Preconditions.checkNotNull;
+import static vigi.care_provider.view.utils.editText.EditTextUtils.getTrimmedText;
 
-    private static String TAG = Activity.class.getName();
+public class ForgotPasswordActivity extends AppCompatActivity implements VigiGenerateNewPasswordActivity {
+
+    private static String TAG = ForgotPasswordActivity.class.getName();
 
     private ProgressBar fabProgressCircle;
+
     private FloatingActionButton continueBtn;
     private EditText emailText;
-    private boolean error=false;
-    private Toolbar myToolbar;
-    private TextView internet;
-    private RelativeLayout background;
     private TextInputLayout emailInput;
-    private String errorCode;
-    private String errorText;
+    private TextView internetTextView;
+
+    private boolean emailError = false;
+    AuthenticationService authService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Open layout
-
         setContentView(R.layout.authentication_forgot_password);
 
-        // Views
+        setupUiComponents();
 
+        authService = new FirebaseAuthService();
+        authService.init();
+
+    }
+
+    @Override
+    public void setupUiComponents() {
+        // Make continue button respond to a click and disable it at beggining
         continueBtn = findViewById(R.id.continue_button);
+        continueBtn.setEnabled(false);
+
         emailText = findViewById(R.id.email);
+
+        // Implement TextWatcher for removing errors and enabling continue button
+        emailText.addTextChangedListener(new ForgotPasswordTextWatcher(this));
+
+        // Try to continue when enter is pressed in email text
+        emailText.setOnEditorActionListener((v, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO && continueBtn.isEnabled()) {
+                continueBtn.performClick();
+                return true;
+            }
+            return false;
+        });
+
+        emailText.setOnKeyListener((v, keyCode, keyEvent) -> {
+            // Try to continue when enter is pressed in email text from the enter button
+            if (keyCode == KeyEvent.KEYCODE_ENTER
+                    && keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                    && continueBtn.isEnabled() ) {
+
+                continueBtn.performClick();
+                return true;
+            }
+            return false;
+        });
+
         fabProgressCircle = findViewById(R.id.progress_circle);
-        internet = findViewById(R.id.internet);
-        background = findViewById(R.id.background);
+        internetTextView = findViewById(R.id.internet);
         emailInput = findViewById(R.id.email_input_layout);
-        myToolbar = findViewById(R.id.toolbar);
 
-        // Customize action bar / toolbar
+        customizeActionBar();
+        customizeToolBar();
+    }
 
+    private void customizeActionBar() {
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+    }
 
+    private void customizeToolBar() {
+        checkNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Make continue button respond to a click and disable it at beggining
-
-        continueBtn.setOnClickListener(this);
-        continueBtn.setEnabled(false);
-
-        // Make editText respond to enter
-
-        emailText.addTextChangedListener(generalTextWatcher);
-        emailText.setOnEditorActionListener(this);
-        emailText.setOnKeyListener(this);
-
-        emailText.hasFocus();
-
     }
 
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
-
-        // Try to continue when enter is pressed in email text
-
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-
-            if (continueBtn.isEnabled()){
-
-                continueBtn.performClick();
-
-            }
-
-            return true;
-        }
-        return false;
-
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-        // Try to continue when enter is pressed in email text from the enter button
-
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-
-            switch (event.getAction()){
-
-                case KeyEvent.ACTION_DOWN:
-
-                    if (continueBtn.isEnabled()){
-
-                        continueBtn.performClick();
-
-                    }
-
-                    break;
-
-                case KeyEvent.ACTION_UP:
-
-                    // nothing
-
-                    break;
-
-            }
-
-            return true;
-
-        }
-
-        return false;
-    }
-
-    // Implement TextWatcher for removing errors and enabling continue button
-
-    private TextWatcher generalTextWatcher = new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            if (error) {
-
-                emailInput.setError(null);
-
-                error=false;
-
-            }
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-            if (emailText.getText().length()!=0){
-                continueBtn.setEnabled(true);
-                continueBtn.setBackgroundTintList(ForgotPasswordActivity.this.getResources().getColorStateList(R.color.colorMain));
-            }
-            else{
-
-                continueBtn.setEnabled(false);
-                continueBtn.setBackgroundTintList(ForgotPasswordActivity.this.getResources().getColorStateList(R.color.colorGrayLight));
-
-            }
-
-        }
-    };
-
-    // Implement funcionalities on click
-
-    @Override
-    public void onClick(View v) {
-
-        if(v.getId()== continueBtn.getId()) {  // Send e-mail to user
-
+    public void setupClickListeners() {
+        continueBtn.setOnClickListener(view -> {
             // Internet check
-
             ConnectionEvaluator checkNet = new ConnectionEvaluator();
 
-            if (!checkNet.isInternetAvailable(ForgotPasswordActivity.this)){
-                if (internet.getVisibility()!=View.INVISIBLE) return;
+            if (!checkNet.isConnectionAvailable(ForgotPasswordActivity.this)) {
+                if (internetTextView.getVisibility() != View.INVISIBLE) return;
                 else {
-                    slideUp(internet);
+                    slideUp(internetTextView);
                     Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            slideDown(internet);
-                        }
-                    }, 3500);
+                    handler.postDelayed(() -> slideDown(internetTextView), 3500);
                     return;
                 }
             }
 
             // Check if emailText is still wrong
-            if(error){
+            if (hasEmailError()) {
                 emailInput.requestFocus();
                 return;
             }
@@ -219,54 +139,21 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             continueBtn.setImageResource(0);
             fabProgressCircle.setVisibility(View.VISIBLE);
 
-            String email = emailText.getText().toString().trim();
+            performGenerateNewPassword(authService, getTrimmedText(emailText));
+        });
+    }
 
-            // Initialize Firebase auth
-            FirebaseAuth authfire = FirebaseAuth.getInstance();
-
-            authfire.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
-                    if (task.isSuccessful()) {
-                        finish();
-                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                    } else {
-                        try {
-                            errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                            FirebaseErrorCodes exceptionThrowed = new FirebaseErrorCodes();
-                            errorText = exceptionThrowed.exceptionType(errorCode);
-                            error = true;
-                            emailInput.setError(errorText);
-                            loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPasswordActivity.this);
-                        } catch (ClassCastException e) {
-
-                            // Internet problem
-                            if (internet.getVisibility() != View.INVISIBLE) {
-                                internet.setVisibility(View.VISIBLE);
-                            } else {
-                                slideUp(internet);
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        slideDown(internet);
-                                    }
-                                }, 3500);
-                            }
-                            loadingHandling(fabProgressCircle, emailText, continueBtn, ForgotPasswordActivity.this);
-                        }
-                    }
-                }
-            });
-        }
+    @Override
+    public void performGenerateNewPassword(AuthenticationService authService, String user) {
+        authService.generateNewPassword(user);
+        authService.addGenerateNewPasswordCompleteListener(this, new GenerateNewPasswordCompleteListener());
     }
 
     // Stop spinning loader, enable movement
-    private static void loadingHandling(View spinView, View textView, FloatingActionButton btn, Activity activity) {
+    private void loadingHandling(View spinView, View textView, FloatingActionButton btn) {
         spinView.setVisibility(View.GONE);
         btn.setImageResource(R.drawable.ic_continue_white_24dp);
-        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         textView.requestFocus();
     }
 
@@ -275,9 +162,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         view.setVisibility(View.VISIBLE);
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
-                0,                 // toXDelta
-                view.getHeight(),  // fromYDelta
-                0);                // toYDelta
+                0,                  // toXDelta
+                view.getHeight(),           // fromYDelta
+                0);               // toYDelta
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
@@ -287,9 +174,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     public void slideDown(View view){
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
-                0,                 // toXDelta
-                0,                 // fromYDelta
-                view.getHeight()); // toYDelta
+                0,                  // toXDelta
+                0,               // fromYDelta
+                view.getHeight());         // toYDelta
         animate.setDuration(500);
         animate.setFillAfter(true);
         view.startAnimation(animate);
@@ -306,6 +193,56 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                 return true;
         }
         return false;
+    }
+
+    protected boolean hasEmailError() {
+        return emailError;
+    }
+
+    protected void setEmailError(boolean emailError) {
+        this.emailError = emailError;
+    }
+
+    public FloatingActionButton getContinueBtn() {
+        return continueBtn;
+    }
+
+    public EditText getEmailText() {
+        return emailText;
+    }
+
+    public TextInputLayout getEmailInput() {
+        return emailInput;
+    }
+
+    private class GenerateNewPasswordCompleteListener implements OnCompleteListener<Void> {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else {
+                try {
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    String errorText = FirebaseErrorCodes.exceptionType(errorCode);
+                    setEmailError(true);
+                    emailInput.setError(errorText);
+
+                    loadingHandling(fabProgressCircle, emailText, continueBtn);
+                } catch (ClassCastException e) {
+                    //TODO: is this exception the right one?
+                    // Internet problem
+                    if (internetTextView.getVisibility() != View.INVISIBLE) {
+                        internetTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        slideUp(internetTextView);
+                        Handler handler = new Handler();
+                        handler.postDelayed(() -> slideDown(internetTextView), 3500);
+                    }
+                    loadingHandling(fabProgressCircle, emailText, continueBtn);
+                }
+            }
+        }
     }
 }
 
