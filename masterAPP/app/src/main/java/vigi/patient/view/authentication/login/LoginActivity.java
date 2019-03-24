@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -60,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
 
         setupUiComponents();
         setupClickListeners();
-
         setupAuthService();
     }
 
@@ -144,6 +146,8 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
             spinVisibility(this, spin, View.VISIBLE, loginBtn);
 
             if (emailText.getText().length() == 0 || passwordText.getText().length() == 0){
+                background.performClick();
+                stopSpinningLoader(spin, loginBtn);
                 new VigiErrorDialog(LoginActivity.this).showDialog("Please enter a valid sign up, all fields are required.");
             } else{
                 performLogin(authService, getTrimmedText(emailText), getTrimmedText(passwordText));
@@ -168,7 +172,8 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         }
     }
 
-    private void stopSpinningLoader(ImageView spinView, Button btn) {
+
+    private void stopSpinningLoader(View spinView, Button btn) {
         spinVisibility(this, spinView, View.INVISIBLE, btn);
         this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
@@ -192,11 +197,16 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
         overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
     }
 
-
     @Override
     public void performLogin(AuthenticationService authService, String email, String password) {
-        authService.login(email, password);
-        authService.addLoginCompleteListener(this, new LoginCompleteListener());
+
+        if (authService.login(email, password)){
+            authService.addLoginCompleteListener(this, new LoginCompleteListener());
+        }else{
+            background.performClick();
+            stopSpinningLoader(spin, loginBtn);
+            new VigiErrorDialog(LoginActivity.this).showDialog("Internet connection is not available.");
+        }
     }
 
     private class LoginCompleteListener implements OnCompleteListener<AuthResult> {

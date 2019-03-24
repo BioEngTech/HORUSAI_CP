@@ -16,7 +16,6 @@ public class MockAuthService implements AuthenticationService {
 
     @Override
     public boolean login(String user, String password) {
-        //mock answer
         return true;
     }
 
