@@ -17,24 +17,25 @@ public interface AuthenticationService {
 
     /**
      * Login method
-     * Return true if login is successfull
-     * @throws AuthenticationException otherwise
+     * logs in with user and password
+     * @throws AuthenticationException if non successfull
      * @param user
      * @param password
      */
-    boolean login(String user, String password) throws AuthenticationException;
+    void login(String user, String password) throws AuthenticationException;
 
-    void addLoginCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener);
+    void addLoginCompleteListener(OnCompleteListener<AuthResult> listener);
 
-    boolean generateNewPassword(String user);
+    void generateNewPassword(String user) throws AuthenticationException;
 
-    void addGenerateNewPasswordCompleteListener(Activity activity, OnCompleteListener<Void> listener);
+    void addGenerateNewPasswordCompleteListener(OnCompleteListener<Void> listener);
 
-    boolean register(String user, String password);
+    void register(String user, String password) throws AuthenticationException;
 
-    void addRegisterCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener);
+    void addRegisterCompleteListener(OnCompleteListener<AuthResult> listener);
+
+    void logout() throws AuthenticationException;
 
     String getCurrentUserString();
 
-    boolean logout();
 }

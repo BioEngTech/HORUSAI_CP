@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 
 import vigi.patient.model.entities.Patient;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
+import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.presenter.service.patient.api.PatientService;
@@ -351,9 +352,11 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
     public void performRegister(AuthenticationService authService, String email, String password) {
         try {
             authService.register(email, password);
-            authService.addRegisterCompleteListener(this, new RegisterCompleteListener());
+            authService.addRegisterCompleteListener(new RegisterCompleteListener());
         } catch (IllegalArgumentException e) {
             errorHandling(spin, background, registerBtn, RegisterActivity.this, "Please enter a valid sign up, all fields are required.");
+        } catch (AuthenticationException e) {
+            errorHandling(spin, background, registerBtn, RegisterActivity.this, "Something went wrong :(\nTry again or contact support");
         }
     }
 

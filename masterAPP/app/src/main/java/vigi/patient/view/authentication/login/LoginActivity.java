@@ -200,13 +200,20 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
 
     @Override
     public void performLogin(AuthenticationService authService, String email, String password) {
-
         try {
             authService.login(email, password);
+            authService.addLoginCompleteListener(new LoginCompleteListener());
         } catch (AuthenticationException e) {
-            background.performClick();
-            stopSpinningLoader(spin, loginBtn);
-            new VigiErrorDialog(LoginActivity.this).showDialog(e.getMessage());
+            String errorText = "";
+            try {
+                errorText = FirebaseErrorCodes.exceptionType(e.getMessage());
+            } catch (ClassCastException cce){
+                errorText = "Internet connection is not available.";
+            } finally {
+                background.performClick();
+                stopSpinningLoader(spin, loginBtn);
+                new VigiErrorDialog(LoginActivity.this).showDialog(errorText);
+            }
         }
     }
 

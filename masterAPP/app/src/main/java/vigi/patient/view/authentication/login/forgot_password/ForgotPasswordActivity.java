@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import vigi.patient.R;
 import vigi.patient.presenter.connection.ConnectionEvaluator;
 import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
+import vigi.patient.presenter.error.exceptions.AuthenticationException;
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
 import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.view.vigi.activity.VigiGenerateNewPasswordActivity;
@@ -145,8 +147,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
 
     @Override
     public void performGenerateNewPassword(AuthenticationService authService, String user) {
-        authService.generateNewPassword(user);
-        authService.addGenerateNewPasswordCompleteListener(this, new GenerateNewPasswordCompleteListener());
+        try {
+            authService.generateNewPassword(user);
+            authService.addGenerateNewPasswordCompleteListener(new GenerateNewPasswordCompleteListener());
+        } catch (AuthenticationException e) {
+            //TODO: Improvement needed!
+            Toast.makeText(this, "Deu coco!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Stop spinning loader, enable movement

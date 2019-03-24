@@ -1,6 +1,5 @@
 package vigi.patient.presenter.service.authentication.impl;
 
-import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
@@ -16,35 +15,33 @@ public class MockAuthService implements AuthenticationService {
     }
 
     @Override
-    public boolean login(String user, String password) throws AuthenticationException {
-        return true;
-    }
-
-    @Override
-    public void addLoginCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener) {
+    public void login(String user, String password) throws AuthenticationException {
         //mock answer
     }
 
     @Override
-    public boolean generateNewPassword(String user) {
-        //mock answer
-        return true;
-    }
-
-    @Override
-    public void addGenerateNewPasswordCompleteListener(Activity activity, OnCompleteListener<Void> listener) {
+    public void addLoginCompleteListener(OnCompleteListener<AuthResult> listener) {
         //mock answer
     }
 
     @Override
-    public boolean register(String user, String password) {
+    public void generateNewPassword(String user) {
         //mock answer
-        return true;
     }
 
     @Override
-    public void addRegisterCompleteListener(Activity activity, OnCompleteListener<AuthResult> listener) {
+    public void addGenerateNewPasswordCompleteListener(OnCompleteListener<Void> listener) {
         //mock answer
+    }
+
+    @Override
+    public void register(String user, String password) {
+        //mock answer
+    }
+
+    @Override
+    public void addRegisterCompleteListener(OnCompleteListener<AuthResult> listener) {
+
     }
 
     @Override
@@ -53,8 +50,7 @@ public class MockAuthService implements AuthenticationService {
     }
 
     @Override
-    public boolean logout() {
+    public void logout() {
         //mock answer
-        return true;
     }
 }
