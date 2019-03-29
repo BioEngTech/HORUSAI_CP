@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +38,10 @@ public class HomePatientActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private DrawerLayout drawerView;
+    private Boolean mSlideState;
+    private ActionBarDrawerToggle mDrawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +52,44 @@ public class HomePatientActivity extends AppCompatActivity implements View.OnCli
         toolbar = findViewById(R.id.toolbar);
         recyclerView = findViewById(R.id.recycler_view);
         bookingBtn = findViewById(R.id.appointment_btn);
+        drawerView = findViewById(R.id.drawer_layout);
+
+
+        //set state of drawer
+        mSlideState=false;
 
         // Set up toolbar
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+
+        //set up toggle
+        mDrawerToggle = new ActionBarDrawerToggle(this,
+                drawerView,
+                toolbar,
+                0,
+                0){
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mSlideState=false;//is Closed
+            }
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mSlideState=true;//is Opened
+            }};
+        drawerView.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+
+        // Set Button to open navdrawer
+        toolbar.setNavigationOnClickListener(view -> {
+            if(mSlideState){
+                drawerView.closeDrawer(Gravity.START);
+            }else{
+                drawerView.openDrawer(Gravity.START);
+            }
+        });
 
         // Set up booking btn
         bookingBtn.setOnClickListener(this);
@@ -90,10 +131,24 @@ public class HomePatientActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
+        Log.d("1904 entrou? ", String.valueOf(view.getId()));
+        Log.d("1905 toolbar? ", String.valueOf(toolbar.getId()));
+        Log.d("1905 nav? ", String.valueOf(drawerView.getId()));
+
+
         if (view.getId() == bookingBtn.getId()){
             Intent chooseTreatmentIntent = new Intent(this, SelectTreatmentActivity.class);
             startActivity(chooseTreatmentIntent);
         }
+        else if( view.getId() == toolbar.getId() ){
+            if(mSlideState){
+                drawerView.closeDrawer(Gravity.START);
+            }else{
+                drawerView.openDrawer(Gravity.START);
+            }
+        }
+
+
     }
 
     @Override

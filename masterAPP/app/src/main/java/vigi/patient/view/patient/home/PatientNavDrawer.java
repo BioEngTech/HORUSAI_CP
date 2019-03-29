@@ -6,4 +6,5 @@ public class PatientNavDrawer {
 
     private static String TAG = Activity.class.getName();
 
+
 }

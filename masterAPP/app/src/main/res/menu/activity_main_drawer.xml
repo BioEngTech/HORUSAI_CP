@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:id="@+id/nav_item_one"
+            android:title="Discover" />
+        <item android:id="@+id/nav_item_two"
+            android:title="History" />
+        <item android:id="@+id/nav_item_four"
+        android:title="Location" />
+        <item android:id="@+id/nav_item_five"
+            android:title="Payment" />
+        <item android:id="@+id/nav_item_six"
+            android:title="Help" />
+        <item android:id="@+id/nav_item_seven"
+            android:title="Settings" />
+
+    </group>
+
+    <group android:id="@+id/group_menu">
+        <item android:id="@+id/nav_item_eight"
+            android:title="Log out" />
+    </group>
+</menu>
