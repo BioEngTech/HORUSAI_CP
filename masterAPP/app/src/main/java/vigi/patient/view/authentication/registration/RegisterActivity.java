@@ -244,6 +244,8 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
 
     private void setupPatientService() {
         patientService = new FirebasePatientService();
+
+        //TODO how to make this patient static and accessible from following activities?
         patientService.init();
     }
 

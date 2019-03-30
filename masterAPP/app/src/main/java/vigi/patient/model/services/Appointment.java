@@ -1,52 +1,62 @@
 package vigi.patient.model.services;
 
-import android.graphics.drawable.Drawable;
-
 public class Appointment {
 
-    private String hour;
-    private String day;
+    private String date;
+    private String report;
+    private String rating;
+    private String latitude;
+    private String longitude;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public Appointment()
+    {
+
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     private String duration;
     private String price;
     private String treatment;
-    // TODO private String careProviderId;
-    private String careProviderName;
-    private String careProviderRating;
-    private Drawable careProviderImage;
-    // TODO private String patientId;
-    private String patientName;
-    private String patientAge;
-    private Drawable patientImage;
-    // TODO position of the patient and careprovider should also be add
+    private String careProviderId;
+    private String patientId;
 
-    public Appointment(String hour, String day, String duration, String price, String treatment, String careProviderName, String careProviderRating, Drawable careProviderImage, String patientName, String patientAge, Drawable patientImage) {
-        this.hour = hour;
-        this.day = day;
-        this.duration = duration;
-        this.price = price;
-        this.treatment = treatment;
-        this.careProviderName = careProviderName;
-        this.careProviderRating = careProviderRating;
-        this.careProviderImage = careProviderImage;
-        this.patientName = patientName;
-        this.patientAge = patientAge;
-        this.patientImage = patientImage;
+    public String getDate() {
+        return date;
     }
 
-    public String getHour() {
-        return hour;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public void setHour(String hour) {
-        this.hour = hour;
+    public String getReport() {
+        return report;
     }
 
-    public String getDay() {
-        return day;
+    public void setReport(String report) {
+        this.report = report;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public String getDuration() {
@@ -73,51 +83,19 @@ public class Appointment {
         this.treatment = treatment;
     }
 
-    public String getCareProviderName() {
-        return careProviderName;
+    public String getCareProviderId() {
+        return careProviderId;
     }
 
-    public void setCareProviderName(String careProviderName) {
-        this.careProviderName = careProviderName;
+    public void setCareProviderId(String careProviderId) {
+        this.careProviderId = careProviderId;
     }
 
-    public String getCareProviderRating() {
-        return careProviderRating;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setCareProviderRating(String careProviderRating) {
-        this.careProviderRating = careProviderRating;
-    }
-
-    public Drawable getCareProviderImage() {
-        return careProviderImage;
-    }
-
-    public void setCareProviderImage(Drawable careProviderImage) {
-        this.careProviderImage = careProviderImage;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getPatientAge() {
-        return patientAge;
-    }
-
-    public void setPatientAge(String patientAge) {
-        this.patientAge = patientAge;
-    }
-
-    public Drawable getPatientImage() {
-        return patientImage;
-    }
-
-    public void setPatientImage(Drawable patientImage) {
-        this.patientImage = patientImage;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 }
