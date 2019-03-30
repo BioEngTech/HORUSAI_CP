@@ -60,17 +60,12 @@ public class AppointmentsViewAdapter extends FirebaseRecyclerAdapter<Appointment
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Appointment model) {
-        Log.d("1904 patientKey", "ver");
 
         mRefPatient.child(this.patientKey).child("appointments").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Log.d("1904 entrou", "SIIIII");
                 for (DataSnapshot appointment:dataSnapshot.getChildren()){
-
-                    Log.d("1904 appointment", String.valueOf(getRef(position).getKey()));
-                    Log.d("1904 patient", String.valueOf(appointment.getKey()));
 
                     if (getRef(position).getKey().toString().equals(appointment.getKey().toString())){
                         Appointment appointmentInstance = new Appointment();
@@ -79,6 +74,7 @@ public class AppointmentsViewAdapter extends FirebaseRecyclerAdapter<Appointment
                         appointmentInstance.setCareProviderId(model.getCareProviderId().toString());
                         appointmentInstance.setRating(model.getRating().toString());
                         appointmentInstance.setDuration(model.getDuration().toString());
+
                         holder.setAppointment(appointmentInstance);
                     }
                 }

@@ -88,60 +88,13 @@ public class HomePatientActivity extends AppCompatActivity implements View.OnCli
         FirebaseRecyclerOptions<Appointment> options = new FirebaseRecyclerOptions.Builder<Appointment>()
                 .setQuery(mRefAppointment, Appointment.class)
                 .build();
-        Log.d("1904 passou2", ficticiousUserKey);
 
         adapter = new AppointmentsViewAdapter(options, ficticiousUserKey);
 
         adapter.startListening();
         recyclerView.setAdapter(adapter);
-        Log.d("1904 passou", "SIIIII");
 
         // TODO create dragging view to cancel an appointment
-
-    }
-
-
-    private void getUserAppointments(){
-/*
-        appointmentsList = new ArrayList<>();
-
-        mRefPatient.child(ficticiousUserKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot appointment:dataSnapshot.getChildren()){
-
-                    mRefAppointment.child(appointment.getKey())
-                    appointmentsList.add(appointment.getKey().);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-
-    */
 
     }
 
