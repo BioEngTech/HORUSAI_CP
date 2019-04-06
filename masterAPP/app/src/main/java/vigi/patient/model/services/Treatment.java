@@ -2,23 +2,24 @@ package vigi.patient.model.services;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.HashMap;
+
 public class Treatment {
 
-    private String id;
-    private String title;
-    private Drawable image;
-    private String category;
+    private HashMap<String,Boolean> admittedjobs;
+    private String image;
+    private String expectedtime;
+    private String pricehint;
     private String description;
-    private String duration;
+    private String name;
+    private String id;
     private String benefits;
 
-    public Treatment(String id, String title, Drawable image, String category, String description, String duration, String benefits) {
-        this.id = id;
-        this.title = title;
-        this.image = image;
-        this.category = category;
-        this.description = description;
-        this.duration = duration;
+    public String getBenefits() {
+        return benefits;
+    }
+
+    public void setBenefits(String benefits) {
         this.benefits = benefits;
     }
 
@@ -30,28 +31,55 @@ public class Treatment {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public Treatment(Object admittedjobs, Object image, Object expectedtime, Object pricehint, Object description, Object name, Object id, Object benefits) {
+        this.admittedjobs = (HashMap<String, Boolean>) admittedjobs;
+        this.image = (String) image;
+        this.expectedtime = (String) expectedtime;
+        this.pricehint = (String) pricehint;
+        this.description = (String) description;
+        this.name = (String) name;
+        this.id = (String) id;
+        this.benefits = (String) benefits;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getName() {
+        return name;
     }
 
-    public Drawable getImage() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public HashMap<String, Boolean> getAdmittedjobs() {
+        return admittedjobs;
+    }
+
+    public void setAdmittedjobs(HashMap<String, Boolean> admittedjobs) {
+        this.admittedjobs = admittedjobs;
+    }
+
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Drawable image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
-    public String getCategory() {
-        return category;
+    public String getExpectedtime() {
+        return expectedtime;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setExpectedtime(String expectedtime) {
+        this.expectedtime = expectedtime;
+    }
+
+    public String getPricehint() {
+        return pricehint;
+    }
+
+    public void setPricehint(String pricehint) {
+        this.pricehint = pricehint;
     }
 
     public String getDescription() {
@@ -60,22 +88,6 @@ public class Treatment {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public String getBenefits() {
-        return benefits;
-    }
-
-    public void setBenefits(String benefits) {
-        this.benefits = benefits;
     }
 }
 

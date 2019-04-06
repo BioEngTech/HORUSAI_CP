@@ -2,18 +2,31 @@ package vigi.patient.view.patient.treatment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.Objects;
 import vigi.patient.R;
+import vigi.patient.model.services.Treatment;
+import vigi.patient.presenter.service.treatment.api.TreatmentService;
+import vigi.patient.presenter.service.treatment.impl.FirebaseTreatmentService;
 import vigi.patient.view.patient.appointment.BookAppointmentsActivity;
+import vigi.patient.view.patient.treatment.viewHolder.CardsPagerTransformerShift;
+import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
 
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -28,6 +41,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
     private TextView benefits;
     private FloatingActionButton bookingBtn;
     private CollapsingToolbarLayout collapsingToolbar;
+    private Treatment treatment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +64,10 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
         // and display information according to the selected treatment, example below
         Intent intent = getIntent();
         String treatmentId = Objects.requireNonNull(intent.getExtras()).getString("treatmentId");
-        setTreatmentDetails(treatmentId);
+        String category_name = Objects.requireNonNull(intent.getExtras()).getString("category_name");
+
+        Log.d(" treatmentId ", treatmentId);
+        setTreatmentDetails(category_name, treatmentId);
 
         // Customize action bar / toolbar
         setSupportActionBar(myToolbar);
@@ -64,25 +81,38 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
     }
 
 
-    private void setTreatmentDetails(String id){
+    private void setTreatmentDetails(String category_name, String id){
 
         // TODO set up views according to the information of the treatment selected
 
-        imageTreatment.setImageDrawable(getResources().getDrawable(R.drawable.image_daily));
-        collapsingToolbar.setTitle("Daily tasks");
-        duration.setText("1h30 average");
-        category.setText("Daily assistance");
-        description.setText("O interesse pelo texto como objeto de estudo gerou vários trabalhos importantes de teóricos da Linguística Textual," +
-                " que percorreram fases diversas cujas características principais eram transpor os limites da frase descontextualizada da gramática tradicional" +
-                " e ainda incluir os relevantes papéis do autor e do leitor na construção de textos.\n" + "Um texto pode ser escrito ou oral e, em sentido lato, pode ser também não verbal." +
-                "\n" + "Todo texto tem que ter alguns aspectos formais, ou seja, tem que ter estrutura, elementos que estabelecem relação entre si. " +
-                " Dentro dos aspectos formais temos a coesão e a coerência, que dão sentido e forma ao texto.");
+        new FirebaseTreatmentService().readTreatment( category_name, id, new TreatmentService() {
+            @Override
+            public void onStart() {
+                //DO SOME THING WHEN START GET DATA HERE
+            }
 
-        benefits.setText("O interesse pelo texto como objeto de estudo gerou vários trabalhos importantes de teóricos da Linguística Textual," +
-                " que percorreram fases diversas cujas características principais eram transpor os limites da frase descontextualizada da gramática tradicional" +
-                " e ainda incluir os relevantes papéis do autor e do leitor na construção de textos.\n" + "Um texto pode ser escrito ou oral e, em sentido lato, pode ser também não verbal." +
-                "\n" + "Todo texto tem que ter alguns aspectos formais, ou seja, tem que ter estrutura, elementos que estabelecem relação entre si. " +
-                " Dentro dos aspectos formais temos a coesão e a coerência, que dão sentido e forma ao texto.");
+            @Override
+            public void onSuccess(DataSnapshot data) {
+
+                //DO SOME THING WHEN GET DATA SUCCESS HERE
+                treatment = new Treatment(data.child("admittedjobs").getValue(),data.child("image").getValue(), data.child("expectedtime").getValue(), data.child("pricehint").getValue(), data.child("description").getValue(), data.child("name").getValue(), data.getKey(), data.child("benefits").getValue() );
+
+                Picasso.get().load(treatment.getImage()).into(imageTreatment);
+                collapsingToolbar.setTitle(treatment.getName());
+                duration.setText(treatment.getExpectedtime());
+                category.setText(category_name);
+                description.setText(treatment.getDescription());
+                benefits.setText(treatment.getBenefits());
+
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                //DO SOME THING WHEN GET DATA FAILED HERE
+            }
+        });
+
+
     }
 
     @Override
