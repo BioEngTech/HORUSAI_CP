@@ -1,7 +1,5 @@
 package vigi.patient.presenter.service.patient.api;
 
-import java.util.concurrent.ExecutionException;
-
 import vigi.patient.model.entities.Patient;
 
 /**
@@ -13,10 +11,10 @@ public interface PatientService {
 
     boolean createPatient(Patient patient);
 
-    Patient readPatient();
+    Patient readPatient(Long patientId);
 
-    Patient updatePatient();
+    Patient updatePatient(Long patientId);
 
-    boolean deletePatient();
+    boolean deletePatient(Long patientId);
 
 }

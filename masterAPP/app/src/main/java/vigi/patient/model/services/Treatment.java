@@ -1,45 +1,28 @@
 package vigi.patient.model.services;
 
-import android.graphics.drawable.Drawable;
-
-import java.util.HashMap;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.time.Duration;
+import java.util.List;
 
 public class Treatment {
 
-    private HashMap<String,Boolean> admittedjobs;
-    private String image;
-    private String expectedtime;
-    private String pricehint;
-    private String description;
+    private Long id;
     private String name;
-    private String id;
+    private String description;
+    private TreatmentCategory category;
     private String benefits;
+    private List<String> admittedJobs;
+    private URL image;
+    private Duration expectedTime; /*e.g. Duration.ofSeconds(10)*/
+    private BigDecimal priceHint;
 
-    public String getBenefits() {
-        return benefits;
-    }
-
-    public void setBenefits(String benefits) {
-        this.benefits = benefits;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public Treatment(Object admittedjobs, Object image, Object expectedtime, Object pricehint, Object description, Object name, Object id, Object benefits) {
-        this.admittedjobs = (HashMap<String, Boolean>) admittedjobs;
-        this.image = (String) image;
-        this.expectedtime = (String) expectedtime;
-        this.pricehint = (String) pricehint;
-        this.description = (String) description;
-        this.name = (String) name;
-        this.id = (String) id;
-        this.benefits = (String) benefits;
     }
 
     public String getName() {
@@ -50,44 +33,75 @@ public class Treatment {
         this.name = name;
     }
 
-    public HashMap<String, Boolean> getAdmittedjobs() {
-        return admittedjobs;
-    }
-
-    public void setAdmittedjobs(HashMap<String, Boolean> admittedjobs) {
-        this.admittedjobs = admittedjobs;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getExpectedtime() {
-        return expectedtime;
-    }
-
-    public void setExpectedtime(String expectedtime) {
-        this.expectedtime = expectedtime;
-    }
-
-    public String getPricehint() {
-        return pricehint;
-    }
-
-    public void setPricehint(String pricehint) {
-        this.pricehint = pricehint;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public TreatmentCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TreatmentCategory category) {
+        this.category = category;
+    }
+
+    public String getBenefits() {
+        return benefits;
+    }
+
+    public void setBenefits(String benefits) {
+        this.benefits = benefits;
+    }
+
+    public List<String> getAdmittedJobs() {
+        return admittedJobs;
+    }
+
+    public void setAdmittedJobs(List<String> admittedJobs) {
+        this.admittedJobs = admittedJobs;
+    }
+
+    public URL getImage() {
+        return image;
+    }
+
+    public void setImage(URL image) {
+        this.image = image;
+    }
+
+    public Duration getExpectedTime() {
+        return expectedTime;
+    }
+
+    public void setExpectedTime(Duration expectedTime) {
+        this.expectedTime = expectedTime;
+    }
+
+    public BigDecimal getPriceHint() {
+        return priceHint;
+    }
+
+    public void setPriceHint(BigDecimal priceHint) {
+        this.priceHint = priceHint;
+    }
+
+    public enum TreatmentCategory {
+        DAILY_ASSISTANCE("DAILY_ASSISTANCE"),
+        MEDICAL_ASSISTANCE("MEDICAL_ASSISTANCE");
+
+        private String category;
+
+        TreatmentCategory(String category) {
+            this.category = category;
+        }
+
+        public String categoryString() {
+            return category;
+        }
     }
 }
 

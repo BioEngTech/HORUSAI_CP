@@ -10,11 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import vigi.patient.model.entities.Patient;
 import vigi.patient.model.firebase.FirebaseConstants;
@@ -32,8 +28,6 @@ public class FirebasePatientService implements PatientService {
     DatabaseReference currentReference;
 
     Patient patient;
-
-    boolean successfullOperation = false;
 
     @Override
     public void init() {
@@ -60,7 +54,7 @@ public class FirebasePatientService implements PatientService {
         }
     }
 
-    private void uploadPatientImage(Patient patient) throws ExecutionException, InterruptedException {
+    private void uploadPatientImage(Patient patient) throws InterruptedException {
         storageReference.child(FirebaseConstants.IMAGE_PATH);
 
         //save image in firestore
@@ -94,18 +88,18 @@ public class FirebasePatientService implements PatientService {
     }
 
     @Override
-    public Patient readPatient() {
+    public Patient readPatient(Long patientId) {
         return new Patient();
     }
 
 
     @Override
-    public Patient updatePatient() {
+    public Patient updatePatient(Long patientId) {
         return new Patient();
     }
 
     @Override
-    public boolean deletePatient() {
+    public boolean deletePatient(Long patientId) {
         return true;
     }
 }

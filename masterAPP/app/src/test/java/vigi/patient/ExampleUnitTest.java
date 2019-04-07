@@ -2,6 +2,9 @@ package vigi.patient;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+
 import static org.junit.Assert.*;
 
 /**
@@ -14,6 +17,8 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
         long a = 0L;
+
+        System.out.println(BigDecimal.TEN);
 
         assert a == 0L;
     }
