@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.treatment.api;
 
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -13,15 +15,7 @@ public interface TreatmentService {
 
     void init();
 
-    boolean createTreatment(Treatment treatment);
+    void readTreatmentsWithCategory(ValueEventListener listener, String treatmentCategory);
 
-    Treatment readTreatment(UUID treatmentId);
-
-    List<Treatment> readTreatments();
-
-    List<Treatment> readTreatmentsWithCategory(String treatmentCategory);
-
-    Treatment updateTreatment(Treatment treatment);
-
-    boolean deleteTreatment(UUID TreatmentId);
+    void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 }

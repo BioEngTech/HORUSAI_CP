@@ -35,7 +35,7 @@ public class AppointmentsViewAdapter extends RecyclerView.Adapter<AppointmentsVi
         viewHolder.time.setText(String.valueOf(appointments.get(i).getDate()));
         viewHolder.treatment.setText(appointments.get(i).getReport());
         viewHolder.careProviderName.setText(appointments.get(i).getCareProviderId().toString());
-        viewHolder.rating.setText(appointments.get(i).getRating());
+        viewHolder.rating.setText(appointments.get(i).getRating().toString());
         viewHolder.duration.setText(appointments.get(i).getDuration().toString());
         viewHolder.day.setText(appointments.get(i).getDate().toString());
         //TODO: CareProvider object

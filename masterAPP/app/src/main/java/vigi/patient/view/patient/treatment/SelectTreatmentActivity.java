@@ -2,6 +2,7 @@ package vigi.patient.view.patient.treatment;
 
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,12 +13,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
+import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.treatment.viewHolder.CardsPagerTransformerShift;
 import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
 import vigi.patient.R;
@@ -37,6 +43,7 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
     private List<String> categories;
     ArrayAdapter<String> dataAdapter;
 
+    ValueEventListener treatmentListener;
     TreatmentService treatmentService;
 
     @Override
@@ -68,46 +75,38 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         spinner.setAdapter(dataAdapter);
         // TODO Several treatment objects should be in the database with id, title, image, categoryString, description, duration, benefits...
 
-        treatmentService = new FirebaseTreatmentService();
-        treatmentService.init();
-
-        //NOTE: DAILY_ASSISTANCE is the default one!
-        List<Treatment> treatments = treatmentService.readTreatmentsWithCategory(DAILY_ASSISTANCE.categoryString());
-
-        adapter = new TreatmentsViewAdapter(category, treatments, getApplicationContext());
-
-        viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(adapter);
-
         float density = getResources().getDisplayMetrics().density;
         int partialWidth = 45 * (int) density; // 45dp
         int pageMargin = 55 * (int) density; // 55dp
-
         int viewPagerPadding = partialWidth + pageMargin;
-
-        viewPager.setPageMargin(pageMargin);
-        viewPager.setPadding(pageMargin, 0, viewPagerPadding, 0);
-
         Point screen = new Point();
         getWindowManager().getDefaultDisplay().getSize(screen);
-        float startOffset = (float)(viewPagerPadding)/(float)(screen.x - 2*viewPagerPadding);
+        float startOffset = (float)(viewPagerPadding)/(float)(screen.x - 2 * viewPagerPadding);
 
+        viewPager = findViewById(R.id.view_pager);
+        viewPager.setPageMargin(pageMargin);
+        viewPager.setPadding(pageMargin, 0, viewPagerPadding, 0);
         viewPager.setPageTransformer(false, new CardsPagerTransformerShift(1, 1,(float) 0.85, startOffset));
 
+        //NOTE: DAILY_ASSISTANCE is the default one!
+        category = Treatment.TreatmentCategory.DAILY_ASSISTANCE.categoryString();
+        treatmentListener = new VigiValueEventListener();
+        treatmentService = new FirebaseTreatmentService();
+        treatmentService.init();
+        treatmentService.readTreatmentsWithCategory(treatmentListener, DAILY_ASSISTANCE.categoryString());
+
+    }
+
+    public void notifyDataChanged(List<Treatment> treatments) {
+        adapter = new TreatmentsViewAdapter(category, treatments, getApplicationContext());
+        viewPager.setAdapter(adapter);
     }
 
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         category = spinner.getSelectedItem().toString();
-
-        List<Treatment> categoryTreatments = treatmentService.readTreatmentsWithCategory(category);
-
-        //TODO: show categoryTreatments?
-        adapter = new TreatmentsViewAdapter(category, categoryTreatments, getApplicationContext());
-
-        viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(adapter);
+        treatmentService.readTreatmentsWithCategory(treatmentListener, category);
     }
 
     @Override
@@ -132,4 +131,20 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         overridePendingTransition(R.anim.not_movable, R.anim.slide_down);
     }
 
+    public class VigiValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            List<Treatment> treatmentList = new ArrayList<>();
+            for (DataSnapshot snapshotTreatment : dataSnapshot.getChildren()) {
+                treatmentList.add(TreatmentConverter.getTreatmentFromDataSnapshot(snapshotTreatment));
+                notifyDataChanged(treatmentList);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            notifyDataChanged(new ArrayList<>());
+        }
+    }
 }
