@@ -3,7 +3,6 @@ package vigi.patient.model.services;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public class Appointment {
@@ -14,7 +13,7 @@ public class Appointment {
     private Double latitude;
     private Double longitude;
     private Double altitude;
-    private Duration duration;
+    private Integer minutesOfDuration;
     private BigDecimal price;
     private UUID treatmentId;
     private UUID careProviderId;
@@ -25,14 +24,14 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Date date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Duration duration, BigDecimal price, UUID treatmentId, UUID careProviderId, UUID patientId, String status) {
+    public Appointment(Date date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Integer minutesOfDuration, BigDecimal price, UUID treatmentId, UUID careProviderId, UUID patientId, String status) {
         this.date = date;
         this.report = report;
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
-        this.duration = duration;
+        this.minutesOfDuration = minutesOfDuration;
         this.price = price;
         this.treatmentId = treatmentId;
         this.careProviderId = careProviderId;
@@ -88,12 +87,12 @@ public class Appointment {
         this.altitude = altitude;
     }
 
-    public Duration getDuration() {
-        return duration;
+    public Integer getMinutesOfDuration() {
+        return minutesOfDuration;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setMinutesOfDuration(Integer minutesOfDuration) {
+        this.minutesOfDuration = minutesOfDuration;
     }
 
     public BigDecimal getPrice() {

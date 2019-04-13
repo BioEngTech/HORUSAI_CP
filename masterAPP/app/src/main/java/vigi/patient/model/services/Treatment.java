@@ -3,7 +3,6 @@ package vigi.patient.model.services;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +14,9 @@ public class Treatment implements Serializable {
     private String description;
     private TreatmentCategory category;
     private String benefits;
-    private String[] admittedJobs;
+    private List<String> admittedJobs;
     private URL image;
-    private Duration expectedMinutes; /*e.g. Duration.ofSeconds(10)*/
+    private Integer minutesOfDuration; /*e.g. Duration.ofSeconds(10)*/
     private BigDecimal priceHint;
 
     public UUID getId() {
@@ -60,11 +59,11 @@ public class Treatment implements Serializable {
         this.benefits = benefits;
     }
 
-    public String[] getAdmittedJobs() {
+    public List<String> getAdmittedJobs() {
         return admittedJobs;
     }
 
-    public void setAdmittedJobs(String[] admittedJobs) {
+    public void setAdmittedJobs(List<String> admittedJobs) {
         this.admittedJobs = admittedJobs;
     }
 
@@ -76,12 +75,12 @@ public class Treatment implements Serializable {
         this.image = image;
     }
 
-    public Duration getExpectedMinutes() {
-        return expectedMinutes;
+    public Integer getMinutesOfDuration() {
+        return minutesOfDuration;
     }
 
-    public void setExpectedMinutes(Duration expectedMinutes) {
-        this.expectedMinutes = expectedMinutes;
+    public void setMinutesOfDuration(Integer minutesOfDuration) {
+        this.minutesOfDuration = minutesOfDuration;
     }
 
     public BigDecimal getPriceHint() {

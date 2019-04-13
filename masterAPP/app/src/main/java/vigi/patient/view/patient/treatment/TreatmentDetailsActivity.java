@@ -1,7 +1,6 @@
 package vigi.patient.view.patient.treatment;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,21 +11,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import vigi.patient.R;
 import vigi.patient.model.services.Treatment;
-import vigi.patient.presenter.service.treatment.api.TreatmentService;
-import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
-import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.appointment.BookAppointmentsActivity;
 
 
@@ -82,7 +72,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
 
         Picasso.get().load(treatment.getImage().toString()).into(imageTreatment);
         collapsingToolbar.setTitle(treatment.getName());
-        duration.setText(treatment.getExpectedMinutes().toString());
+        duration.setText(treatment.getMinutesOfDuration().toString());
         category.setText(treatment.getCategory().categoryString());
         description.setText(treatment.getDescription());
         benefits.setText(treatment.getBenefits());
