@@ -1,9 +1,7 @@
 package vigi.patient.presenter.service.treatment.api;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-
 import java.util.List;
+import java.util.UUID;
 
 import vigi.patient.model.services.Treatment;
 
@@ -17,7 +15,7 @@ public interface TreatmentService {
 
     boolean createTreatment(Treatment treatment);
 
-    Treatment readTreatment(Long treatmentId);
+    Treatment readTreatment(UUID treatmentId);
 
     List<Treatment> readTreatments();
 
@@ -25,5 +23,5 @@ public interface TreatmentService {
 
     Treatment updateTreatment(Treatment treatment);
 
-    boolean deleteTreatment(Long TreatmentId);
+    boolean deleteTreatment(UUID TreatmentId);
 }

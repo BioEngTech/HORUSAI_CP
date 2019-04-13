@@ -11,8 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
+
 import vigi.patient.R;
 
 
@@ -70,22 +76,13 @@ public class HomePatientActivity extends AppCompatActivity implements View.OnCli
 
     private void getUserAppointments(){
         appointmentsList = new ArrayList<>();
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
-        appointmentsList.add(new Appointment("13h","Today","1h30","29$","Hygene and comfort","Anna Baker","4.4",getResources().getDrawable(R.drawable.image_photo),"","",getResources().getDrawable(R.drawable.image_photo)));
+        Date date = new Date(20190413L);
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, Duration.ZERO, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
     }
 
     @Override

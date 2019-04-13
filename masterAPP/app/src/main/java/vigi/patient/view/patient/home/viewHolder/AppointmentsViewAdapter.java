@@ -32,13 +32,14 @@ public class AppointmentsViewAdapter extends RecyclerView.Adapter<AppointmentsVi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.time.setText(String.valueOf(appointments.get(i).getHour()));
-        viewHolder.treatment.setText(appointments.get(i).getTreatment());
-        viewHolder.careProviderName.setText(appointments.get(i).getCareProviderName());
-        viewHolder.rating.setText(appointments.get(i).getCareProviderRating());
-        viewHolder.duration.setText(appointments.get(i).getDuration());
-        viewHolder.day.setText(appointments.get(i).getDay());
-        viewHolder.image.setImageDrawable(appointments.get(i).getCareProviderImage());
+        viewHolder.time.setText(String.valueOf(appointments.get(i).getDate()));
+        viewHolder.treatment.setText(appointments.get(i).getReport());
+        viewHolder.careProviderName.setText(appointments.get(i).getCareProviderId().toString());
+        viewHolder.rating.setText(appointments.get(i).getRating());
+        viewHolder.duration.setText(appointments.get(i).getDuration().toString());
+        viewHolder.day.setText(appointments.get(i).getDate().toString());
+        //TODO: CareProvider object
+        //viewHolder.image.setImageDrawable(appointments.get(i).getCareProviderImage());
     }
 
     @Override

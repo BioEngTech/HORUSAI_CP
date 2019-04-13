@@ -3,6 +3,8 @@ package vigi.patient.model.services;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Treatment {
@@ -90,8 +92,8 @@ public class Treatment {
     }
 
     public enum TreatmentCategory {
-        DAILY_ASSISTANCE("DAILY_ASSISTANCE"),
-        MEDICAL_ASSISTANCE("MEDICAL_ASSISTANCE");
+        DAILY_ASSISTANCE("Daily Assistance"),
+        MEDICAL_ASSISTANCE("Medical Assistance");
 
         private String category;
 
@@ -101,6 +103,15 @@ public class Treatment {
 
         public String categoryString() {
             return category;
+        }
+
+        //TODO: Refactor (logic should not be calculated every time)
+        public static List<String> getCategories() {
+            List<String> categories = new ArrayList<>();
+            for (TreatmentCategory category : TreatmentCategory.values()) {
+                categories.add(category.categoryString());
+            }
+            return categories;
         }
     }
 }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import vigi.patient.R;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
@@ -61,10 +63,10 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
         // Fetch selected treatment form the database using id previously selected,
         // and display information according to the selected treatment, example below
         Intent intent = getIntent();
-        Long treatmentId = Objects.requireNonNull(intent.getExtras()).getLong("treatmentId");
+        UUID treatmentId = (UUID) Objects.requireNonNull(intent.getExtras()).get("treatmentId");
         String categoryName = Objects.requireNonNull(intent.getExtras()).getString("categoryName");
 
-        Log.d(" treatmentId ", treatmentId.toString());
+        Log.d("treatmentId ", treatmentId.toString());
         readTreatment(categoryName, treatmentId);
 
         // Customize action bar / toolbar
@@ -79,7 +81,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
     }
 
 
-    private void readTreatment(String categoryName, Long treatmentId){
+    private void readTreatment(String categoryName, UUID treatmentId){
 
         // TODO set up views according to the information of the treatment selected
         treatment = treatmentService.readTreatment(treatmentId);

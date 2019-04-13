@@ -1,10 +1,9 @@
 package vigi.patient.model.services;
 
-import android.graphics.drawable.Drawable;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class Appointment {
@@ -24,6 +23,21 @@ public class Appointment {
 
 
     public Appointment() {
+    }
+
+    public Appointment(Date date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Duration duration, BigDecimal price, UUID treatmentId, UUID careProviderId, UUID patientId, String status) {
+        this.date = date;
+        this.report = report;
+        this.rating = rating;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+        this.duration = duration;
+        this.price = price;
+        this.treatmentId = treatmentId;
+        this.careProviderId = careProviderId;
+        this.patientId = patientId;
+        this.status = status;
     }
 
     public Date getDate() {
@@ -127,7 +141,6 @@ public class Appointment {
         ONHOLD("ONHOLD"),
         ONGOING("ONGOING"),
         ACTIVE("ACTIVE");
-
 
         private String status;
 

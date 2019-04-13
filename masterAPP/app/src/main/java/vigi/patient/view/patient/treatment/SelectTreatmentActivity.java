@@ -1,22 +1,16 @@
 package vigi.patient.view.patient.treatment;
 
-import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +22,8 @@ import vigi.patient.view.patient.treatment.viewHolder.CardsPagerTransformerShift
 import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
 import vigi.patient.R;
 
-@SuppressWarnings("FieldCanBeLocal")
+import static vigi.patient.model.services.Treatment.TreatmentCategory.DAILY_ASSISTANCE;
+
 public class SelectTreatmentActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private static String TAG = SelectTreatmentActivity.class.getName();
@@ -39,7 +34,7 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
     private Spinner spinner;
     private String category;
     //TODO: We must know beforehand the categories that exist
-    private List<String> categories = new ArrayList(){{add("category1");add("category2");}};
+    private List<String> categories;
     ArrayAdapter<String> dataAdapter;
 
     TreatmentService treatmentService;
@@ -62,11 +57,9 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
 
-
-
-
+        categories = Treatment.TreatmentCategory.getCategories();
         // Creating adapter for spinner
-        dataAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
 
         // Give drop down style to the spinner
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -75,13 +68,11 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         spinner.setAdapter(dataAdapter);
         // TODO Several treatment objects should be in the database with id, title, image, categoryString, description, duration, benefits...
 
-
-
-
-
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
-        List<Treatment> treatments = treatmentService.readTreatments();
+
+        //NOTE: DAILY_ASSISTANCE is the default one!
+        List<Treatment> treatments = treatmentService.readTreatmentsWithCategory(DAILY_ASSISTANCE.categoryString());
 
         adapter = new TreatmentsViewAdapter(category, treatments, getApplicationContext());
 
@@ -113,6 +104,10 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         List<Treatment> categoryTreatments = treatmentService.readTreatmentsWithCategory(category);
 
         //TODO: show categoryTreatments?
+        adapter = new TreatmentsViewAdapter(category, categoryTreatments, getApplicationContext());
+
+        viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(adapter);
     }
 
     @Override

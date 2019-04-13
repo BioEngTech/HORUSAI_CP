@@ -10,11 +10,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
-
 
 public class FirebaseTreatmentService implements TreatmentService {
 
@@ -33,7 +33,6 @@ public class FirebaseTreatmentService implements TreatmentService {
 
     @Override
     public boolean createTreatment(Treatment treatment) {
-
         try {
             currentReference = databaseReference.push();
             databaseReference.child(currentReference.getKey()).setValue(treatment);
@@ -45,15 +44,13 @@ public class FirebaseTreatmentService implements TreatmentService {
     }
 
     @Override
-    public Treatment readTreatment(Long treatmentId) {
+    public Treatment readTreatment(UUID treatmentId) {
         List<Treatment> treatmentList = readTreatments();
-
         for (Treatment treatment : treatmentList) {
             if (treatmentId.toString().equals(treatment.getId().toString())) {
                 return treatment;
             }
         }
-
         return new Treatment();
     }
 
@@ -113,7 +110,7 @@ public class FirebaseTreatmentService implements TreatmentService {
     }
 
     @Override
-    public boolean deleteTreatment(Long TreatmentId) {
+    public boolean deleteTreatment(UUID TreatmentId) {
         return false;
     }
 }
