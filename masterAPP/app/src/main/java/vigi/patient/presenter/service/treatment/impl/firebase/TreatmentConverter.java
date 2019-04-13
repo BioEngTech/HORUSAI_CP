@@ -4,7 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import vigi.patient.model.services.Treatment;
 
-final class TreatmentConverter {
+public final class TreatmentConverter {
 
     public static Treatment getTreatmentFromDataSnapshot(DataSnapshot snapshot) {
 
