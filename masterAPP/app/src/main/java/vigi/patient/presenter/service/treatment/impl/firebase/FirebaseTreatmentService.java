@@ -34,7 +34,7 @@ public class FirebaseTreatmentService implements TreatmentService {
     @Override
     public List<Treatment> readTreatmentWithCategory(String category) {
         return allTreatments.stream()
-                .filter(treatment -> category.equals(treatment.getCategory().categoryString()))
+                .filter(treatment -> category.equals(treatment.getCategory().toString()))
                 .collect(Collectors.toList());
     }
 

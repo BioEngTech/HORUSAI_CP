@@ -109,7 +109,7 @@ public class Treatment implements Serializable {
         public static List<String> getCategories() {
             List<String> categories = new ArrayList<>();
             for (TreatmentCategory category : TreatmentCategory.values()) {
-                categories.add(category.categoryString());
+                categories.add(category.toString());
             }
             return categories;
         }

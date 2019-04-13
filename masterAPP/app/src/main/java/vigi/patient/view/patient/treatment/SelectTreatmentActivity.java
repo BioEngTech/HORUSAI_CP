@@ -87,7 +87,7 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         viewPager.setPageTransformer(false, new CardsPagerTransformerShift(1, 1,(float) 0.85, startOffset));
 
         //NOTE: DAILY_ASSISTANCE is the default one!
-        category = Treatment.TreatmentCategory.DAILY_ASSISTANCE.categoryString();
+        category = Treatment.TreatmentCategory.DAILY_ASSISTANCE.toString();
         treatmentListener = new VigiValueEventListener();
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
@@ -139,8 +139,8 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
             List<Treatment> treatmentList = new ArrayList<>();
             for (DataSnapshot snapshotTreatment : dataSnapshot.getChildren()) {
                 treatmentList.add(TreatmentConverter.getTreatmentFromDataSnapshot(snapshotTreatment));
-                notifyDataChanged(treatmentList);
             }
+            notifyDataChanged(treatmentList);
         }
 
         @Override

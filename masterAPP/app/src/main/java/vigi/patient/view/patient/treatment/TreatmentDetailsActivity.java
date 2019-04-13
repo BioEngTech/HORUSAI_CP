@@ -73,7 +73,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
         Picasso.get().load(treatment.getImage().toString()).into(imageTreatment);
         collapsingToolbar.setTitle(treatment.getName());
         duration.setText(treatment.getMinutesOfDuration().toString());
-        category.setText(treatment.getCategory().categoryString());
+        category.setText(treatment.getCategory().toString());
         description.setText(treatment.getDescription());
         benefits.setText(treatment.getBenefits());
     }
