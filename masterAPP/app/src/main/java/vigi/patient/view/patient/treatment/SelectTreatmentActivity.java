@@ -28,8 +28,6 @@ import vigi.patient.view.patient.treatment.viewHolder.CardsPagerTransformerShift
 import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
 import vigi.patient.R;
 
-import static vigi.patient.model.services.Treatment.TreatmentCategory.DAILY_ASSISTANCE;
-
 public class SelectTreatmentActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private static String TAG = SelectTreatmentActivity.class.getName();
@@ -93,12 +91,15 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
         treatmentListener = new VigiValueEventListener();
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
-        treatmentService.readTreatmentsWithCategory(treatmentListener, DAILY_ASSISTANCE.categoryString());
+        treatmentService.readTreatments(treatmentListener);
 
     }
 
-    public void notifyDataChanged(List<Treatment> treatments) {
-        adapter = new TreatmentsViewAdapter(category, treatments, getApplicationContext());
+    private void notifyDataChanged(List<Treatment> treatments) {
+        treatmentService.setAllTreatments(treatments);
+
+        List<Treatment> treatmentsWithCategory = treatmentService.readTreatmentWithCategory(category);
+        adapter = new TreatmentsViewAdapter(category, treatmentsWithCategory, getApplicationContext());
         viewPager.setAdapter(adapter);
     }
 
@@ -106,7 +107,7 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         category = spinner.getSelectedItem().toString();
-        treatmentService.readTreatmentsWithCategory(treatmentListener, category);
+        treatmentService.readTreatments(treatmentListener);
     }
 
     @Override
@@ -147,4 +148,6 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
             notifyDataChanged(new ArrayList<>());
         }
     }
+
+
 }

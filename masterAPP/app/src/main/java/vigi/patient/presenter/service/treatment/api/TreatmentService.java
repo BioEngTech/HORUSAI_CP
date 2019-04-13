@@ -15,7 +15,13 @@ public interface TreatmentService {
 
     void init();
 
-    void readTreatmentsWithCategory(ValueEventListener listener, String treatmentCategory);
+    void readTreatments(ValueEventListener listener);
+
+    void setAllTreatments(List<Treatment> treatments);
+
+    List<Treatment> readTreatmentWithCategory(String category);
+
+    Treatment readTreatment(UUID treatmentId);
 
     void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 }

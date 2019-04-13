@@ -1,19 +1,24 @@
 package vigi.patient.view.patient.treatment;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -21,6 +26,7 @@ import vigi.patient.R;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
+import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.appointment.BookAppointmentsActivity;
 
 
@@ -38,7 +44,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
     private CollapsingToolbarLayout collapsingToolbar;
     private Treatment treatment;
 
-    private TreatmentService treatmentService;
+    private final static String CHOSEN_TREATMENT = "chosenTreatment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +63,6 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
         benefits = findViewById(R.id.benefits);
         bookingBtn = findViewById(R.id.booking_btn);
 
-        treatmentService = new FirebaseTreatmentService();
-        treatmentService.init();
-
-        // Fetch selected treatment form the database using id previously selected,
-        // and display information according to the selected treatment, example below
-        Intent intent = getIntent();
-        UUID treatmentId = (UUID) Objects.requireNonNull(intent.getExtras()).get("treatmentId");
-        String categoryName = Objects.requireNonNull(intent.getExtras()).getString("categoryName");
-
-        Log.d("treatmentId ", treatmentId.toString());
-        readTreatment(categoryName, treatmentId);
-
         // Customize action bar / toolbar
         setSupportActionBar(myToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
@@ -78,18 +72,18 @@ public class TreatmentDetailsActivity extends AppCompatActivity implements View.
         // Set up booking btn
         bookingBtn.setOnClickListener(this);
 
+        Intent intent = getIntent();
+        treatment = (Treatment) Objects.requireNonNull(intent.getExtras()).get(CHOSEN_TREATMENT);
+        displayTreatment(treatment);
+
     }
 
-
-    private void readTreatment(String categoryName, UUID treatmentId){
-
-        // TODO set up views according to the information of the treatment selected
-        treatment = treatmentService.readTreatment(treatmentId);
+    private void displayTreatment(Treatment treatment){
 
         Picasso.get().load(treatment.getImage().toString()).into(imageTreatment);
         collapsingToolbar.setTitle(treatment.getName());
         duration.setText(treatment.getExpectedMinutes().toString());
-        category.setText(categoryName);
+        category.setText(treatment.getCategory().categoryString());
         description.setText(treatment.getDescription());
         benefits.setText(treatment.getBenefits());
     }

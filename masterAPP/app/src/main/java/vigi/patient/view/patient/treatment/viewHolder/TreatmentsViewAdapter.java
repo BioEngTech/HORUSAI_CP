@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vigi.patient.R;
@@ -31,8 +30,10 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     private ImageView imageView;
     private TextView title;
     private TextView knowMore;
-    private int pos = 0;
+    private int position = 0;
     private String category;
+
+    private final static String CHOSEN_TREATMENT = "chosenTreatment";
 
 
     public TreatmentsViewAdapter(String category, List<Treatment> treatments, Context context) {
@@ -59,10 +60,10 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
         layoutInflater = LayoutInflater.from(context);
 
         //set loop
-        if (pos >= treatments.size() - 1) {
-            pos = 0;
+        if (this.position >= treatments.size() - 1) {
+            this.position = 0;
         } else {
-            ++pos;
+            ++this.position;
         }
 
         View view = layoutInflater.inflate(R.layout.patient_treatment_view, container, false);
@@ -71,9 +72,9 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
         title = view.findViewById(R.id.title);
         knowMore = view.findViewById(R.id.see_more);
 
-        //imageView.setImageDrawable(treatments.get(pos).getImage());
-        Picasso.get().load(treatments.get(pos).getImage().toString()).into(imageView);
-        title.setText(treatments.get(pos).getName());
+        //imageView.setImageDrawable(treatments.get(position).getImage());
+        Picasso.get().load(treatments.get(this.position).getImage().toString()).into(imageView);
+        title.setText(treatments.get(this.position).getName());
 
         imageView.setOnClickListener(this);
         knowMore.setOnClickListener(this);
@@ -93,13 +94,12 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
 
         if (view.getId() == knowMore.getId()){ // Go to treatment details
             Intent treatmentDetailsIntent = new Intent(context, TreatmentDetailsActivity.class);
-            treatmentDetailsIntent.putExtra("treatmentId", treatments.get(pos).getId());
-            treatmentDetailsIntent.putExtra("categoryName", category);
+            treatmentDetailsIntent.putExtra(CHOSEN_TREATMENT, treatments.get(position));
             context.startActivity(treatmentDetailsIntent);
 
-        }else if (view.getId() == imageView.getId()){ // Go to booking appointments
+        } else if (view.getId() == imageView.getId()){ // Go to booking appointments
             Intent bookingIntent = new Intent(context, BookAppointmentsActivity.class);
-            bookingIntent.putExtra("treatmentId", treatments.get(pos).getId());
+            bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(position));
             context.startActivity(bookingIntent);
         }
     }

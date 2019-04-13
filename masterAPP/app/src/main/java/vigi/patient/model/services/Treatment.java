@@ -1,5 +1,6 @@
 package vigi.patient.model.services;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.Duration;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Treatment {
+public class Treatment implements Serializable {
 
     private UUID id;
     private String name;
