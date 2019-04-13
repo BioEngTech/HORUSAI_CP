@@ -24,6 +24,10 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">
+        <item name="android:background">@color/colorBlueSoft</item>
+    </style>
+
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@color/colorDark</item>
         <item name="android:textSize">10sp</item>

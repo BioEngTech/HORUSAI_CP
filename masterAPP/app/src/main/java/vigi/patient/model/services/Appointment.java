@@ -5,8 +5,28 @@ import android.graphics.drawable.Drawable;
 public class Appointment {
 
     private String hour;
+    private String paymentCode;
+    private String paymentStatus;
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
     private String day;
     private String duration;
+
+    public String getPaymentCode() {
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
+    }
+
     private String price;
     private String treatment;
     // TODO private String careProviderId;
@@ -19,8 +39,11 @@ public class Appointment {
     private Drawable patientImage;
     // TODO position of the patient and careprovider should also be add
 
-    public Appointment(String hour, String day, String duration, String price, String treatment, String careProviderName, String careProviderRating, Drawable careProviderImage, String patientName, String patientAge, Drawable patientImage) {
+
+    public Appointment(String hour, String paymentCode, String paymentStatus, String day, String duration, String price, String treatment, String careProviderName, String careProviderRating, Drawable careProviderImage, String patientName, String patientAge, Drawable patientImage) {
         this.hour = hour;
+        this.paymentCode = paymentCode;
+        this.paymentStatus = paymentStatus;
         this.day = day;
         this.duration = duration;
         this.price = price;
