@@ -14,7 +14,7 @@ class TreatmentConverter {
         treatment.setBenefits(snapshot.getValue(Treatment.class).getBenefits());
         treatment.setCategory(snapshot.getValue(Treatment.class).getCategory());
         treatment.setDescription(snapshot.getValue(Treatment.class).getDescription());
-        treatment.setExpectedTime(snapshot.getValue(Treatment.class).getExpectedTime());
+        treatment.setExpectedMinutes(snapshot.getValue(Treatment.class).getExpectedMinutes());
         treatment.setImage(snapshot.getValue(Treatment.class).getImage());
         treatment.setPriceHint(snapshot.getValue(Treatment.class).getPriceHint());
         treatment.setAdmittedJobs(snapshot.getValue(Treatment.class).getAdmittedJobs());

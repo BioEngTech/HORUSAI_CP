@@ -3,25 +3,25 @@ package vigi.patient.model.services;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.Duration;
-import java.util.List;
+import java.util.UUID;
 
 public class Treatment {
 
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private TreatmentCategory category;
     private String benefits;
-    private List<String> admittedJobs;
+    private String[] admittedJobs;
     private URL image;
-    private Duration expectedTime; /*e.g. Duration.ofSeconds(10)*/
+    private Duration expectedMinutes; /*e.g. Duration.ofSeconds(10)*/
     private BigDecimal priceHint;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -57,11 +57,11 @@ public class Treatment {
         this.benefits = benefits;
     }
 
-    public List<String> getAdmittedJobs() {
+    public String[] getAdmittedJobs() {
         return admittedJobs;
     }
 
-    public void setAdmittedJobs(List<String> admittedJobs) {
+    public void setAdmittedJobs(String[] admittedJobs) {
         this.admittedJobs = admittedJobs;
     }
 
@@ -73,12 +73,12 @@ public class Treatment {
         this.image = image;
     }
 
-    public Duration getExpectedTime() {
-        return expectedTime;
+    public Duration getExpectedMinutes() {
+        return expectedMinutes;
     }
 
-    public void setExpectedTime(Duration expectedTime) {
-        this.expectedTime = expectedTime;
+    public void setExpectedMinutes(Duration expectedMinutes) {
+        this.expectedMinutes = expectedMinutes;
     }
 
     public BigDecimal getPriceHint() {

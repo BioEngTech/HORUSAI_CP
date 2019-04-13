@@ -2,122 +2,142 @@ package vigi.patient.model.services;
 
 import android.graphics.drawable.Drawable;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.util.Date;
+import java.util.UUID;
+
 public class Appointment {
 
-    private String hour;
-    private String day;
-    private String duration;
-    private String price;
-    private String treatment;
-    // TODO private String careProviderId;
-    private String careProviderName;
-    private String careProviderRating;
-    private Drawable careProviderImage;
-    // TODO private String patientId;
-    private String patientName;
-    private String patientAge;
-    private Drawable patientImage;
-    // TODO position of the patient and careprovider should also be add
+    private Date date;
+    private String report;
+    private Integer rating;
+    private Double latitude;
+    private Double longitude;
+    private Double altitude;
+    private Duration duration;
+    private BigDecimal price;
+    private UUID treatmentId;
+    private UUID careProviderId;
+    private UUID patientId;
+    private String status;
 
-    public Appointment(String hour, String day, String duration, String price, String treatment, String careProviderName, String careProviderRating, Drawable careProviderImage, String patientName, String patientAge, Drawable patientImage) {
-        this.hour = hour;
-        this.day = day;
-        this.duration = duration;
-        this.price = price;
-        this.treatment = treatment;
-        this.careProviderName = careProviderName;
-        this.careProviderRating = careProviderRating;
-        this.careProviderImage = careProviderImage;
-        this.patientName = patientName;
-        this.patientAge = patientAge;
-        this.patientImage = patientImage;
+
+    public Appointment() {
     }
 
-    public String getHour() {
-        return hour;
+    public Date getDate() {
+        return date;
     }
 
-    public void setHour(String hour) {
-        this.hour = hour;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public String getDay() {
-        return day;
+    public String getReport() {
+        return report;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setReport(String report) {
+        this.report = report;
     }
 
-    public String getDuration() {
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
+
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public String getTreatment() {
-        return treatment;
+    public UUID getTreatmentId() {
+        return treatmentId;
     }
 
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
+    public void setTreatmentId(UUID treatmentId) {
+        this.treatmentId = treatmentId;
     }
 
-    public String getCareProviderName() {
-        return careProviderName;
+    public UUID getCareProviderId() {
+        return careProviderId;
     }
 
-    public void setCareProviderName(String careProviderName) {
-        this.careProviderName = careProviderName;
+    public void setCareProviderId(UUID careProviderId) {
+        this.careProviderId = careProviderId;
     }
 
-    public String getCareProviderRating() {
-        return careProviderRating;
+    public UUID getPatientId() {
+        return patientId;
     }
 
-    public void setCareProviderRating(String careProviderRating) {
-        this.careProviderRating = careProviderRating;
+    public void setPatientId(UUID patientId) {
+        this.patientId = patientId;
     }
 
-    public Drawable getCareProviderImage() {
-        return careProviderImage;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCareProviderImage(Drawable careProviderImage) {
-        this.careProviderImage = careProviderImage;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public enum AppointmentStatus {
+        CANCELLED("CANCELLED"),
+        ONHOLD("ONHOLD"),
+        ONGOING("ONGOING"),
+        ACTIVE("ACTIVE");
+
+
+        private String status;
+
+        AppointmentStatus(String category) {
+            this.status = status;
+        }
+
+        public String categoryString() {
+            return status;
+        }
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    public String getPatientAge() {
-        return patientAge;
-    }
-
-    public void setPatientAge(String patientAge) {
-        this.patientAge = patientAge;
-    }
-
-    public Drawable getPatientImage() {
-        return patientImage;
-    }
-
-    public void setPatientImage(Drawable patientImage) {
-        this.patientImage = patientImage;
-    }
 }
