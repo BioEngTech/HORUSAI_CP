@@ -64,8 +64,6 @@
         <!-- PATIENT SELECT TREATMENTS ACTIVITY -->
         <activity android:name=".view.patient.treatment.SelectTreatmentActivity"
             android:screenOrientation="portrait">
-
-
         </activity>
         <!-- PATIENT TREATMENT DETAILS ACTIVITY -->
         <activity android:name=".view.patient.treatment.TreatmentDetailsActivity"

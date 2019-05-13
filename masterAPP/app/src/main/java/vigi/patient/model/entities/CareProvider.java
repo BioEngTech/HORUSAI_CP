@@ -1,11 +1,10 @@
 package vigi.patient.model.entities;
 
-
 /**
  * Model POJO (plain old java object)
- * for the patient user
+ * for the care provider user
  */
-public class Patient {
+public class CareProvider {
 
     //TODO: Add birthday date
 
@@ -13,6 +12,7 @@ public class Patient {
     private String name;
     private String image;
     private String email;
+
 
     private Position position;
 

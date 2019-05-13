@@ -97,7 +97,6 @@ public class SelectTreatmentActivity extends AppCompatActivity implements Adapte
 
     private void notifyDataChanged(List<Treatment> treatments) {
         treatmentService.setAllTreatments(treatments);
-
         List<Treatment> treatmentsWithCategory = treatmentService.readTreatmentWithCategory(category);
         adapter = new TreatmentsViewAdapter(category, treatmentsWithCategory, getApplicationContext());
         viewPager.setAdapter(adapter);
