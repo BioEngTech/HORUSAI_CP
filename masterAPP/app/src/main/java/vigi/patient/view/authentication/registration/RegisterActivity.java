@@ -144,13 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         // Activate Birthday Dialog
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
             month++;
-            String date = new StringBuilder()
-                    .append(dayOfMonth)
-                    .append("/")
-                    .append(month)
-                    .append("/")
-                    .append(year).toString();
-
+            String date = String.valueOf(dayOfMonth) + "/" + month + "/" + year;
             birthdayText.setText(date);
             emailText.requestFocus();
         };
@@ -168,7 +162,6 @@ public class RegisterActivity extends AppCompatActivity implements VigiRegisterA
         });
 
         setupTermsAndConditions();
-
         removeScrollableIndicator();
         customizeActionBar();
         customizeToolBar();

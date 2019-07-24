@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements VigiLoginActivit
     }
 
     private void removeScrollableIndicator() {
-        ScrollView scrollView = findViewById(R.id.scroll_view);
+        ScrollView scrollView = findViewById(R.id.nested_scroll_view);
         scrollView.setVerticalScrollBarEnabled(false);
     }
 

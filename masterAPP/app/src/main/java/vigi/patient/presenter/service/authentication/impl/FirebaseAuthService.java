@@ -4,10 +4,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-
 import vigi.patient.presenter.service.authentication.api.AuthenticationService;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FirebaseAuthService implements AuthenticationService {

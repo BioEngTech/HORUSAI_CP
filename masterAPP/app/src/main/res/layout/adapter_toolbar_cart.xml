@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/image_company" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/patient_name"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="Treatment"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:textColor="@color/colorGray"/>
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_below="@id/patient_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="$99"
+                android:textColor="@color/colorBlueLight"/>
+
+            <TextView
+                android:id="@+id/cp_name"
+                android:layout_alignTop="@id/patient_name"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:text="Name surname"
+                android:textColor="@color/colorGray"/>
+
+            <TextView
+                android:id="@+id/cp_field"
+                android:layout_below="@id/cp_name"
+                android:textSize="14sp"
+                android:layout_alignStart="@id/cp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="Field"
+                android:textColor="@color/colorBlueLight"/>
+
+        </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/removeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_black_24dp"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
+
+

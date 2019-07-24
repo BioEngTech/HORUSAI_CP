@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.ArrayList;
-import vigi.patient.view.authentication.home.viewHolder.HomeAuthSliderAdapter;
+import vigi.patient.view.authentication.home.viewHolder.ServicesAdapter;
 import vigi.patient.view.authentication.registration.RegisterActivity;
 import vigi.patient.view.authentication.login.LoginActivity;
 import vigi.patient.view.authentication.home.components.HomeAuthAnimatorListener;
@@ -47,8 +47,7 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Open layout
-        setContentView(R.layout.authentication_home);
+        setContentView(R.layout.authentication_initiation);
 
         setupUiComponents();
 
@@ -74,13 +73,13 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
 
         // Set up images and descriptions to show on the slider
         sliderImages.add(0,getResources().getDrawable(R.drawable.image_medical_kit));
-        sliderDescriptions.add(0,"Get the help you need, right in the corner.");
+        sliderDescriptions.add(0,"Get the help you need,\n right in the corner.");
         sliderImageSizes.add(0,75);
         sliderImages.add(1,getResources().getDrawable(R.drawable.image_staff));
-        sliderDescriptions.add(1,"Explore our amazing staff, always ready to assist you");
+        sliderDescriptions.add(1,"Explore our amazing staff,\n always ready to assist you");
         sliderImageSizes.add(1,100);
 
-        HomeAuthSliderAdapter adapter = new HomeAuthSliderAdapter(this,sliderImages,sliderDescriptions,sliderImageSizes);
+        ServicesAdapter adapter = new ServicesAdapter(this,sliderImages,sliderDescriptions,sliderImageSizes);
 
         slideView.setAdapter(adapter);
         slideView.addOnPageChangeListener(viewListener);
@@ -94,7 +93,7 @@ public class HomeAuthActivity extends AppCompatActivity implements VigiActivity 
             dot.setText(VigiHtml.fromHtml("&#8226;"));
             dot.setTextSize(24);
             dot.setTextColor(ContextCompat.getColor(HomeAuthActivity.this,
-                    i == position ? R.color.colorMain : R.color.colorBlueSoft));
+                    i == position ? R.color.colorTheme : R.color.colorBlueSoft));
             dotLayout.addView(dot);
         });
     }

@@ -29,7 +29,7 @@ public class ForgotPasswordTextWatcher implements TextWatcher {
         //TODO: Isn't the text accessible from the editable?
         if (activity.getEmailText().getText().length() != 0){
             activity.getContinueBtn().setEnabled(true);
-            activity.getContinueBtn().setBackgroundTintList(ContextCompat.getColorStateList(activity, R.color.colorMain));
+            activity.getContinueBtn().setBackgroundTintList(ContextCompat.getColorStateList(activity, R.color.colorTheme));
         } else {
             activity.getContinueBtn().setEnabled(false);
             activity.getContinueBtn().setBackgroundTintList(ContextCompat.getColorStateList(activity, R.color.colorGrayLight));

@@ -2,12 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scroll_view"
+    android:id="@+id/nested_scroll_view"
     android:fillViewport="true"
     android:isScrollContainer="true"
     android:orientation="vertical"
     android:overScrollMode="never"
-    android:background="@color/colorMain">
+    android:background="@color/colorTheme">
 
     <LinearLayout
         android:id="@+id/background"
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         style="@style/Widget.AppCompat.Button.Borderless"
-                        android:background="@drawable/utils_btn_rounded_transparent"
+                        android:background="@drawable/utils_rectangle_rounded_200dp_border_1dp_white"
                         android:id="@+id/login_button"
                         android:textColor="@color/colorWhite"
                         android:text="@string/log_in_text"
@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:contentDescription="@string/load_spinner_image"
-                        android:src="@drawable/image_spinner"
+                        android:src="@drawable/image_waiting_spinner"
                         android:visibility="invisible" />
 
                 </RelativeLayout>

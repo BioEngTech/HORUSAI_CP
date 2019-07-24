@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hour"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/utils_rectangle_rounded_200dp_full_white"
+    android:textAlignment="center"
+    android:gravity="center"
+    android:padding="7.5dp"
+    android:textColor="@color/colorGrayStrong"
+    android:textSize="13sp" />

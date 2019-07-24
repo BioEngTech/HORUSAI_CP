@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/image_photo" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/patient"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Name username"
+                android:textColor="@color/colorPurpleMedium"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/patient"
+                android:textColor="@color/colorGrayStrong"
+                android:text="Treated by Anna two days ago"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="40dp"
+        android:background="@drawable/utils_rectangle_rounded_50dp_full_purple"
+        android:padding="12.5dp"
+        android:text="@string/medium_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="13sp" />
+
+</LinearLayout>

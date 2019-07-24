@@ -112,6 +112,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements VigiGen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    // Action when back navigation button is pressed
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
     @Override
     public void setupClickListeners() {
         continueBtn.setOnClickListener(view -> {

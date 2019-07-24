@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="85dp"
+    android:background="@color/colorWhite"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15h"
+        android:textSize="15sp"
+        android:textColor="@color/colorDark"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/patient_name"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="Testing1"
+            android:singleLine="true"
+            android:textSize="15sp"
+            android:textColor="@color/colorBlueDark"/>
+
+        <TextView
+            android:id="@+id/cp_name"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Testing2"
+            android:singleLine="true"
+            android:textSize="15sp"
+            android:textColor="@color/colorGray"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:text="4.4"
+            android:textColor="@color/colorPurpleBlue"
+            android:drawableStart="@drawable/ic_star_blue_24dp"/>
+
+        <TextView
+            android:layout_toEndOf="@id/rating"
+            android:layout_alignBottom="@+id/rating"
+            android:id="@+id/duration"
+            android:layout_marginStart="6.5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="13sp"
+            android:text="1h30"
+            android:gravity="center"
+            android:textColor="@color/colorPurpleBlue"
+            android:drawableStart="@drawable/ic_duration_blue_24dp"/>
+
+        <TextView
+            android:layout_toStartOf="@id/image"
+            android:id="@+id/day"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:text="Today"
+            android:textColor="@color/colorBlueLight"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/utils_oval_border_1point5dp_blue_light"
+            android:src="@drawable/image_photo"
+            android:padding="1dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorWhite"/>
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="1dp"
+            android:background="@color/colorPurpleBlue"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+
+

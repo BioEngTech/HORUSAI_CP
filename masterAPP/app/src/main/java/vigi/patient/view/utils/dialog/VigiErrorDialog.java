@@ -14,8 +14,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class VigiErrorDialog {
     private Activity activity;
 
-    private VigiErrorDialog(){}
-
     public VigiErrorDialog(Activity activity) {
         this.activity = activity;
     }
@@ -26,7 +24,7 @@ public class VigiErrorDialog {
 
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
-            dialog.setContentView(R.layout.utils_error_dialog);
+            dialog.setContentView(R.layout.dialog_error_message);
             checkNotNull(dialog.getWindow());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 

@@ -4,26 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import vigi.patient.R;
-
-
 import vigi.patient.model.services.Treatment;
-import vigi.patient.view.patient.appointment.BookAppointmentsActivity;
-import vigi.patient.view.patient.treatment.TreatmentDetailsActivity;
+import vigi.patient.view.patient.treatment.booking.BookingActivity;
+import vigi.patient.view.utils.dialog.VigiTreatmentDetailsDialog;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickListener {
 
+    private String TAG = getClass().getName();
+    private final static String CHOSEN_TREATMENT = "chosenTreatment";
     private List<Treatment> treatments;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -31,22 +33,15 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     private TextView title;
     private TextView knowMore;
     private int position = 0;
-    private String category;
 
-    private final static String CHOSEN_TREATMENT = "chosenTreatment";
-
-
-    public TreatmentsViewAdapter(String category, List<Treatment> treatments, Context context) {
+    public TreatmentsViewAdapter(List<Treatment> treatments, Context context) {
         this.treatments = treatments;
-        this.category = category;
-
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        //TODO: Must be refactored -> infinite = consuming resources
-        return Integer.MAX_VALUE; // Make it an infinite view pager
+        return treatments.size();
     }
 
     @Override
@@ -59,22 +54,15 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         layoutInflater = LayoutInflater.from(context);
 
-        //set loop
-        if (this.position >= treatments.size() - 1) {
-            this.position = 0;
-        } else {
-            ++this.position;
-        }
-
-        View view = layoutInflater.inflate(R.layout.patient_treatment_view, container, false);
+        View view = layoutInflater.inflate(R.layout.adapter_treatment_selection, container, false);
 
         imageView = view.findViewById(R.id.image);
         title = view.findViewById(R.id.title);
         knowMore = view.findViewById(R.id.see_more);
 
-        //imageView.setImageDrawable(treatments.get(position).getImage());
         Picasso.get().load(treatments.get(this.position).getImage().toString()).into(imageView);
         title.setText(treatments.get(this.position).getName());
+        setupKnowMore();
 
         imageView.setOnClickListener(this);
         knowMore.setOnClickListener(this);
@@ -93,14 +81,19 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     public void onClick(View view) {
 
         if (view.getId() == knowMore.getId()){ // Go to treatment details
-            Intent treatmentDetailsIntent = new Intent(context, TreatmentDetailsActivity.class);
-            treatmentDetailsIntent.putExtra(CHOSEN_TREATMENT, treatments.get(position));
-            context.startActivity(treatmentDetailsIntent);
-
+            new VigiTreatmentDetailsDialog(context).showDetails(treatments.get(position));
         } else if (view.getId() == imageView.getId()){ // Go to booking appointments
-            Intent bookingIntent = new Intent(context, BookAppointmentsActivity.class);
+            Intent bookingIntent = new Intent(context, BookingActivity.class);
             bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(position));
             context.startActivity(bookingIntent);
         }
     }
+
+    private void setupKnowMore() {
+        SpannableString ss = new SpannableString(context.getString(R.string.know_more_text));
+        ss.setSpan(new UnderlineSpan(), 0, context.getString(R.string.know_more_text).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        knowMore.setText(ss);
+        knowMore.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
 }

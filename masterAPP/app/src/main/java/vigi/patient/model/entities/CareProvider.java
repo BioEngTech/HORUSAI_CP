@@ -1,5 +1,7 @@
 package vigi.patient.model.entities;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Model POJO (plain old java object)
  * for the care provider user
@@ -10,7 +12,7 @@ public class CareProvider {
 
     private String id;
     private String name;
-    private String image;
+    private CircleImageView image;
     private String email;
 
 
@@ -50,11 +52,11 @@ public class CareProvider {
         this.name = name;
     }
 
-    public String getImage() {
+    public CircleImageView getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(CircleImageView image) {
         this.image = image;
     }
 

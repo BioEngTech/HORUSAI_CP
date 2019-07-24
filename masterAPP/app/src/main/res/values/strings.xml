@@ -35,8 +35,8 @@
     <string name="sign_in_to_continue_text">sign in to continue</string>
     <string name="medical_kit_image">medical_kit</string>
     <string name="staff_image">staff</string>
-    <string name="home_slide_two_text">Explore our amazing staff, always ready to assist you</string>
-    <string name="home_slide_one_text">Get the help you need, right in the corner.</string>
+    <string name="home_slide_two_text">Explore our amazing staff,\n always ready to assist you</string>
+    <string name="home_slide_text">Get the help you need,\n right in the corner.</string>
     <string name="home_care_image">home_care</string>
     <string name="home_slide_three_text">Get daily assistance at your house.</string>
     <string name="error_text">Error</string>
@@ -63,12 +63,21 @@
     <string name="logo_white_image">logo_white</string>
     <string name="get_started_text">Get started,</string>
     <string name="sign_up_to_continue_text">sign up to continue</string>
-    <string name="title_activity_main">main</string>
+
+    <string name="currency">EUR</string>
+    <string name="medium_text">
+
+
+    "Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion."
+    "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+    "technologically advanced and open to imagination and magic."
+
+    </string>
+
     <string name="large_text">
 
-        "Material is the metaphor.\n\n"
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic.\n"
         "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
@@ -155,5 +164,12 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="know_more_text">Know more</string>
 
 </resources>

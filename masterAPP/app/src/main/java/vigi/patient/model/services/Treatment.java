@@ -92,6 +92,7 @@ public class Treatment implements Serializable {
     }
 
     public enum TreatmentCategory {
+
         DAILY_ASSISTANCE("Daily Assistance"),
         MEDICAL_ASSISTANCE("Medical Assistance");
 
