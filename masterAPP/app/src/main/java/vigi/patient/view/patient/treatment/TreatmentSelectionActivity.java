@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -47,7 +48,7 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
     private ValueEventListener treatmentListener;
     private TreatmentService treatmentService;
     private List<Treatment> treatmentsWithCategory;
-
+    private int treatmentsSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,6 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
         setupUiComponents();
         setupTreatments(); // TODO while treatments are being retrieved from database a spinner should run
         setupClickListeners();
-        addDotsIndicator(0); // TODO need to wait for treatments to know the range, currently is set to five
     }
 
     @Override
@@ -110,9 +110,9 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
         dailyAssistance.performClick(); // DEFAULT CATEGORY
     }
 
-    private void addDotsIndicator(int position){
+    private void addDotsIndicator(int position, int treatmentsSize){
         dotLayout.removeAllViews();
-        IntStream.range(0, 2).forEach(i -> {
+        IntStream.range(0, treatmentsSize).forEach(i -> {
             TextView dot = new TextView(TreatmentSelectionActivity.this);
             dot.setText(VigiHtml.fromHtml("&#8226;"));
             dot.setTextSize(24);
@@ -129,7 +129,8 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
 
         @Override
         public void onPageSelected(int position) {
-            addDotsIndicator(position);
+            TreatmentsViewAdapter.currentPosition = position;
+            addDotsIndicator(position, treatmentsSize);
         }
 
         @Override
@@ -139,9 +140,13 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
     private void notifyDataChanged(List<Treatment> treatments) {
         treatmentService.setAllTreatments(treatments);
         treatmentsWithCategory = treatmentService.readTreatmentWithCategory(category);
+
         adapter = new TreatmentsViewAdapter(treatmentsWithCategory, this);
         viewPager.setAdapter(adapter);
-        addDotsIndicator(0);
+        treatmentsSize = treatmentsWithCategory.size();
+
+        TreatmentsViewAdapter.currentPosition = 0;
+        addDotsIndicator(0, treatmentsSize);
     }
 
     // Action when back navigation button is pressed

@@ -1,5 +1,6 @@
 package vigi.patient.view.patient.treatment.viewHolder;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,7 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     private ImageView imageView;
     private TextView title;
     private TextView knowMore;
-    private int position = 0;
+    public static int currentPosition;
 
     public TreatmentsViewAdapter(List<Treatment> treatments, Context context) {
         this.treatments = treatments;
@@ -60,8 +62,8 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
         title = view.findViewById(R.id.title);
         knowMore = view.findViewById(R.id.see_more);
 
-        Picasso.get().load(treatments.get(this.position).getImage().toString()).into(imageView);
-        title.setText(treatments.get(this.position).getName());
+        Picasso.get().load(treatments.get(position).getImage().toString()).into(imageView);
+        title.setText(treatments.get(position).getName());
         setupKnowMore();
 
         imageView.setOnClickListener(this);
@@ -81,10 +83,11 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
     public void onClick(View view) {
 
         if (view.getId() == knowMore.getId()){ // Go to treatment details
-            new VigiTreatmentDetailsDialog(context).showDetails(treatments.get(position));
+            new VigiTreatmentDetailsDialog(context).showDetails(treatments.get(currentPosition));
         } else if (view.getId() == imageView.getId()){ // Go to booking appointments
+
             Intent bookingIntent = new Intent(context, BookingActivity.class);
-            bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(position));
+            bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(currentPosition).getName());
             context.startActivity(bookingIntent);
         }
     }
