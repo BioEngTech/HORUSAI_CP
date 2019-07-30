@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,24 +37,26 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class BookingActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, AdapterView.OnItemSelectedListener, VigiActivity {
 
     private String TAG = getClass().getName();
+    private final static String CHOSEN_TREATMENT = "chosenTreatment";
     private Toolbar toolbar;
     private ArrayList<CareProvider> careProvidersList;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private Spinner spinnerOrder;
+    private String treatmentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.treatment_booking);
-        setupUiComponents();
-
         // Fetch care providers that can do the selected treatment for that day,
         // and display information according to that
         Intent intent = getIntent();
-        String treatmentId = Objects.requireNonNull(intent.getExtras()).getString("treatmentId");
+        treatmentName = Objects.requireNonNull(intent.getExtras()).getString(CHOSEN_TREATMENT);
+
+        setContentView(R.layout.treatment_booking);
+        setupUiComponents();
 
         getUserAppointments();
         setUpRecyclerView();
@@ -120,7 +123,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
 
     private void customizeToolBar() {
         checkNotNull(getSupportActionBar());
-        getSupportActionBar().setTitle("Treatment name...");
+        getSupportActionBar().setTitle(treatmentName);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -130,21 +133,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         CareProvider careProviderExample = new CareProvider();
         careProviderExample.setName("John doe");
         careProvidersList.add(careProviderExample);
-        CareProvider careProviderExample2 = new CareProvider();
-        careProviderExample2.setName("John doe");
-        careProvidersList.add(careProviderExample2);
-        CareProvider careProviderExample3 = new CareProvider();
-        careProviderExample3.setName("John doe");
-        careProvidersList.add(careProviderExample);
-        CareProvider careProviderExample4 = new CareProvider();
-        careProviderExample4.setName("John doe");
-        careProvidersList.add(careProviderExample2);
-        CareProvider careProviderExample5 = new CareProvider();
-        careProviderExample5.setName("John doe");
-        careProvidersList.add(careProviderExample);
-        CareProvider careProviderExample6 = new CareProvider();
-        careProviderExample6.setName("John doe");
-        careProvidersList.add(careProviderExample2);
+
     }
 
     public void setCount(Context context, String count, Menu menu) {
