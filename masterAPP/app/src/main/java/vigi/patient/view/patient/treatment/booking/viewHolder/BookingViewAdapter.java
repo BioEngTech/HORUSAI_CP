@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +13,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
+import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
+
+import static java.util.stream.Collectors.toList;
 
 
 public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.ViewHolder>{
 
     private String TAG = getClass().getName();
-    private ArrayList<CareProvider> careProviders;
+    private List<CareProvider> careProviders;
+    private List<Agenda> agendaInstances;
     private Context context;
+    private CareProvider careProvider;
 
-    public BookingViewAdapter(Context context, ArrayList<CareProvider> careProvidersList) {
+    public BookingViewAdapter(Context context, List<CareProvider> careProvidersList, List<Agenda> agendaInstances) {
         this.context = context;
         this.careProviders = careProvidersList;
+        this.agendaInstances = agendaInstances;
     }
 
     @NonNull
@@ -37,12 +46,19 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.name.setText(careProviders.get(i).getName());
-        // viewHolder.field.setText(careProviders.get(i).getField());
-        // viewHolder.duration.setText(careProviders.get(i).getDuration());
-        // viewHolder.rating.setText(careProviders.get(i).getRating());
-        // viewHolder.price.setText(careProviders.get(i).getPrice());
-        //viewHolder.image.setImageDrawable(careProviders.get(i).getCareProviderImage());
+
+        careProvider = careProviders.stream()
+                .filter(careProvider -> careProvider.getId().equals(agendaInstances.get(i).getCareProviderId())).findFirst().orElse(null);
+        Log.d("NAMASTE careProvider name", careProvider.getName());
+
+        viewHolder.name.setText(careProvider.getName());
+        viewHolder.field.setText(careProvider.getJob());
+        //TODO change duration with beginning hour from agenda class
+        viewHolder.duration.setText(careProvider.getExpectedtime()+"min");
+        viewHolder.rating.setText(careProvider.getRating());
+        viewHolder.price.setText(careProvider.getPrice()+"€");
+
+        //viewHolder.image.setImageDrawable(careProviders.get(i).getImage());
         viewHolder.addToCart.setOnClickListener(view -> {
             Toast.makeText(context,"Request has been added to the cart!", Toast.LENGTH_LONG).show();
             // TODO add request to database, so we can access request from CartActivity
@@ -54,7 +70,7 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
 
     @Override
     public int getItemCount() {
-        return careProviders.size();
+        return agendaInstances.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

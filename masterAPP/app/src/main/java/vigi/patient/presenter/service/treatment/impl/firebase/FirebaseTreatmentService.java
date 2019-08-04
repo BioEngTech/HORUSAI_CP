@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.treatment.impl.firebase;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 
@@ -24,6 +27,7 @@ public class FirebaseTreatmentService implements TreatmentService {
         allTreatments = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(Treatment.class.getSimpleName());
+
     }
 
     @Override
@@ -33,6 +37,7 @@ public class FirebaseTreatmentService implements TreatmentService {
 
     @Override
     public List<Treatment> readTreatmentWithCategory(String category) {
+
         return allTreatments.stream()
                 .filter(treatment -> category.equals(treatment.getCategory().toString()))
                 .collect(Collectors.toList());

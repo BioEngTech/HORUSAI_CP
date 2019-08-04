@@ -61,7 +61,6 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
 
     @Override
     public void setupUiComponents() {
-
         categories = Treatment.TreatmentCategory.getCategories();
         viewPager = findViewById(R.id.view_pager);
         dotLayout = findViewById(R.id.dot_layout);
@@ -88,6 +87,7 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
     private void setupTreatments(){
         TreatmentsChangeListener viewListener = new TreatmentsChangeListener();
         viewPager.addOnPageChangeListener(viewListener);
+
         treatmentListener = new TreatmentSelectionActivity.VigiValueEventListener();
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
@@ -101,6 +101,7 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
             category = Treatment.TreatmentCategory.DAILY_ASSISTANCE.toString();
             treatmentService.readTreatments(treatmentListener);
         });
+
         medicalAssistance.setOnClickListener(view -> {
             medicalAssistance.setBackgroundResource(R.drawable.utils_rectangle_rounded_200dp_full_blue_medium);
             dailyAssistance.setBackgroundResource(R.drawable.utils_rectangle_rounded_200dp_border_0point5dp_white);
@@ -138,10 +139,12 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
     }
 
     private void notifyDataChanged(List<Treatment> treatments) {
+
         treatmentService.setAllTreatments(treatments);
         treatmentsWithCategory = treatmentService.readTreatmentWithCategory(category);
 
         adapter = new TreatmentsViewAdapter(treatmentsWithCategory, this);
+
         viewPager.setAdapter(adapter);
         treatmentsSize = treatmentsWithCategory.size();
 
@@ -207,6 +210,7 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             List<Treatment> treatmentList = new ArrayList<>();
+
             for (DataSnapshot snapshotTreatment : dataSnapshot.getChildren()) {
                 treatmentList.add(TreatmentConverter.getTreatmentFromDataSnapshot(snapshotTreatment));
             }

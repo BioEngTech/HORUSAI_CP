@@ -51,17 +51,43 @@
                     android:paddingEnd="30dp"
                     android:paddingBottom="25dp">
 
-                    <TextView
-                        android:id="@+id/time"
+                    <RelativeLayout
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
+                        android:id="@+id/time"
                         android:background="@drawable/utils_rectangle_rounded_15dp_border_with_dash_1dp_blue_strong"
-                        android:gravity="center"
-                        android:text="10h00"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center">
+
+                    <EditText
+                        android:id="@+id/hours_time"
+                        android:layout_width="30dp"
+                        android:layout_height="60dp"
+                        android:text="10"
                         android:textAlignment="center"
                         android:textColor="@color/colorPurpleMedium"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/two_dots"
+                        android:layout_toEndOf="@id/hours_time"
+                        android:layout_width="5dp"
+                        android:layout_height="60dp"
+                        android:text=":"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPurpleMedium"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/minutes_time"
+                        android:layout_toEndOf="@id/two_dots"
+                        android:layout_width="30dp"
+                        android:layout_height="60dp"
+                        android:text="00"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPurpleMedium"
+                        android:textSize="15sp" />
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -73,13 +99,14 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/decrease_time"
+                            android:id="@+id/increase_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_add_box_theme_24dp" />
 
                         <ImageView
+                            android:id="@+id/decrease_time"
                             android:layout_marginTop="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

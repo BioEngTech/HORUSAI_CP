@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.treatment.impl.firebase;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 
 import java.math.BigDecimal;
@@ -19,7 +21,6 @@ public final class TreatmentConverter {
 
         Map<String, String> snapshotMap = (Map<String, String>) snapshot.getValue();
 
-        //TODO: Probably some fields fail since in Firebase might not be supported
         treatment.setName(snapshotMap.get("name"));
         treatment.setBenefits(snapshotMap.get("benefits"));
         treatment.setCategory(Treatment.TreatmentCategory.valueOf(snapshotMap.get("category")));
@@ -33,7 +34,7 @@ public final class TreatmentConverter {
         }
         treatment.setPriceHint(new BigDecimal(snapshotMap.get("pricehint")));
 
-        List<String> admittedjobs = (List<String>) ((HashMap)snapshot.getValue()).get("admittedjobs");
+        String admittedjobs = snapshotMap.get("admittedjobs");
         treatment.setAdmittedJobs(admittedjobs);
 
         return treatment;

@@ -28,6 +28,7 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
 
     private String TAG = getClass().getName();
     private final static String CHOSEN_TREATMENT = "chosenTreatment";
+    private final static String ADMITTED_CLINICIANS = "admittedClinicians";
     private List<Treatment> treatments;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -85,9 +86,10 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
         if (view.getId() == knowMore.getId()){ // Go to treatment details
             new VigiTreatmentDetailsDialog(context).showDetails(treatments.get(currentPosition));
         } else if (view.getId() == imageView.getId()){ // Go to booking appointments
-
             Intent bookingIntent = new Intent(context, BookingActivity.class);
             bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(currentPosition).getName());
+            bookingIntent.putExtra(ADMITTED_CLINICIANS, treatments.get(currentPosition).getAdmittedJobs());
+
             context.startActivity(bookingIntent);
         }
     }

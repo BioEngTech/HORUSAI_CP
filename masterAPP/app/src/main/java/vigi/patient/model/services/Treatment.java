@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,16 @@ public class Treatment implements Serializable {
     private String description;
     private TreatmentCategory category;
     private String benefits;
-    private List<String> admittedJobs;
+
+    public String getAdmittedJobs() {
+        return admittedJobs;
+    }
+
+    public void setAdmittedJobs(String admittedJobs) {
+        this.admittedJobs = admittedJobs;
+    }
+
+    private String admittedJobs;
     private URL image;
     private Integer minutesOfDuration; /*e.g. Duration.ofSeconds(10)*/
     private BigDecimal priceHint;
@@ -57,14 +67,6 @@ public class Treatment implements Serializable {
 
     public void setBenefits(String benefits) {
         this.benefits = benefits;
-    }
-
-    public List<String> getAdmittedJobs() {
-        return admittedJobs;
-    }
-
-    public void setAdmittedJobs(List<String> admittedJobs) {
-        this.admittedJobs = admittedJobs;
     }
 
     public URL getImage() {

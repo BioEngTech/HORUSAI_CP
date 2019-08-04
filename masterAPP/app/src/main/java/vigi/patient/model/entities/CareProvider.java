@@ -1,5 +1,9 @@
 package vigi.patient.model.entities;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -12,8 +16,61 @@ public class CareProvider {
 
     private String id;
     private String name;
-    private CircleImageView image;
+
+    public URL getImage() {
+        return image;
+    }
+
+    public void setImage(URL image) {
+        this.image = image;
+    }
+
+    private URL image;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getExpectedtime() {
+        return expectedtime;
+    }
+
+    public void setExpectedtime(String expectedtime) {
+        this.expectedtime = expectedtime;
+    }
+
     private String email;
+    private String job, price, rating, expectedtime;
+
+    public List<HashMap<String, String>> getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(List<HashMap<String, String>> agenda) {
+        this.agenda = agenda;
+    }
+
+    private List<HashMap<String,String>> agenda;
 
 
     private Position position;
@@ -50,14 +107,6 @@ public class CareProvider {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public CircleImageView getImage() {
-        return image;
-    }
-
-    public void setImage(CircleImageView image) {
-        this.image = image;
     }
 
     public Position getPosition() {
