@@ -18,7 +18,7 @@ public interface AgendaService {
 
     void setAllAgendas(List<Agenda> allAgendas);
 
-    List<Agenda> readAgendaWithFilter(String filter);
+    List<Agenda> readAgendaWithFilter(String filter, List<CareProvider> careProvidersWithTreatment);
 
     List<Agenda> readAgendaWithDate(String date);
 

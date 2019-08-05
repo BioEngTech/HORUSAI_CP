@@ -9,12 +9,16 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 import vigi.patient.R;
+import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Review;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.view.patient.careProvider.booking.BookingActivity;
@@ -36,12 +40,17 @@ public class ProfileActivity extends AppCompatActivity implements VigiActivity {
     private String TAG = getClass().getName();
     private ArrayList<Review> reviewsList;
     private ArrayList<Treatment> servicesList;
+    private CareProvider careProvider;
+    private final static String CHOSEN_CAREPROVIDER = "chosenCareProvider";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cprovider_profile);
+
+        Intent intent = getIntent();
+        careProvider = (CareProvider) Objects.requireNonNull(intent.getExtras()).getSerializable(CHOSEN_CAREPROVIDER);
 
         setupUiComponents();
         getServices();
@@ -80,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements VigiActivity {
     private void getServices() {
         servicesList = new ArrayList<>();
         Treatment example = new Treatment();
-        example.setName("Exemplo");
+        example.setName(careProvider.getName());
         servicesList.add(example);
         servicesList.add(example);
     }
@@ -104,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity implements VigiActivity {
 
     private void customizeToolBar() {
         checkNotNull(getSupportActionBar());
-        getSupportActionBar().setTitle("Care Provider Name"); // TODO set here care provider name
+        getSupportActionBar().setTitle(careProvider.getName());
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

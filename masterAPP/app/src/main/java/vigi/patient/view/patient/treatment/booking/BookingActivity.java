@@ -67,6 +67,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     private String TAG = getClass().getName();
     private final static String CHOSEN_TREATMENT = "chosenTreatment";
     private final static String ADMITTED_CLINICIANS = "admittedClinicians";
+    private final static String CHOSEN_CAREPROVIDER = "chosenCareProvider";
 
     private Toolbar toolbar;
     private ArrayList<CareProvider> careProvidersList;
@@ -121,14 +122,13 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         List<String> categories = new ArrayList<>();
         categories.add("Rating");
         categories.add("Price");
-        categories.add("Hour");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.adapter_treatment_booking_spinner,categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerOrder.setAdapter(adapter);
         spinnerOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                filter = String.valueOf(i);
+                filter = adapterView.getItemAtPosition(i).toString();
                 careProviderService.readCareProviders(careProviderListener);
                 agendaService.readAgendas(agendaListener);
             }
@@ -168,9 +168,8 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     private void setUpAvailableCareProviders(){
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        //bookingAdapter = new BookingViewAdapter(this,careProvidersWithFilter);
-        //recyclerView.setAdapter(bookingAdapter);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.recycler_view_vertical_margin);
+        recyclerView.addItemDecoration(itemDecoration);
 
         careProviderListener = new BookingActivity.CareProviderValueEventListener();
         careProviderService = new FirebaseCareProviderService();
@@ -179,8 +178,6 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         agendaListener = new BookingActivity.AgendaValueEventListener();
         agendaService = new FirebaseAgendaService();
         agendaService.init();
-
-
     }
 
     @Override
@@ -207,7 +204,6 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Log.d("NAMASTE sdfMinutes", minTimeDate.toString());
             cal = Calendar.getInstance();
             cal.setTime(minTimeDate);
             cal.add(Calendar.MINUTE, -1);
@@ -292,34 +288,29 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     }
 
     private void notifyCareProviderDataChanged(List<CareProvider> careProvidersList) {
-
         careProviderService.setAllCareProviders(careProvidersList);
         careProvidersWithTreatment = careProviderService.readCareProviderWithTreatment(admittedJobs);
         careProviderService.setAllCareProviders(careProvidersWithTreatment);
-
     }
 
     private void notifyAgendaDataChanged(List<Agenda> agendaList){
 
+        agendaService.setAllAgendas(agendaList);
+
         try {
             sdfFullDate.parse(selectedFullDate);
-            agendaService.setAllAgendas(agendaList);
+
             agendaInstances = agendaService.readAgendaWithDate(selectedFullDate);
+            agendaService.setAllAgendas(agendaInstances);
 
-            //TODO filter agenda
-            //careProvidersWithFilter = careProviderService.readCareProviderWithFilter(filter);
-            //Log.d("NAMASTE careProvidersWithFilter", careProvidersWithFilter.toString());
-
+            agendaInstances = agendaService.readAgendaWithFilter(filter, careProvidersWithTreatment);
             bookingAdapter = new BookingViewAdapter(this,careProvidersWithTreatment, agendaInstances);
             recyclerView.setAdapter(bookingAdapter);
-
         } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(this,"Confirm time format HH:mm", Toast.LENGTH_LONG).show();
         }
 
-        //ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.recycler_view_vertical_margin);
-        //recyclerView.addItemDecoration(itemDecoration);
     }
 
     public class CareProviderValueEventListener implements ValueEventListener {
@@ -331,12 +322,8 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
             for (DataSnapshot snapshotCareProvider : dataSnapshot.getChildren()) {
                 careProvidersList.add(CareProviderConverter.getCareProviderFromDataSnapshot(snapshotCareProvider));
             }
-            Log.d("NAMASTE PASSOU", "1");
             notifyCareProviderDataChanged(careProvidersList);
-            Log.d("NAMASTE PASSOU", "3");
             agendaService.readAgendas(agendaListener);
-
-
         }
 
         @Override
@@ -353,10 +340,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
             careProviderIds = new ArrayList<>();
             careProviderIds = careProvidersWithTreatment.stream().map(careProvider -> careProvider.getId()).collect(toList());
 
-            Log.d("NAMASTE careProviderIds", careProviderIds.toString());
-
             for (DataSnapshot snapshotAgendaInstance : dataSnapshot.getChildren()) {
-
                 if(careProviderIds.contains(snapshotAgendaInstance.child("careProviderId").getValue().toString())){
                     agendaList.add(AgendaConverter.getAgendaFromDataSnapshot(snapshotAgendaInstance));
                 }

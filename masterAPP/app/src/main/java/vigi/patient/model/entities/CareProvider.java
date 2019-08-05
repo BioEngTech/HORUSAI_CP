@@ -1,5 +1,6 @@
 package vigi.patient.model.entities;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Model POJO (plain old java object)
  * for the care provider user
  */
-public class CareProvider {
+public class CareProvider implements Serializable {
 
     //TODO: Add birthday date
 
@@ -43,14 +44,6 @@ public class CareProvider {
         this.price = price;
     }
 
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
     public String getExpectedtime() {
         return expectedtime;
     }
@@ -60,7 +53,17 @@ public class CareProvider {
     }
 
     private String email;
-    private String job, price, rating, expectedtime;
+    private String job, price, expectedtime;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    private int rating;
 
     public List<HashMap<String, String>> getAgenda() {
         return agenda;
