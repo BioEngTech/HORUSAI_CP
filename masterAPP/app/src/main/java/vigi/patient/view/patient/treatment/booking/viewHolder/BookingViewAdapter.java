@@ -22,7 +22,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
 import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
+import vigi.patient.model.services.Appointment;
+import vigi.patient.presenter.service.appointment.api.AppointmentService;
+import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
 import vigi.patient.view.patient.careProvider.ProfileActivity;
+import vigi.patient.view.patient.cart.CartActivity;
 import vigi.patient.view.patient.search.SearchActivity;
 import vigi.patient.view.patient.treatment.booking.BookingActivity;
 
@@ -35,15 +39,25 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
     private List<CareProvider> careProviders, careProvidersDisplayed;
     private List<Agenda> agendaInstances;
     private Context context;
-    private CareProvider careProvider;
+    private CareProvider careProvider, careProviderToBeSaved;
+    private Agenda agendaToBeSaved;
+    private Appointment appointmentToBeSaved;
     private final static String CHOSEN_CAREPROVIDER = "chosenCareProvider";
+    private final static String CHOSEN_AGENDAINSTANCE = "chosenAgendaInstance";
+    private AppointmentService appointmentService;
+    private String currentPatientId;
+    private String treatmentId, date;
 
 
-    public BookingViewAdapter(Context context, List<CareProvider> careProvidersList, List<Agenda> agendaInstances) {
+    public BookingViewAdapter(Context context, List<CareProvider> careProvidersList, List<Agenda> agendaInstances, String currentPatientId, String treatmentId, String date) {
         this.context = context;
         this.careProviders = careProvidersList;
         this.agendaInstances = agendaInstances;
         this.careProvidersDisplayed = new ArrayList<>();
+        this.currentPatientId = currentPatientId;
+        this.treatmentId = treatmentId;
+        this.date = date;
+
     }
 
     @NonNull
@@ -70,8 +84,22 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
 
         //viewHolder.image.setImageDrawable(careProviders.get(i).getImage());
         viewHolder.addToCart.setOnClickListener(view -> {
-            Toast.makeText(context,"Request has been added to the cart!", Toast.LENGTH_LONG).show();
             // TODO add request to database, so we can access request from CartActivity
+            appointmentService = new FirebaseAppointmentService();
+            appointmentService.init(currentPatientId);
+
+            careProviderToBeSaved = careProvidersDisplayed.get(i);
+            agendaToBeSaved = agendaInstances.get(i);
+
+            appointmentToBeSaved = new Appointment();
+            appointmentToBeSaved.setCareProviderId(careProviderToBeSaved.getId());
+            appointmentToBeSaved.setPrice(careProviderToBeSaved.getPrice());
+            appointmentToBeSaved.setStatus("cart");
+            appointmentToBeSaved.setDate(date);
+            appointmentToBeSaved.setPatientId(currentPatientId);
+            appointmentToBeSaved.setTreatmentId(treatmentId);
+
+            appointmentService.setFirebaseAppointments(context,appointmentToBeSaved);
 
         });
         viewHolder.profileCareProvider.setOnClickListener(view -> {

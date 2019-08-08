@@ -9,21 +9,22 @@ public class Patient {
 
     //TODO: Add birthday date
 
-    private String id;
+    private String tokenid;
     private String name;
     private String image;
     private String email;
+
 
     private Position position;
 
     private String phoneNumber;
 
     public String getId() {
-        return id;
+        return tokenid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String tokenid) {
+        this.tokenid = tokenid;
     }
 
     public String getPhoneNumber() {

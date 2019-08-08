@@ -28,7 +28,6 @@ public final class CareProviderConverter {
         careProvider.setExpectedtime(snapshotMap.get("expectedtime"));
         careProvider.setJob(snapshotMap.get("job"));
         careProvider.setPrice(snapshotMap.get("price"));
-
         careProvider.setRating((int)Float.parseFloat(snapshotMap.get("rating")));
 
         try {

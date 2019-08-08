@@ -27,7 +27,8 @@ import vigi.patient.view.utils.dialog.VigiTreatmentDetailsDialog;
 public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickListener {
 
     private String TAG = getClass().getName();
-    private final static String CHOSEN_TREATMENT = "chosenTreatment";
+    private final static String CHOSEN_TREATMENT_NAME = "chosenTreatmentName";
+    private final static String CHOSEN_TREATMENT_ID = "chosenTreatmentId";
     private final static String ADMITTED_CLINICIANS = "admittedClinicians";
     private List<Treatment> treatments;
     private LayoutInflater layoutInflater;
@@ -87,7 +88,8 @@ public class TreatmentsViewAdapter extends PagerAdapter implements View.OnClickL
             new VigiTreatmentDetailsDialog(context).showDetails(treatments.get(currentPosition));
         } else if (view.getId() == imageView.getId()){ // Go to booking appointments
             Intent bookingIntent = new Intent(context, BookingActivity.class);
-            bookingIntent.putExtra(CHOSEN_TREATMENT, treatments.get(currentPosition).getName());
+            bookingIntent.putExtra(CHOSEN_TREATMENT_NAME, treatments.get(currentPosition).getName());
+            bookingIntent.putExtra(CHOSEN_TREATMENT_ID, treatments.get(currentPosition).getId());
             bookingIntent.putExtra(ADMITTED_CLINICIANS, treatments.get(currentPosition).getAdmittedJobs());
 
             context.startActivity(bookingIntent);

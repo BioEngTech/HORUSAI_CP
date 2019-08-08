@@ -2,15 +2,24 @@ package vigi.patient.view.patient.cart.viewHolder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
+import vigi.patient.model.entities.Agenda;
+import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
+import vigi.patient.model.services.Treatment;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 import vigi.patient.view.vigi.activity.VigiRecyclerViewNotification;
 
@@ -18,12 +27,19 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
 
     private final String TAG = getClass().getName();
 
-    private ArrayList<Appointment> requests;
+    private List<Appointment> appointmentsList;
+    private List<CareProvider> careProvidersList;
+    private List<Treatment> treatmentsList;
     private VigiRecyclerViewNotification vigiRecyclerViewNotification;
+    private CareProvider careProvider;
+    private Treatment treatment;
 
-    public CartAdapter(ArrayList<Appointment> requests, VigiRecyclerViewNotification vigiRecyclerViewNotification) {
-        this.requests = requests;
+    public CartAdapter(List<Appointment> appointmentsList, List<CareProvider> careProvidersList, List<Treatment> treatmentsList, VigiRecyclerViewNotification vigiRecyclerViewNotification) {
+        this.appointmentsList = appointmentsList;
         this.vigiRecyclerViewNotification = vigiRecyclerViewNotification;
+        this.careProvidersList = careProvidersList;
+        this.treatmentsList = treatmentsList;
+
     }
 
     @NonNull
@@ -35,13 +51,21 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        /*
-            viewHolder.treatment.setText(requests.get(i).getTreatmentName()); TODO need method to get treatment name in class Appointment (Ex: getTreamentName())
-            viewHolder.price.setText(String.format("@string/currency%s", requests.get(i).getPrice().toString()));
-            viewHolder.cpName.setText(requests.get(i).getCareProviderName()); TODO need method to get care provider name in class Appointment (Ex: getCareProviderName())
-            viewHolder.cpField.setText(requests.get(i).getCareProviderField()); TODO need method to get care provider field in class Appointment (Ex: getCareProviderField())
-            viewHolder.image.setImageDrawable(requests.get(i).getTreatmentImage()); TODO need method to get treatment image in class Appointment (Ex: getTreatmentImage())
-        */
+
+        careProvider = careProvidersList.stream()
+                .filter(careProvider -> careProvider.getId().equals(appointmentsList.get(i).getCareProviderId())).findFirst().orElse(null);
+        treatment = treatmentsList.stream()
+                .filter(treatment -> treatment.getId().equals(appointmentsList.get(i).getTreatmentId())).findFirst().orElse(null);
+
+        viewHolder.treatment.setText(treatment.getName());
+        viewHolder.price.setText(appointmentsList.get(i).getPrice()+"€");
+        viewHolder.cpName.setText(careProvider.getName());
+        viewHolder.cpField.setText(careProvider.getJob());
+        String[] splitedDate = appointmentsList.get(i).getDate().split(" ");
+        viewHolder.date.setText(splitedDate[0]);
+        viewHolder.hour.setText(splitedDate[1]);
+        //Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
+
         viewHolder.removeBtn.setOnClickListener(view -> {
           // TODO remove request from cart and update recycler view that is being shown to the user
         });
@@ -49,9 +73,9 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (requests.isEmpty()) { vigiRecyclerViewNotification.onRecyclerViewNotification(View.GONE); }
+        if (appointmentsList.isEmpty()) { vigiRecyclerViewNotification.onRecyclerViewNotification(View.GONE); }
         else { vigiRecyclerViewNotification.onRecyclerViewNotification(View.VISIBLE); }
-        return requests.size();
+        return appointmentsList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -60,6 +84,8 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
         TextView price;
         TextView cpName;
         TextView cpField;
+        TextView date;
+        TextView hour;
         ImageView removeBtn;
 
         ViewHolder(@NonNull View itemView) {
@@ -70,6 +96,8 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
             cpName = itemView.findViewById(R.id.cp_name);
             cpField = itemView.findViewById(R.id.cp_field);
             removeBtn = itemView.findViewById(R.id.removeIcon);
+            date = itemView.findViewById(R.id.date);
+            hour = itemView.findViewById(R.id.hour);
         }
     }
 

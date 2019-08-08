@@ -44,7 +44,7 @@ public class FirebaseTreatmentService implements TreatmentService {
     }
 
     @Override
-    public Treatment readTreatment(UUID treatmentId) {
+    public Treatment readTreatment(String treatmentId) {
         return allTreatments.stream()
                 .filter(treatment -> treatmentId.equals(treatment.getId()))
                 .findFirst()

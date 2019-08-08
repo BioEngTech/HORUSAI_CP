@@ -22,6 +22,7 @@ public final class TreatmentConverter {
         Map<String, String> snapshotMap = (Map<String, String>) snapshot.getValue();
 
         treatment.setName(snapshotMap.get("name"));
+        treatment.setId(snapshotMap.get("id"));
         treatment.setBenefits(snapshotMap.get("benefits"));
         treatment.setCategory(Treatment.TreatmentCategory.valueOf(snapshotMap.get("category")));
         treatment.setDescription(snapshotMap.get("description"));

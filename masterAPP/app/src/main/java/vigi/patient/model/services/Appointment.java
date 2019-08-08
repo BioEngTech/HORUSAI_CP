@@ -7,24 +7,64 @@ import java.util.UUID;
 
 public class Appointment {
 
-    private Date date;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private String date;
     private String report;
     private Integer rating;
     private Double latitude;
     private Double longitude;
     private Double altitude;
     private Integer minutesOfDuration;
-    private BigDecimal price;
-    private UUID treatmentId;
-    private UUID careProviderId;
-    private UUID patientId;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    private String price;
+    private String treatmentId;
+    private String careProviderId;
+    private String patientId;
     private String status;
 
+    public String getTreatmentId() {
+        return treatmentId;
+    }
+
+    public void setTreatmentId(String treatmentId) {
+        this.treatmentId = treatmentId;
+    }
+
+    public String getCareProviderId() {
+        return careProviderId;
+    }
+
+    public void setCareProviderId(String careProviderId) {
+        this.careProviderId = careProviderId;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     public Appointment() {
     }
 
-    public Appointment(Date date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Integer minutesOfDuration, BigDecimal price, UUID treatmentId, UUID careProviderId, UUID patientId, String status) {
+    public Appointment(String date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Integer minutesOfDuration, String price, String treatmentId, String careProviderId, String patientId, String status) {
         this.date = date;
         this.report = report;
         this.rating = rating;
@@ -39,13 +79,6 @@ public class Appointment {
         this.status = status;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public String getReport() {
         return report;
@@ -95,37 +128,6 @@ public class Appointment {
         this.minutesOfDuration = minutesOfDuration;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public UUID getTreatmentId() {
-        return treatmentId;
-    }
-
-    public void setTreatmentId(UUID treatmentId) {
-        this.treatmentId = treatmentId;
-    }
-
-    public UUID getCareProviderId() {
-        return careProviderId;
-    }
-
-    public void setCareProviderId(UUID careProviderId) {
-        this.careProviderId = careProviderId;
-    }
-
-    public UUID getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(UUID patientId) {
-        this.patientId = patientId;
-    }
 
     public String getStatus() {
         return status;

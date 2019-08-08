@@ -1,6 +1,9 @@
 package vigi.patient.model.entities;
 
-public class Agenda {
+import java.io.Serializable;
+import java.util.HashMap;
+
+public class Agenda implements Serializable {
 
     public String getCareProviderId() {
         return careProviderId;
@@ -27,6 +30,17 @@ public class Agenda {
     }
 
     String careProviderId, endDate, startDate;
+
+    public HashMap<String, Boolean> getCartDate() {
+        return cartDate;
+    }
+
+    public void setCartDate(HashMap<String, Boolean> cartDate) {
+        this.cartDate = cartDate;
+    }
+
+    HashMap<String, Boolean> cartDate;
+
 
 
 }

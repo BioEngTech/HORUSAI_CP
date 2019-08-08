@@ -93,13 +93,14 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
 
     private void getUserAppointments() {
         appointmentsList = new ArrayList<>();
-        Date date = new Date(20190413L);
+        /*Date date = new Date(20190413L);
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
         appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
+   */
     }
 
     public void setCount(Context context, String count, Menu menu) {

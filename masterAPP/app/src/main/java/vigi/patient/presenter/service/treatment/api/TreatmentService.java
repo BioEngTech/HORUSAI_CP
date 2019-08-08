@@ -21,7 +21,7 @@ public interface TreatmentService {
 
     List<Treatment> readTreatmentWithCategory(String category);
 
-    Treatment readTreatment(UUID treatmentId);
+    Treatment readTreatment(String treatmentId);
 
     void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 }

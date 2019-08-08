@@ -65,7 +65,8 @@ import static java.util.stream.Collectors.toList;
 public class BookingActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, AdapterView.OnItemSelectedListener, VigiActivity {
 
     private String TAG = getClass().getName();
-    private final static String CHOSEN_TREATMENT = "chosenTreatment";
+    private final static String CHOSEN_TREATMENT_NAME = "chosenTreatmentName";
+    private final static String CHOSEN_TREATMENT_ID = "chosenTreatmentId";
     private final static String ADMITTED_CLINICIANS = "admittedClinicians";
     private final static String CHOSEN_CAREPROVIDER = "chosenCareProvider";
 
@@ -88,7 +89,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     private List<Agenda> agendaInstances;
     private List<CareProvider> careProvidersWithFilter, careProvidersWithTreatment;
     private BookingViewAdapter bookingAdapter;
-    private String admittedJobs, time, treatmentName, minTime, selectedDate, selectedFullDate, filter;
+    private String currentPatientId, admittedJobs, time, treatmentName, treatmentId, minTime, selectedDate, selectedFullDate, filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +98,11 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         // Fetch care providers that can do the selected treatment for that day,
         // and display information according to that
         Intent intent = getIntent();
-        treatmentName = Objects.requireNonNull(intent.getExtras()).getString(CHOSEN_TREATMENT);
+        treatmentName = Objects.requireNonNull(intent.getExtras()).getString(CHOSEN_TREATMENT_NAME);
+        treatmentId = Objects.requireNonNull(intent.getExtras()).getString(CHOSEN_TREATMENT_ID);
         admittedJobs = Objects.requireNonNull(intent.getExtras()).getString(ADMITTED_CLINICIANS);
+
+        currentPatientId = "1"; //TODO change to tokenid
 
         careProvidersList = new ArrayList<>();
         agendaList = new ArrayList<>();
@@ -113,7 +117,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
 
         setContentView(R.layout.treatment_booking);
         setupUiComponents();
-        setUpAvailableCareProviders();
+        setUpServices();
         setupClickListeners();
     }
 
@@ -165,7 +169,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         });
     }
 
-    private void setUpAvailableCareProviders(){
+    private void setUpServices(){
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.recycler_view_vertical_margin);
@@ -294,7 +298,6 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     }
 
     private void notifyAgendaDataChanged(List<Agenda> agendaList){
-
         agendaService.setAllAgendas(agendaList);
 
         try {
@@ -304,7 +307,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
             agendaService.setAllAgendas(agendaInstances);
 
             agendaInstances = agendaService.readAgendaWithFilter(filter, careProvidersWithTreatment);
-            bookingAdapter = new BookingViewAdapter(this,careProvidersWithTreatment, agendaInstances);
+            bookingAdapter = new BookingViewAdapter(this,careProvidersWithTreatment, agendaInstances, currentPatientId, treatmentId , selectedFullDate);
             recyclerView.setAdapter(bookingAdapter);
         } catch (ParseException e) {
             e.printStackTrace();

@@ -10,7 +10,15 @@ import java.util.UUID;
 
 public class Treatment implements Serializable {
 
-    private UUID id;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     private String name;
     private String description;
     private TreatmentCategory category;
@@ -29,13 +37,7 @@ public class Treatment implements Serializable {
     private Integer minutesOfDuration; /*e.g. Duration.ofSeconds(10)*/
     private BigDecimal priceHint;
 
-    public UUID getId() {
-        return id;
-    }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
