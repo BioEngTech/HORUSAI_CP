@@ -9,14 +9,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,12 +40,13 @@ import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentS
 import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.cart.viewHolder.CartAdapter;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
+import vigi.patient.view.vigi.activity.VigiActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements VigiActivity {
 
     private String TAG = getClass().getName();
     private List<Appointment> appointmentsList, appointmentsInCart;
@@ -56,7 +61,10 @@ public class CartActivity extends AppCompatActivity {
     private ValueEventListener careProviderListener, appointmentListener, treatmentListener;
     private CartAdapter cartAdapter;
     private List<String> careProviderIds, treatmentsIds, appointmentsIds;
+    private List<Integer> appointmentsPrices;
     private RelativeLayout detailsLayout;
+    private TextView totalPriceText;
+    private ImageView confirmCartImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +79,16 @@ public class CartActivity extends AppCompatActivity {
         customizeActionBar();
         customizeToolBar();
 
+        setupUiComponents();
+        setupClickListeners();
+
         setUpServices(currentPatientId);
+
+
     }
 
     private void setUpServices(String currentPatientId) {
 
-        recyclerView = findViewById(R.id.recycler_view);
-        detailsLayout = findViewById(R.id.confirmation_layout);
-        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         appointmentListener = new CartActivity.AppointmentValueEventListener();
@@ -94,10 +104,6 @@ public class CartActivity extends AppCompatActivity {
         treatmentService.init();
 
         appointmentService.readAppointments(appointmentListener);
-    }
-
-    private void notifyAppointmentDataChanged(List<Appointment> appointmentList){
-        appointmentService.setAllAppointments(appointmentList);
     }
 
     private void customizeActionBar() {
@@ -124,9 +130,11 @@ public class CartActivity extends AppCompatActivity {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             appointmentsList = new ArrayList<>();
+            appointmentsIds = new ArrayList<>();
             for (DataSnapshot snapshotAppointment : dataSnapshot.getChildren()) {
                 if (snapshotAppointment.child("status").getValue().equals("cart")){
                     appointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                    appointmentsIds.add(snapshotAppointment.getKey());
                 }
             }
 
@@ -173,10 +181,14 @@ public class CartActivity extends AppCompatActivity {
                 }
             }
 
-            cartAdapter = new CartAdapter(appointmentsList, careProvidersList, treatmentList, detailsLayout::setVisibility);
+            cartAdapter = new CartAdapter(CartActivity.this, appointmentsIds, appointmentsList, careProvidersList, treatmentList, detailsLayout::setVisibility);
             recyclerView.setAdapter(cartAdapter);
             recyclerView.setEmptyView(findViewById(R.id.empty_view)); // Can only be called after setting adapter
 
+            //set total price
+            appointmentsPrices = appointmentsList.stream().map(appointment -> Integer.parseInt(appointment.getPrice())).collect(toList());
+            int totalPrice = appointmentsPrices.stream().mapToInt(Integer::intValue).sum();
+            totalPriceText.setText(totalPrice+ " EUR");
 
         }
 
@@ -185,6 +197,27 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void setupUiComponents() {
+        totalPriceText = findViewById(R.id.total_price);
+        recyclerView = findViewById(R.id.recycler_view);
+        detailsLayout = findViewById(R.id.confirmation_layout);
+        confirmCartImage = findViewById(R.id.confirm);
+        layoutManager = new LinearLayoutManager(this);
+    }
+
+    @Override
+    public void setupClickListeners() {
+        confirmCartImage.setOnClickListener(view -> {
+
+            appointmentService.confirmPurchaseFirebaseAppointments(CartActivity.this, appointmentsIds);
+            //TODO restrictions regarding whether cart is not empty, address and payment have been selected
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

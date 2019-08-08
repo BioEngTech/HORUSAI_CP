@@ -1,5 +1,6 @@
 package vigi.patient.view.patient.cart.viewHolder;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,8 @@ import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
+import vigi.patient.presenter.service.appointment.api.AppointmentService;
+import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 import vigi.patient.view.vigi.activity.VigiRecyclerViewNotification;
 
@@ -33,9 +36,15 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
     private VigiRecyclerViewNotification vigiRecyclerViewNotification;
     private CareProvider careProvider;
     private Treatment treatment;
+    private AppointmentService appointmentService;
+    private Context context;
+    private Appointment appointmentToBeRemoved;
+    private List<String> appointmentsIds;
 
-    public CartAdapter(List<Appointment> appointmentsList, List<CareProvider> careProvidersList, List<Treatment> treatmentsList, VigiRecyclerViewNotification vigiRecyclerViewNotification) {
+    public CartAdapter(Context context, List<String> appointmentsIds, List<Appointment> appointmentsList, List<CareProvider> careProvidersList, List<Treatment> treatmentsList, VigiRecyclerViewNotification vigiRecyclerViewNotification) {
+        this.context = context;
         this.appointmentsList = appointmentsList;
+        this.appointmentsIds = appointmentsIds;
         this.vigiRecyclerViewNotification = vigiRecyclerViewNotification;
         this.careProvidersList = careProvidersList;
         this.treatmentsList = treatmentsList;
@@ -61,13 +70,17 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
         viewHolder.price.setText(appointmentsList.get(i).getPrice()+"€");
         viewHolder.cpName.setText(careProvider.getName());
         viewHolder.cpField.setText(careProvider.getJob());
+
         String[] splitedDate = appointmentsList.get(i).getDate().split(" ");
         viewHolder.date.setText(splitedDate[0]);
         viewHolder.hour.setText(splitedDate[1]);
-        //Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
-
+        Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
         viewHolder.removeBtn.setOnClickListener(view -> {
-          // TODO remove request from cart and update recycler view that is being shown to the user
+
+            appointmentService = new FirebaseAppointmentService();
+            appointmentService.init(appointmentsList.get(i).getPatientId());
+            appointmentService.removeFirebaseAppointments(context,appointmentsIds.get(i));
+
         });
     }
 

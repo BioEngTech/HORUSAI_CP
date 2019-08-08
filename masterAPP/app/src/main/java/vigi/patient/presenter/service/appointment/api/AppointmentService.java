@@ -20,6 +20,10 @@ public interface AppointmentService {
 
     void setFirebaseAppointments(Context context, Appointment appointment);
 
+    void confirmPurchaseFirebaseAppointments(Context context, List<String> appointmentsIds);
+
+    void removeFirebaseAppointments(Context context, String appointmentId);
+
     void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 
 }

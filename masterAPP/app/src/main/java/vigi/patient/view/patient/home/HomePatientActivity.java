@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,18 +14,37 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import vigi.patient.R;
 
 
+import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
+import vigi.patient.model.services.Treatment;
+import vigi.patient.presenter.service.appointment.api.AppointmentService;
+import vigi.patient.presenter.service.appointment.impl.AppointmentConverter;
+import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
+import vigi.patient.presenter.service.careProvider.api.CareProviderService;
+import vigi.patient.presenter.service.careProvider.firebase.CareProviderConverter;
+import vigi.patient.presenter.service.careProvider.firebase.FirebaseCareProviderService;
+import vigi.patient.presenter.service.treatment.api.TreatmentService;
+import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
+import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
+import vigi.patient.view.patient.cart.viewHolder.CartAdapter;
 import vigi.patient.view.patient.search.SearchActivity;
 import vigi.patient.view.patient.cart.CartActivity;
 import vigi.patient.view.patient.home.viewHolder.AppointmentsAdapter;
@@ -33,6 +53,7 @@ import vigi.patient.view.utils.drawable.CountDrawable;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 import static vigi.patient.view.utils.activity.ActivityUtils.jumpToActivity;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -41,14 +62,31 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
     private String TAG = getClass().getName();
     private Toolbar myToolbar;
     private FloatingActionButton bookingBtn;
-    private ArrayList<Appointment> appointmentsList;
+    private ArrayList<Appointment> cartAppointmentsList, activeAppointmentsList;
+    private ValueEventListener appointmentListener;
+    private AppointmentService appointmentService;
+    MenuInflater menuInflater;
+    Menu menuToUpdate;
+    private EmptyRecyclerView.LayoutManager layoutManager;
+    private EmptyRecyclerView recyclerView;
+    private CareProviderService careProviderService;
+    private TreatmentService treatmentService;
+    private ValueEventListener careProviderListener, treatmentListener;
+    private List<String> careProviderIds, treatmentsIds, appointmentsIds;
+    private List<CareProvider> careProvidersList;
+    private List<Treatment> treatmentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_appointments);
 
-        getUserAppointments();
+        cartAppointmentsList = new ArrayList<>();
+        activeAppointmentsList = new ArrayList<>();
+
+        String currentPatientId = "1"; //TODO change with currentPatientTokenId
+        setUpServices(currentPatientId);
+
         customizeActionBar();
         customizeToolBar();
         setUpRecyclerView();
@@ -72,12 +110,28 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
     }
 
     private void setUpRecyclerView() {
-        EmptyRecyclerView recyclerView = findViewById(R.id.recycler_view);
-        EmptyRecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView = findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        AppointmentsAdapter adapter = new AppointmentsAdapter(appointmentsList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setEmptyView(findViewById(R.id.empty_view)); // always put after the adapter was set
+
+      }
+
+    private void setUpServices(String currentPatientId){
+
+        appointmentListener = new HomePatientActivity.AppointmentValueEventListener();
+        appointmentService = new FirebaseAppointmentService();
+        appointmentService.init(currentPatientId);
+
+        careProviderListener = new HomePatientActivity.CareProviderValueEventListener();
+        careProviderService = new FirebaseCareProviderService();
+        careProviderService.init();
+
+        treatmentListener = new HomePatientActivity.TreatmentValueEventListener();
+        treatmentService = new FirebaseTreatmentService();
+        treatmentService.init();
+
+        appointmentService.readAppointments(appointmentListener);
+
     }
 
     private void customizeActionBar() {
@@ -89,18 +143,6 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         checkNotNull(getSupportActionBar());
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("Homecare");
-    }
-
-    private void getUserAppointments() {
-        appointmentsList = new ArrayList<>();
-        /*Date date = new Date(20190413L);
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-        appointmentsList.add(new Appointment(date, "report", 3, 20.0, 10.0, 5.0, 10, BigDecimal.TEN, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Appointment.AppointmentStatus.ACTIVE.categoryString()));
-   */
     }
 
     public void setCount(Context context, String count, Menu menu) {
@@ -121,11 +163,89 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
     }
 
 
+    public class AppointmentValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            cartAppointmentsList = new ArrayList<>();
+            activeAppointmentsList = new ArrayList<>();
+
+            for (DataSnapshot snapshotAppointment : dataSnapshot.getChildren()) {
+                if (snapshotAppointment.child("status").getValue().equals("cart")){
+                    cartAppointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                }
+                else if (snapshotAppointment.child("status").getValue().equals("active")){
+                    activeAppointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                }
+            }
+            // update menu cart number
+            setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
+            careProviderService.readCareProviders(careProviderListener);
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    }
+
+
+    public class CareProviderValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            careProvidersList = new ArrayList<>();
+            careProviderIds = activeAppointmentsList.stream().map(appointment -> appointment.getCareProviderId()).collect(toList());
+
+            for (DataSnapshot snapshotCareProvider : dataSnapshot.getChildren()) {
+                if(careProviderIds.contains(snapshotCareProvider.child("id").getValue().toString())){
+                    careProvidersList.add(CareProviderConverter.getCareProviderFromDataSnapshot(snapshotCareProvider));
+                }
+            }
+            treatmentService.readTreatments(treatmentListener);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    }
+
+
+    public class TreatmentValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            treatmentList = new ArrayList<>();
+            treatmentsIds = activeAppointmentsList.stream().map(appointment -> appointment.getTreatmentId()).collect(toList());
+
+            for (DataSnapshot snapshotTreatmentInstance : dataSnapshot.getChildren()) {
+                if(treatmentsIds.contains(snapshotTreatmentInstance.child("id").getValue())){
+                    treatmentList.add(TreatmentConverter.getTreatmentFromDataSnapshot(snapshotTreatmentInstance));
+                }
+            }
+
+            //display list of active appointments
+            AppointmentsAdapter adapter = new AppointmentsAdapter(HomePatientActivity.this, appointmentsIds, activeAppointmentsList, careProvidersList, treatmentList);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setEmptyView(findViewById(R.id.empty_view)); // always put after the adapter was set
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    }
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        // TODO get amount of requests in the cart and update cart icon with that value
-        setCount(this, "1", menu); // In case there was one request in the cart
+        menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu, menu);
+        setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menu); // In case there was one request in the cart
+        menuToUpdate = menu;
+
         return true;
     }
 

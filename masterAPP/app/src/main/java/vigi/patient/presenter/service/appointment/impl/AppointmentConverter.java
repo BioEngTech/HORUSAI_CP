@@ -20,6 +20,7 @@ public final class AppointmentConverter {
         appointment.setTreatmentId(snapshotMap.get("treatmentId"));
         appointment.setStatus(snapshotMap.get("status"));
         appointment.setPrice(snapshotMap.get("price"));
+        appointment.setMinutesOfDuration((int) Float.parseFloat(snapshotMap.get("duration")));
 
         return appointment;
     }

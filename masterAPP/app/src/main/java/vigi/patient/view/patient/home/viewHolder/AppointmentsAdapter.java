@@ -1,25 +1,44 @@
 package vigi.patient.view.patient.home.viewHolder;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.R;
+import vigi.patient.model.services.Treatment;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 
 
 public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsAdapter.ViewHolder>{
 
     private String TAG = getClass().getName();
-    private ArrayList<Appointment> appointments;
+    private List<String> appointmentsIds;
+    private List<Appointment> appointmentsList;
+    private List<CareProvider> careProvidersList;
+    private List<Treatment> treatmentsList;
+    private Context context;
+    private CareProvider careProvider;
+    private Treatment treatment;
 
-    public AppointmentsAdapter(ArrayList<Appointment> appointmentsList) {
-        appointments = appointmentsList;
+    public AppointmentsAdapter(Context context, List<String> appointmentsIds, List<Appointment> appointmentsList, List<CareProvider> careProvidersList, List<Treatment> treatmentsList) {
+        this.context = context;
+        this.appointmentsList = appointmentsList;
+        this.appointmentsIds = appointmentsIds;
+        this.careProvidersList = careProvidersList;
+        this.treatmentsList = treatmentsList;
     }
 
     @NonNull
@@ -31,19 +50,26 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.time.setText(String.valueOf(appointments.get(i).getDate()));
-        viewHolder.treatment.setText(appointments.get(i).getReport());
-        viewHolder.careProviderName.setText(appointments.get(i).getCareProviderId().toString());
-        viewHolder.rating.setText(appointments.get(i).getRating().toString());
-        viewHolder.duration.setText(appointments.get(i).getMinutesOfDuration().toString());
-        viewHolder.day.setText(appointments.get(i).getDate().toString());
-        //TODO: CareProvider object
-        //viewHolder.image.setImageDrawable(appointments.get(i).getCareProviderImage());
+
+        careProvider = careProvidersList.stream()
+                .filter(careProvider -> careProvider.getId().equals(appointmentsList.get(i).getCareProviderId())).findFirst().orElse(null);
+        treatment = treatmentsList.stream()
+                .filter(treatment -> treatment.getId().equals(appointmentsList.get(i).getTreatmentId())).findFirst().orElse(null);
+
+
+        viewHolder.time.setText(appointmentsList.get(i).getDate().split(" ")[1]);
+        viewHolder.treatment.setText(treatment.getName());
+        viewHolder.careProviderName.setText(careProvider.getName());
+        viewHolder.rating.setText(String.valueOf(careProvider.getRating()));
+        viewHolder.duration.setText(String.valueOf(appointmentsList.get(i).getMinutesOfDuration()));
+        viewHolder.day.setText(appointmentsList.get(i).getDate().split(" ")[0]);
+        Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
+
     }
 
     @Override
     public int getItemCount() {
-        return appointments.size();
+        return appointmentsList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

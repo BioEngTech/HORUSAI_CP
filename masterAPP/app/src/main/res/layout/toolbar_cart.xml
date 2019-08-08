@@ -156,7 +156,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="100 EUR"
                 android:textColor="@color/colorPurpleMedium"
                 android:textSize="22sp" />
 
