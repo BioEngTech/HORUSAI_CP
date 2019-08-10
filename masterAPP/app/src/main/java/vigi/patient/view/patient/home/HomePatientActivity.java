@@ -26,12 +26,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import vigi.patient.R;
 
 
+import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
@@ -75,6 +80,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
     private List<String> careProviderIds, treatmentsIds, appointmentsIds;
     private List<CareProvider> careProvidersList;
     private List<Treatment> treatmentList;
+    private Comparator<Appointment> appointmentComparator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +175,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             cartAppointmentsList = new ArrayList<>();
             activeAppointmentsList = new ArrayList<>();
+            appointmentsIds = new ArrayList<>();
 
             for (DataSnapshot snapshotAppointment : dataSnapshot.getChildren()) {
                 if (snapshotAppointment.child("status").getValue().equals("cart")){
@@ -176,8 +183,15 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
                 }
                 else if (snapshotAppointment.child("status").getValue().equals("active")){
                     activeAppointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                    appointmentsIds.add(snapshotAppointment.getKey());
                 }
             }
+
+            //order active appointments list to be displayed in HomePatientActivity
+            appointmentComparator = Comparator.comparing(Appointment::getDate);
+            Collections.sort(activeAppointmentsList, appointmentComparator);
+
+
             // update menu cart number
             setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
             careProviderService.readCareProviders(careProviderListener);

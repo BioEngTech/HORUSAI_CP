@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.appointment.impl;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.Map;
@@ -20,7 +22,8 @@ public final class AppointmentConverter {
         appointment.setTreatmentId(snapshotMap.get("treatmentId"));
         appointment.setStatus(snapshotMap.get("status"));
         appointment.setPrice(snapshotMap.get("price"));
-        appointment.setMinutesOfDuration((int) Float.parseFloat(snapshotMap.get("duration")));
+        appointment.setMinutesOfDuration(String.valueOf(snapshotMap.get("minutesOfDuration")));
+        appointment.setPaymentCode(snapshotMap.get("paymentCode"));
 
         return appointment;
     }

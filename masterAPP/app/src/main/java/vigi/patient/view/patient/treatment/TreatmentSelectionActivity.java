@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,12 +23,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import vigi.patient.R;
+import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
+import vigi.patient.presenter.service.appointment.api.AppointmentService;
+import vigi.patient.presenter.service.appointment.impl.AppointmentConverter;
+import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.cart.CartActivity;
 import vigi.patient.view.patient.search.SearchActivity;
+import vigi.patient.view.patient.treatment.booking.BookingActivity;
 import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
 import vigi.patient.view.utils.drawable.CountDrawable;
 import vigi.patient.view.vigi.activity.VigiActivity;
@@ -43,19 +49,29 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
     private TextView dailyAssistance;
     private TextView medicalAssistance;
     private TreatmentsViewAdapter adapter;
-    private String category;
+    private String category, currentPatientId;
     private List<String> categories;
-    private ValueEventListener treatmentListener;
+    private ValueEventListener treatmentListener, appointmentListener;
     private TreatmentService treatmentService;
     private List<Treatment> treatmentsWithCategory;
     private int treatmentsSize;
+    private ArrayList<Appointment> cartAppointmentsList;
+    private AppointmentService appointmentService;
+    MenuInflater menuInflater;
+    Menu menuToUpdate;
+    private Boolean menuPrepared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.treatment_selection);
+
+        currentPatientId = "1"; //TODO change to tokenid
+        cartAppointmentsList = new ArrayList<>();
+        menuPrepared = false;
+
         setupUiComponents();
-        setupTreatments(); // TODO while treatments are being retrieved from database a spinner should run
+        setUpServices(); // TODO while treatments are being retrieved from database a spinner should run
         setupClickListeners();
     }
 
@@ -84,11 +100,17 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupTreatments(){
+    private void setUpServices(){
         TreatmentsChangeListener viewListener = new TreatmentsChangeListener();
         viewPager.addOnPageChangeListener(viewListener);
 
-        treatmentListener = new TreatmentSelectionActivity.VigiValueEventListener();
+        appointmentListener = new TreatmentSelectionActivity.AppointmentValueEventListener();
+        appointmentService = new FirebaseAppointmentService();
+        appointmentService.init(currentPatientId);
+
+        appointmentService.readAppointments(appointmentListener);
+
+        treatmentListener = new TreatmentSelectionActivity.TreatmentValueEventListener();
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
     }
@@ -179,9 +201,12 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        // TODO get amount of requests in the cart and update cart icon with that value
-        setCount(this, "1", menu); // In case there was one request in the cart
+        menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu, menu);
+        setCount(TreatmentSelectionActivity.this, String.valueOf(cartAppointmentsList.size()), menu); // In case there was one request in the cart
+        menuToUpdate = menu;
+        menuPrepared = true;
+
         return true;
     }
 
@@ -205,7 +230,7 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
         }
     }
 
-    public class VigiValueEventListener implements ValueEventListener {
+    public class TreatmentValueEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -214,12 +239,37 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
             for (DataSnapshot snapshotTreatment : dataSnapshot.getChildren()) {
                 treatmentList.add(TreatmentConverter.getTreatmentFromDataSnapshot(snapshotTreatment));
             }
+
             notifyDataChanged(treatmentList);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
             notifyDataChanged(new ArrayList<>());
+        }
+    }
+
+    public class AppointmentValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            cartAppointmentsList = new ArrayList<>();
+
+            for (DataSnapshot snapshotAppointment : dataSnapshot.getChildren()) {
+                if (snapshotAppointment.child("status").getValue().equals("cart")){
+                    cartAppointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                }
+            }
+
+            //set count after new purchase is made
+            if (menuPrepared) {
+                setCount(TreatmentSelectionActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
         }
     }
 

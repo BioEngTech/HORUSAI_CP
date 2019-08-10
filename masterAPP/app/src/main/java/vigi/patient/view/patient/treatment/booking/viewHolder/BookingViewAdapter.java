@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
@@ -73,7 +74,6 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
         careProvider = careProviders.stream()
                 .filter(careProvider -> careProvider.getId().equals(agendaInstances.get(i).getCareProviderId())).findFirst().orElse(null);
         careProvidersDisplayed.add(careProvider);
-        Log.d("NAMASTE careProvidersDisplayed", careProvidersDisplayed.toString());
 
         viewHolder.name.setText(careProvider.getName());
         viewHolder.field.setText(careProvider.getJob());
@@ -98,7 +98,8 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
             appointmentToBeSaved.setDate(date);
             appointmentToBeSaved.setPatientId(currentPatientId);
             appointmentToBeSaved.setTreatmentId(treatmentId);
-
+            appointmentToBeSaved.setMinutesOfDuration(careProviderToBeSaved.getExpectedtime());
+            appointmentToBeSaved.setPaymentCode( UUID.randomUUID().toString());
             appointmentService.setFirebaseAppointments(context,appointmentToBeSaved);
 
         });

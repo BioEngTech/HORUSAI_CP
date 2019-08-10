@@ -42,7 +42,6 @@ public class FirebaseAppointmentService implements AppointmentService {
     @Override
     public void readAppointments(ValueEventListener listener) {
         addOnOperationCompleteListener(listener);
-
     }
 
     @Override
@@ -63,7 +62,6 @@ public class FirebaseAppointmentService implements AppointmentService {
 
     @Override
     public void confirmPurchaseFirebaseAppointments(Context context, List<String> appointmentsIds) {
-
         appointmentsIds.forEach(appointmentId -> databaseReferenceAppointment.child(appointmentId).child("status").setValue("active").addOnCompleteListener(task -> Toast.makeText(context,"Purchase has been confirmed", Toast.LENGTH_LONG).show()));
 
     }
@@ -72,6 +70,11 @@ public class FirebaseAppointmentService implements AppointmentService {
     @Override
     public void removeFirebaseAppointments(Context context, String appointmentId) {
         databaseReferenceAppointment.child(appointmentId).removeValue().addOnCompleteListener(task -> Toast.makeText(context,"Appointment request has been removed from the cart!", Toast.LENGTH_LONG).show());
+    }
+
+    @Override
+    public void setStatusFirebaseAppointments(Context context, String appointmentId, String status) {
+        databaseReferenceAppointment.child(appointmentId).child("status").setValue(status);
     }
 
     @Override

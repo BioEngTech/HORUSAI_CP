@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,15 +44,20 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import vigi.patient.R;
 import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
+import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.agenda.agenda.api.AgendaService;
 import vigi.patient.presenter.service.agenda.agenda.impl.AgendaConverter;
 import vigi.patient.presenter.service.agenda.agenda.impl.FirebaseAgendaService;
+import vigi.patient.presenter.service.appointment.api.AppointmentService;
+import vigi.patient.presenter.service.appointment.impl.AppointmentConverter;
+import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
 import vigi.patient.presenter.service.careProvider.api.CareProviderService;
 import vigi.patient.presenter.service.careProvider.firebase.CareProviderConverter;
 import vigi.patient.presenter.service.careProvider.firebase.FirebaseCareProviderService;
 import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.cart.CartActivity;
+import vigi.patient.view.patient.home.HomePatientActivity;
 import vigi.patient.view.patient.search.SearchActivity;
 import vigi.patient.view.patient.treatment.booking.viewHolder.BookingViewAdapter;
 import vigi.patient.view.patient.treatment.viewHolder.TreatmentsViewAdapter;
@@ -85,11 +91,16 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
     private CareProviderService careProviderService;
     private AgendaService agendaService;
     private List<String> careProviderIds;
-    private ValueEventListener careProviderListener, agendaListener;
+    private ValueEventListener appointmentListener, careProviderListener, agendaListener;
+    private AppointmentService appointmentService;
     private List<Agenda> agendaInstances;
     private List<CareProvider> careProvidersWithFilter, careProvidersWithTreatment;
     private BookingViewAdapter bookingAdapter;
     private String currentPatientId, admittedJobs, time, treatmentName, treatmentId, minTime, selectedDate, selectedFullDate, filter;
+    MenuInflater menuInflater;
+    Menu menuToUpdate;
+    private Boolean menuPrepared;
+    private ArrayList<Appointment> cartAppointmentsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +114,8 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         admittedJobs = Objects.requireNonNull(intent.getExtras()).getString(ADMITTED_CLINICIANS);
 
         currentPatientId = "1"; //TODO change to tokenid
-
+        menuPrepared = false;
+        cartAppointmentsList = new ArrayList<>();
         careProvidersList = new ArrayList<>();
         agendaList = new ArrayList<>();
         careProvidersWithFilter = new ArrayList<>();
@@ -175,6 +187,10 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.recycler_view_vertical_margin);
         recyclerView.addItemDecoration(itemDecoration);
 
+        appointmentListener = new BookingActivity.AppointmentValueEventListener();
+        appointmentService = new FirebaseAppointmentService();
+        appointmentService.init(currentPatientId);
+
         careProviderListener = new BookingActivity.CareProviderValueEventListener();
         careProviderService = new FirebaseCareProviderService();
         careProviderService.init();
@@ -182,6 +198,9 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         agendaListener = new BookingActivity.AgendaValueEventListener();
         agendaService = new FirebaseAgendaService();
         agendaService.init();
+
+        appointmentService.readAppointments(appointmentListener);
+
     }
 
     @Override
@@ -316,6 +335,31 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
 
     }
 
+    public class AppointmentValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            cartAppointmentsList = new ArrayList<>();
+
+            for (DataSnapshot snapshotAppointment : dataSnapshot.getChildren()) {
+                if (snapshotAppointment.child("status").getValue().equals("cart")){
+                    cartAppointmentsList.add(AppointmentConverter.getAppointmentFromDataSnapshot(snapshotAppointment));
+                }
+            }
+
+            //set count after new purchase is made
+            if (menuPrepared) {
+                setCount(BookingActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    }
+
+
     public class CareProviderValueEventListener implements ValueEventListener {
 
         @Override
@@ -376,12 +420,16 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        // TODO get amount of requests in the cart and update cart icon with that value
-        setCount(this, "1", menu); // In case there was one request in the cart
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu, menu);
+        setCount(BookingActivity.this, String.valueOf(cartAppointmentsList.size()), menu); // In case there was one request in the cart
+        menuToUpdate = menu;
+        menuPrepared = true;
+
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

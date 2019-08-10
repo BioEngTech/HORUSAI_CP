@@ -1,5 +1,6 @@
 package vigi.patient.view.patient.search;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,27 +9,42 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import vigi.patient.R;
 import vigi.patient.model.entities.CareProvider;
+import vigi.patient.presenter.service.careProvider.api.CareProviderService;
+import vigi.patient.presenter.service.careProvider.firebase.CareProviderConverter;
+import vigi.patient.presenter.service.careProvider.firebase.FirebaseCareProviderService;
+import vigi.patient.view.patient.home.HomePatientActivity;
 import vigi.patient.view.patient.search.viewHolder.SearchAdapter;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 import vigi.patient.view.utils.recyclerView.ItemOffsetDecoration;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 public class SearchActivity extends AppCompatActivity {
     private SearchAdapter adapter;
     private ArrayList<CareProvider> careProvidersList;
+    private ValueEventListener careProviderListener;
+    private CareProviderService careProviderService;
+    private EmptyRecyclerView recyclerView;
+    private List<String> careProviderIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.toolbar_search);
 
-        getCareProvidersInAcceptedRange();
         customizeActionBar();
         customizeToolBar();
-        setUpRecyclerView();
+        setUpServices();
     }
 
     private void customizeActionBar() {
@@ -41,31 +57,41 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-    private void getCareProvidersInAcceptedRange() {
-        careProvidersList = new ArrayList<>();
-        CareProvider example1 = new CareProvider();
-        example1.setName("Michael");
-        careProvidersList.add(example1);
-        CareProvider example2 = new CareProvider();
-        example2.setName("John");
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-        careProvidersList.add(example2);
-    }
-
-    private void setUpRecyclerView() {
-        EmptyRecyclerView recyclerView = findViewById(R.id.recycler_view);
+    private void setUpServices() {
+        recyclerView = findViewById(R.id.recycler_view);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this, R.dimen.recycler_view_vertical_margin);
         recyclerView.addItemDecoration(itemDecoration);
         EmptyRecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new SearchAdapter(careProvidersList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setEmptyView(findViewById(R.id.empty_view));
+
+        careProviderListener = new SearchActivity.CareProviderValueEventListener();
+        careProviderService = new FirebaseCareProviderService();
+        careProviderService.init();
+        careProviderService.readCareProviders(careProviderListener);
+
+
+    }
+
+
+    public class CareProviderValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            careProvidersList = new ArrayList<>();
+
+            for (DataSnapshot snapshotCareProvider : dataSnapshot.getChildren()) {
+                careProvidersList.add(CareProviderConverter.getCareProviderFromDataSnapshot(snapshotCareProvider));
+                //careProviderIds.add(snapshotCareProvider.getKey());
+            }
+
+            adapter = new SearchAdapter(SearchActivity.this, careProvidersList);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setEmptyView(findViewById(R.id.empty_view));
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
     }
 
     @Override

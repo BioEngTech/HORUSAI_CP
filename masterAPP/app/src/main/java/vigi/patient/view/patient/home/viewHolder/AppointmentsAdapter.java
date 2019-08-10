@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +21,8 @@ import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.R;
 import vigi.patient.model.services.Treatment;
+import vigi.patient.view.utils.dialog.VigiAppointmentDetailsDialog;
+import vigi.patient.view.utils.dialog.VigiTreatmentDetailsDialog;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 
 
@@ -56,7 +60,6 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
         treatment = treatmentsList.stream()
                 .filter(treatment -> treatment.getId().equals(appointmentsList.get(i).getTreatmentId())).findFirst().orElse(null);
 
-
         viewHolder.time.setText(appointmentsList.get(i).getDate().split(" ")[1]);
         viewHolder.treatment.setText(treatment.getName());
         viewHolder.careProviderName.setText(careProvider.getName());
@@ -64,6 +67,12 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
         viewHolder.duration.setText(String.valueOf(appointmentsList.get(i).getMinutesOfDuration()));
         viewHolder.day.setText(appointmentsList.get(i).getDate().split(" ")[0]);
         Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
+
+        viewHolder.cell.setOnClickListener(view ->
+
+                new VigiAppointmentDetailsDialog(context).showDetails(appointmentsList.get(i).getPatientId(), appointmentsIds.get(i), appointmentsList.get(i).getPaymentCode())
+
+        );
 
     }
 
@@ -81,6 +90,7 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
         TextView duration;
         TextView day;
         CircleImageView image;
+        RelativeLayout cell;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,6 +102,7 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
             duration = itemView.findViewById(R.id.duration);
             day = itemView.findViewById(R.id.day);
             image = itemView.findViewById(R.id.image);
+            cell = itemView.findViewById(R.id.cell);
 
         }
     }

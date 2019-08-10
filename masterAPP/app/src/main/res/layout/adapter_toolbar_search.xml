@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:id="@+id/cell">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/cp_image"
@@ -48,7 +49,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:drawableStart="@drawable/ic_star_blue_24dp"
-        android:text="4.4"
         android:textColor="@color/colorGray"
         android:textSize="15sp" />
 

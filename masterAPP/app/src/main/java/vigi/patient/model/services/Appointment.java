@@ -21,7 +21,16 @@ public class Appointment {
     private Double latitude;
     private Double longitude;
     private Double altitude;
-    private Integer minutesOfDuration;
+
+    public String getMinutesOfDuration() {
+        return minutesOfDuration;
+    }
+
+    public void setMinutesOfDuration(String minutesOfDuration) {
+        this.minutesOfDuration = minutesOfDuration;
+    }
+
+    private String minutesOfDuration;
 
     public String getPrice() {
         return price;
@@ -36,6 +45,16 @@ public class Appointment {
     private String careProviderId;
     private String patientId;
     private String status;
+
+    public String getPaymentCode() {
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
+    }
+
+    private String paymentCode;
 
     public String getTreatmentId() {
         return treatmentId;
@@ -64,7 +83,7 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(String date, String report, Integer rating, Double latitude, Double longitude, Double altitude, Integer minutesOfDuration, String price, String treatmentId, String careProviderId, String patientId, String status) {
+    public Appointment(String date, String report, Integer rating, Double latitude, Double longitude, Double altitude, String minutesOfDuration, String price, String treatmentId, String careProviderId, String patientId, String status) {
         this.date = date;
         this.report = report;
         this.rating = rating;
@@ -120,13 +139,6 @@ public class Appointment {
         this.altitude = altitude;
     }
 
-    public Integer getMinutesOfDuration() {
-        return minutesOfDuration;
-    }
-
-    public void setMinutesOfDuration(Integer minutesOfDuration) {
-        this.minutesOfDuration = minutesOfDuration;
-    }
 
 
     public String getStatus() {

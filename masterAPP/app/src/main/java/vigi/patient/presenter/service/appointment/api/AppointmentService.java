@@ -24,6 +24,8 @@ public interface AppointmentService {
 
     void removeFirebaseAppointments(Context context, String appointmentId);
 
+    void setStatusFirebaseAppointments(Context context, String appointmentId, String status);
+
     void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 
 }
