@@ -126,7 +126,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
 
         appointmentListener = new HomePatientActivity.AppointmentValueEventListener();
         appointmentService = new FirebaseAppointmentService();
-        appointmentService.init(currentPatientId);
+        appointmentService.init();
 
         careProviderListener = new HomePatientActivity.CareProviderValueEventListener();
         careProviderService = new FirebaseCareProviderService();
@@ -136,7 +136,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
 
-        appointmentService.readAppointments(appointmentListener);
+        appointmentService.readAppointments(appointmentListener, currentPatientId);
 
     }
 

@@ -26,5 +26,7 @@ public interface CareProviderService {
 
     CareProvider readCareProvider(UUID careProviderId);
 
+    void readCareProvidersTreatments(String careProviderId, ValueEventListener valueEventListener);
+
     void addOnOperationCompleteListener(ValueEventListener valueEventListener);
 }

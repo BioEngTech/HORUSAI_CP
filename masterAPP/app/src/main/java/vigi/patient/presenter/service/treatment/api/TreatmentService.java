@@ -17,6 +17,8 @@ public interface TreatmentService {
 
     void readTreatments(ValueEventListener listener);
 
+
+
     void setAllTreatments(List<Treatment> treatments);
 
     List<Treatment> readTreatmentWithCategory(String category);

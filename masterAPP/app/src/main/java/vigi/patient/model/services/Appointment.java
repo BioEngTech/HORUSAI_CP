@@ -46,6 +46,16 @@ public class Appointment {
     private String patientId;
     private String status;
 
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    private String review;
+
     public String getPaymentCode() {
         return paymentCode;
     }

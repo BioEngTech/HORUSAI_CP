@@ -45,10 +45,10 @@ public class VigiAppointmentDetailsDialog {
 
         cancel_button = dialog.findViewById(R.id.cancel_btn);
         cancel_button.setOnClickListener(view -> {
-
             appointmentService = new FirebaseAppointmentService();
-            appointmentService.init(currentPatientId);
+            appointmentService.init();
             appointmentService.setStatusFirebaseAppointments(context,appointmentId,"cancel");
+
             dialog.dismiss();
         });
 

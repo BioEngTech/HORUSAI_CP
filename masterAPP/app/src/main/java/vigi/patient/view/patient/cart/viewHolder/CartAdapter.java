@@ -75,12 +75,11 @@ public class CartAdapter extends EmptyRecyclerView.Adapter<CartAdapter.ViewHolde
         viewHolder.date.setText(splitedDate[0]);
         viewHolder.hour.setText(splitedDate[1]);
         Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
+
         viewHolder.removeBtn.setOnClickListener(view -> {
-
             appointmentService = new FirebaseAppointmentService();
-            appointmentService.init(appointmentsList.get(i).getPatientId());
+            appointmentService.init();
             appointmentService.removeFirebaseAppointments(context,appointmentsIds.get(i));
-
         });
     }
 

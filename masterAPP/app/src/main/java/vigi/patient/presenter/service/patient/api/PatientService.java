@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.patient.api;
 
+import com.google.firebase.database.ValueEventListener;
+
 import vigi.patient.model.entities.Patient;
 
 /**
@@ -8,6 +10,8 @@ import vigi.patient.model.entities.Patient;
 public interface PatientService {
 
     void init();
+
+    void readPatients(ValueEventListener listener);
 
     boolean createPatient(Patient patient);
 

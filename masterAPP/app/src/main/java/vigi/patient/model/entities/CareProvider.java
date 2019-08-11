@@ -18,6 +18,7 @@ public class CareProvider implements Serializable {
     private String id;
     private String name;
 
+
     public URL getImage() {
         return image;
     }
@@ -64,16 +65,6 @@ public class CareProvider implements Serializable {
     }
 
     private int rating;
-
-    public List<HashMap<String, String>> getAgenda() {
-        return agenda;
-    }
-
-    public void setAgenda(List<HashMap<String, String>> agenda) {
-        this.agenda = agenda;
-    }
-
-    private List<HashMap<String,String>> agenda;
 
 
     private Position position;

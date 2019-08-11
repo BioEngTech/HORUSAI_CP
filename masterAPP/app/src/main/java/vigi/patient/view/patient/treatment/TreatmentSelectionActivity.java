@@ -106,9 +106,9 @@ public class TreatmentSelectionActivity extends AppCompatActivity implements Vig
 
         appointmentListener = new TreatmentSelectionActivity.AppointmentValueEventListener();
         appointmentService = new FirebaseAppointmentService();
-        appointmentService.init(currentPatientId);
+        appointmentService.init();
 
-        appointmentService.readAppointments(appointmentListener);
+        appointmentService.readAppointments(appointmentListener, currentPatientId);
 
         treatmentListener = new TreatmentSelectionActivity.TreatmentValueEventListener();
         treatmentService = new FirebaseTreatmentService();

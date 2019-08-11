@@ -7,20 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
-import vigi.patient.model.services.Review;
+import vigi.patient.model.entities.CareProvider;
+import vigi.patient.model.entities.Patient;
+import vigi.patient.model.services.Appointment;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 
 public class ReviewsAdapter extends EmptyRecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
     private final String TAG = getClass().getName();
-    private ArrayList<Review> reviews;
+    private ArrayList<Appointment> reviews;
+    private CareProvider careProvider;
+    private ArrayList<Patient> patients;
+    private Patient patient;
 
-    public ReviewsAdapter(ArrayList<Review> reviews) {
+    public ReviewsAdapter(ArrayList<Appointment> reviews, ArrayList<Patient> patients, CareProvider careProvider) {
         this.reviews = reviews;
+        this.patients = patients;
+        this.careProvider = careProvider;
     }
 
     @NonNull
@@ -33,10 +42,14 @@ public class ReviewsAdapter extends EmptyRecyclerView.Adapter<ReviewsAdapter.Vie
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        // viewHolder.category.setText(reviews.get(i).getPatientName()); TODO need method to get name in Review
-        // viewHolder.date.setText(reviews.get(i).getTreatmentDate()); TODO need method to get date in Review
-        // viewHolder.comment.setText(reviews.get(i).getComment());  TODO need method to get comment in Review
-        // viewHolder.image.setImageDrawable(reviews.get(i).getPatientImage()); // TODO need method to get image in Review
+        patient = patients.stream()
+                .filter(patient -> patient.getId().equals(reviews.get(i).getPatientId())).findFirst().orElse(null);
+
+        viewHolder.date.setText("Treated by "+ careProvider.getName() +" on the " + reviews.get(i).getDate());
+        viewHolder.patient.setText(patient.getName());
+        Picasso.get().load(patients.get(i).getImage()).into(viewHolder.image);
+        viewHolder.comment.setText(reviews.get(i).getReview());
+
     }
 
     @Override

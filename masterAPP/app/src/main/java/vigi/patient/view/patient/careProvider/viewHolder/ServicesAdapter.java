@@ -6,7 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vigi.patient.R;
@@ -17,6 +21,7 @@ public class ServicesAdapter extends EmptyRecyclerView.Adapter<ServicesAdapter.V
 
     private final String TAG = getClass().getName();
     private ArrayList<Treatment> treatments;
+    private List<String> categories;
 
     public ServicesAdapter(ArrayList<Treatment> treatments) {
         this.treatments = treatments;
@@ -32,8 +37,9 @@ public class ServicesAdapter extends EmptyRecyclerView.Adapter<ServicesAdapter.V
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.treatment.setText(treatments.get(i).getName());
-        // viewHolder.category.setText(treatments.get(i).getCategory()); TODO get category in string
-        // viewHolder.image.setImageDrawable(treatments.get(i).getImage()); TODO get image in correct format
+        viewHolder.category.setText(treatments.get(i).getCategory().categoryString());
+        Picasso.get().load(treatments.get(i).getImage().toString()).into(viewHolder.image);
+
     }
 
     @Override

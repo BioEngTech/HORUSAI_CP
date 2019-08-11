@@ -189,7 +189,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
 
         appointmentListener = new BookingActivity.AppointmentValueEventListener();
         appointmentService = new FirebaseAppointmentService();
-        appointmentService.init(currentPatientId);
+        appointmentService.init();
 
         careProviderListener = new BookingActivity.CareProviderValueEventListener();
         careProviderService = new FirebaseCareProviderService();
@@ -199,7 +199,7 @@ public class BookingActivity extends AppCompatActivity implements ViewPager.OnPa
         agendaService = new FirebaseAgendaService();
         agendaService.init();
 
-        appointmentService.readAppointments(appointmentListener);
+        appointmentService.readAppointments(appointmentListener, currentPatientId);
 
     }
 

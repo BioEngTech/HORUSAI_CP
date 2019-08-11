@@ -93,7 +93,7 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
 
         appointmentListener = new CartActivity.AppointmentValueEventListener();
         appointmentService = new FirebaseAppointmentService();
-        appointmentService.init(currentPatientId);
+        appointmentService.init();
 
         careProviderListener = new CartActivity.CareProviderValueEventListener();
         careProviderService = new FirebaseCareProviderService();
@@ -103,7 +103,7 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
         treatmentService = new FirebaseTreatmentService();
         treatmentService.init();
 
-        appointmentService.readAppointments(appointmentListener);
+        appointmentService.readAppointments(appointmentListener, currentPatientId);
     }
 
     private void customizeActionBar() {
@@ -214,7 +214,6 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
             //TODO restrictions regarding whether cart is not empty, address and payment have been selected
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
 
         });
     }

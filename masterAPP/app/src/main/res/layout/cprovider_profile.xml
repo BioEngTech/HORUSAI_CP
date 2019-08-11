@@ -119,7 +119,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/treatments"
+                            android:id="@+id/treatmentsNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
@@ -131,7 +131,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/treatments"
+                            android:layout_below="@id/treatmentsNumber"
                             android:layout_centerHorizontal="true"
                             android:text="treatments"
                             android:textColor="@color/colorWhiteTran"
@@ -145,7 +145,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/review"
+                            android:id="@+id/reviewsNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
@@ -157,9 +157,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/review"
+                            android:layout_below="@id/reviewsNumber"
                             android:layout_centerHorizontal="true"
-                            android:text="treatments"
+                            android:text="reviews"
                             android:textColor="@color/colorWhiteTran"
                             android:textSize="15sp" />
 

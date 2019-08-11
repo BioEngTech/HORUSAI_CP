@@ -86,7 +86,7 @@ public class BookingViewAdapter extends RecyclerView.Adapter<BookingViewAdapter.
         viewHolder.addToCart.setOnClickListener(view -> {
             // TODO add request to database, so we can access request from CartActivity
             appointmentService = new FirebaseAppointmentService();
-            appointmentService.init(currentPatientId);
+            appointmentService.init();
 
             careProviderToBeSaved = careProvidersDisplayed.get(i);
             agendaToBeSaved = agendaInstances.get(i);

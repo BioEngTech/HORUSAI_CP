@@ -71,10 +71,9 @@ public class SearchAdapter extends EmptyRecyclerView.Adapter<SearchAdapter.ViewH
 
         holder.cell.setOnClickListener(view -> {
             Intent careProviderIntent = new Intent(context, ProfileActivity.class);
-            careProviderIntent.putExtra(CHOSEN_CAREPROVIDER, (Serializable) list.get(position));
+            careProviderIntent.putExtra(CHOSEN_CAREPROVIDER, list.get(position));
             context.startActivity(careProviderIntent);
         });
-
     }
 
     @Override

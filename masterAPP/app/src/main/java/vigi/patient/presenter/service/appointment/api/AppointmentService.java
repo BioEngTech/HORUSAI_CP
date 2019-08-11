@@ -12,9 +12,11 @@ import vigi.patient.model.services.Appointment;
 
 public interface AppointmentService {
 
-    void init(String currentPatientId);
+    void init();
 
-    void readAppointments(ValueEventListener listener);
+    void readAppointments(ValueEventListener listener, String currentPatientId);
+
+    void readCareProviderAppointments(ValueEventListener listener, String careProviderId);
 
     void setAllAppointments(List<Appointment> allAppointments);
 

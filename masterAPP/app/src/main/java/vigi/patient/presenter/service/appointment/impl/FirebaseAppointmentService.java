@@ -26,22 +26,32 @@ public class FirebaseAppointmentService implements AppointmentService {
     List<Appointment> appointments;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceAppointment;
-    private Query databaseQueryAppointment;
+    private Query databaseQueryAppointment, databaseQueryCareProviderAppointment;
 
     @Override
-    public void init(String currentPatientId) {
+    public void init() {
         appointments = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
-
-        databaseQueryAppointment = firebaseDatabase.getReference(Appointment.class.getSimpleName())
-        .orderByChild("patientId").equalTo(currentPatientId);
 
         databaseReferenceAppointment = firebaseDatabase.getReference(Appointment.class.getSimpleName());
     }
 
     @Override
-    public void readAppointments(ValueEventListener listener) {
+    public void readAppointments(ValueEventListener listener, String currentPatientId) {
+
+        databaseQueryAppointment = firebaseDatabase.getReference(Appointment.class.getSimpleName())
+                .orderByChild("patientId").equalTo(currentPatientId);
+
         addOnOperationCompleteListener(listener);
+    }
+
+    @Override
+    public void readCareProviderAppointments(ValueEventListener listener, String careProviderId) {
+
+        databaseQueryCareProviderAppointment = firebaseDatabase.getReference(Appointment.class.getSimpleName())
+                .orderByChild("careProviderId").equalTo(careProviderId);
+
+        databaseQueryCareProviderAppointment.addValueEventListener(listener);
     }
 
     @Override

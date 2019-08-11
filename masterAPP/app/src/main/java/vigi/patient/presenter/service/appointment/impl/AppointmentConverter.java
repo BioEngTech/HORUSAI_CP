@@ -24,6 +24,7 @@ public final class AppointmentConverter {
         appointment.setPrice(snapshotMap.get("price"));
         appointment.setMinutesOfDuration(String.valueOf(snapshotMap.get("minutesOfDuration")));
         appointment.setPaymentCode(snapshotMap.get("paymentCode"));
+        appointment.setReview(snapshotMap.get("review"));
 
         return appointment;
     }
