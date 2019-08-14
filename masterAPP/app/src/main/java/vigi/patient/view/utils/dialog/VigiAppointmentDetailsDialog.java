@@ -30,7 +30,7 @@ public class VigiAppointmentDetailsDialog {
         this.context = context;
     }
 
-    public void showDetails(String currentPatientId, String appointmentId, String paymentCode){
+    public void showActiveDetails(String currentPatientId, String appointmentId, String paymentCode){
 
         final Dialog dialog = new Dialog(context);
 
@@ -58,5 +58,39 @@ public class VigiAppointmentDetailsDialog {
         dialog.show();
 
     }
+
+    public void showHistoryDetails(String currentPatientId, String appointmentId, String status){
+
+        final Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_appointment);
+        checkNotNull(dialog.getWindow());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        qrcode = dialog.findViewById(R.id.qrcode);
+
+        cancel_button = dialog.findViewById(R.id.cancel_btn);
+        if (status.equals("reviewed")){
+            cancel_button.setText("Revisit medical report");
+            qrcode.setHint("Your Care Provider has shared medical report");
+        }
+        else if (status.equals("scanned")){
+            cancel_button.setText("Review Appointment");
+            qrcode.setHint("Write here your review");
+        }
+
+        cancel_button.setOnClickListener(view -> {
+
+        });
+
+        close_cross = dialog.findViewById(R.id.close_btn);
+        close_cross.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+    }
+
 }
 

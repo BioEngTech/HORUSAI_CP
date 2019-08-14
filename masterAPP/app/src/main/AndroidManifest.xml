@@ -24,23 +24,10 @@
             android:name=".view.init.WelcomeScreenActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter android:label="@string/app_name">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- categoryString android:name="android.intent.categoryString.DEFAULT"/ -->
-                <!-- Accepts URIs that begin with "http://www.example.com/vigi” -->
-                <data
-                    android:host="www.example.com"
-                    android:pathPrefix="/vigi"
-                    android:scheme="http" />
-                <!-- note that the leading "/" is required for pathPrefix -->
-                <!-- Accepts URIs that begin with "example://vigi” -->
-                <data
-                    android:host="vigi"
-                    android:scheme="example" />
+
             </intent-filter>
         </activity> <!-- AUTH HOME ACTIVITY -->
         <activity
@@ -77,6 +64,11 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".view.patient.careProvider.booking.BookingActivity" />
         <activity android:name=".view.patient.careProvider.ProfileActivity" />
+        <activity android:name=".view.patient.address.AddressActivity" />
+        <activity android:name=".view.patient.payment.PaymentActivity" />
+        <activity android:name=".view.patient.history.HistoryActivity" />
+
+
     </application>
 
 </manifest>

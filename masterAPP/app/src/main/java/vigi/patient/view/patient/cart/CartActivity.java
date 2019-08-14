@@ -26,6 +26,7 @@ import java.util.Objects;
 
 import vigi.patient.R;
 import vigi.patient.model.entities.CareProvider;
+import vigi.patient.model.entities.Patient;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
 import vigi.patient.presenter.service.agenda.agenda.impl.AgendaConverter;
@@ -35,10 +36,14 @@ import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentServic
 import vigi.patient.presenter.service.careProvider.api.CareProviderService;
 import vigi.patient.presenter.service.careProvider.firebase.CareProviderConverter;
 import vigi.patient.presenter.service.careProvider.firebase.FirebaseCareProviderService;
+import vigi.patient.presenter.service.patient.api.PatientService;
+import vigi.patient.presenter.service.patient.impl.FirebasePatientService;
+import vigi.patient.presenter.service.patient.impl.PatientConverter;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
 import vigi.patient.view.patient.cart.viewHolder.CartAdapter;
+import vigi.patient.view.patient.payment.PaymentActivity;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 import vigi.patient.view.vigi.activity.VigiActivity;
 
@@ -63,8 +68,11 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
     private List<String> careProviderIds, treatmentsIds, appointmentsIds;
     private List<Integer> appointmentsPrices;
     private RelativeLayout detailsLayout;
-    private TextView totalPriceText;
+    private TextView totalPriceText, addressText, paymentText;
     private ImageView confirmCartImage;
+    Patient patient;
+    private ValueEventListener patientListener;
+    private PatientService patientService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +92,16 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
 
         setUpServices(currentPatientId);
 
-
     }
 
     private void setUpServices(String currentPatientId) {
 
         recyclerView.setLayoutManager(layoutManager);
+
+        patientListener = new CartActivity.PatientValueEventListener();
+        patientService = new FirebasePatientService();
+        patientService.init();
+        patientService.readPatient(patientListener, currentPatientId);
 
         appointmentListener = new CartActivity.AppointmentValueEventListener();
         appointmentService = new FirebaseAppointmentService();
@@ -147,6 +159,24 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
         }
     }
 
+    public class PatientValueEventListener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            patient = new Patient();
+            for (DataSnapshot snapshotPatient : dataSnapshot.getChildren()) {
+                patient = PatientConverter.getPatientFromDataSnapshot(snapshotPatient);
+
+            }
+            paymentText.setText(patient.getPayment());
+            addressText.setText(patient.getPosition().getNumber() + ", " + patient.getPosition().getStreet() + ", " + patient.getPosition().getCity() + ", " + patient.getPosition().getCountry());
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    }
 
     public class CareProviderValueEventListener implements ValueEventListener {
 
@@ -203,6 +233,8 @@ public class CartActivity extends AppCompatActivity implements VigiActivity {
         recyclerView = findViewById(R.id.recycler_view);
         detailsLayout = findViewById(R.id.confirmation_layout);
         confirmCartImage = findViewById(R.id.confirm);
+        paymentText = findViewById(R.id.creditcard);
+        addressText =  findViewById(R.id.address);
         layoutManager = new LinearLayoutManager(this);
     }
 

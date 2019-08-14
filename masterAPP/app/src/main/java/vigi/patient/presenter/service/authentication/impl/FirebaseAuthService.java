@@ -57,5 +57,7 @@ public class FirebaseAuthService implements AuthenticationService {
 
     @Override
     public void logout(){
+        authInstance.signOut();
     }
+
 }

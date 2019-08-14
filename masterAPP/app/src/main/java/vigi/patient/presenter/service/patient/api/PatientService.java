@@ -1,5 +1,7 @@
 package vigi.patient.presenter.service.patient.api;
 
+import android.content.Context;
+
 import com.google.firebase.database.ValueEventListener;
 
 import vigi.patient.model.entities.Patient;
@@ -15,9 +17,9 @@ public interface PatientService {
 
     boolean createPatient(Patient patient);
 
-    Patient readPatient(Long patientId);
+    void readPatient(ValueEventListener valueEventListener, String patientId);
 
-    Patient updatePatient(Long patientId);
+    void updatePatient(Context context, String patientKey, String parameter, String value);
 
     boolean deletePatient(Long patientId);
 

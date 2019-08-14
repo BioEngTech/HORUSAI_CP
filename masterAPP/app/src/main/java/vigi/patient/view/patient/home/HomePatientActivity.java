@@ -19,6 +19,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -40,26 +44,35 @@ import vigi.patient.model.entities.Agenda;
 import vigi.patient.model.entities.CareProvider;
 import vigi.patient.model.services.Appointment;
 import vigi.patient.model.services.Treatment;
+import vigi.patient.presenter.error.codes.FirebaseErrorCodes;
 import vigi.patient.presenter.service.appointment.api.AppointmentService;
 import vigi.patient.presenter.service.appointment.impl.AppointmentConverter;
 import vigi.patient.presenter.service.appointment.impl.FirebaseAppointmentService;
+import vigi.patient.presenter.service.authentication.api.AuthenticationService;
+import vigi.patient.presenter.service.authentication.impl.FirebaseAuthService;
 import vigi.patient.presenter.service.careProvider.api.CareProviderService;
 import vigi.patient.presenter.service.careProvider.firebase.CareProviderConverter;
 import vigi.patient.presenter.service.careProvider.firebase.FirebaseCareProviderService;
 import vigi.patient.presenter.service.treatment.api.TreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.FirebaseTreatmentService;
 import vigi.patient.presenter.service.treatment.impl.firebase.TreatmentConverter;
+import vigi.patient.view.authentication.login.LoginActivity;
+import vigi.patient.view.patient.address.AddressActivity;
 import vigi.patient.view.patient.cart.viewHolder.CartAdapter;
+import vigi.patient.view.patient.history.HistoryActivity;
+import vigi.patient.view.patient.payment.PaymentActivity;
 import vigi.patient.view.patient.search.SearchActivity;
 import vigi.patient.view.patient.cart.CartActivity;
 import vigi.patient.view.patient.home.viewHolder.AppointmentsAdapter;
 import vigi.patient.view.patient.treatment.TreatmentSelectionActivity;
+import vigi.patient.view.utils.dialog.VigiErrorDialog;
 import vigi.patient.view.utils.drawable.CountDrawable;
 import vigi.patient.view.utils.recyclerView.EmptyRecyclerView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 import static vigi.patient.view.utils.activity.ActivityUtils.jumpToActivity;
+import static vigi.patient.view.utils.editText.EditTextUtils.getTrimmedText;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class HomePatientActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,6 +94,8 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
     private List<CareProvider> careProvidersList;
     private List<Treatment> treatmentList;
     private Comparator<Appointment> appointmentComparator;
+    private AuthenticationService authService;
+    private Boolean menuPrepared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +104,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
 
         cartAppointmentsList = new ArrayList<>();
         activeAppointmentsList = new ArrayList<>();
+        menuPrepared = false;
 
         String currentPatientId = "1"; //TODO change with currentPatientTokenId
         setUpServices(currentPatientId);
@@ -98,6 +114,8 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         setUpRecyclerView();
         setUpNavigationDrawer();
         setupClickListeners();
+        setupAuthService();
+
 
     }
 
@@ -192,8 +210,10 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
             Collections.sort(activeAppointmentsList, appointmentComparator);
 
 
-            // update menu cart number
-            setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
+            if (menuPrepared) {
+                // update menu cart number
+                setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menuToUpdate); // In case there was one request in the cart
+            }
             careProviderService.readCareProviders(careProviderListener);
 
         }
@@ -259,6 +279,7 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         menuInflater.inflate(R.menu.toolbar_menu, menu);
         setCount(HomePatientActivity.this, String.valueOf(cartAppointmentsList.size()), menu); // In case there was one request in the cart
         menuToUpdate = menu;
+        menuPrepared = true;
 
         return true;
     }
@@ -290,6 +311,11 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    private void setupAuthService() {
+        authService = new FirebaseAuthService();
+        authService.init();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -299,14 +325,21 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_history) {
-
+            Intent checkLocationIntent = new Intent(this, HistoryActivity.class);
+            startActivity(checkLocationIntent);
         } else if (id == R.id.nav_location) {
-
+            Intent checkLocationIntent = new Intent(this, AddressActivity.class);
+            startActivity(checkLocationIntent);
         } else if (id == R.id.nav_payment) {
+            Intent checkPaymentIntent = new Intent(this, PaymentActivity.class);
+            startActivity(checkPaymentIntent);
 
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
+
+            performLogout(authService);
+
 
         }
 
@@ -314,5 +347,19 @@ public class HomePatientActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void performLogout(AuthenticationService authService) {
+        try {
+            authService.logout();
+            jumpToActivity(HomePatientActivity.this, LoginActivity.class, true,
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        } catch (IllegalArgumentException e) {
+            //background.performClick();
+            //stopSpinningLoader(spin, loginBtn);
+            new VigiErrorDialog(HomePatientActivity.this).showDialog("Error to log out");
+        }
+    }
+
 }
 

@@ -60,7 +60,10 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
         treatment = treatmentsList.stream()
                 .filter(treatment -> treatment.getId().equals(appointmentsList.get(i).getTreatmentId())).findFirst().orElse(null);
 
-        viewHolder.time.setText(appointmentsList.get(i).getDate().split(" ")[1]);
+        if (appointmentsList.get(i).getStatus().equals("active")) {
+            viewHolder.time.setText(appointmentsList.get(i).getDate().split(" ")[1]);
+
+        }
         viewHolder.treatment.setText(treatment.getName());
         viewHolder.careProviderName.setText(careProvider.getName());
         viewHolder.rating.setText(String.valueOf(careProvider.getRating()));
@@ -68,10 +71,32 @@ public class AppointmentsAdapter extends EmptyRecyclerView.Adapter<AppointmentsA
         viewHolder.day.setText(appointmentsList.get(i).getDate().split(" ")[0]);
         Picasso.get().load(careProvider.getImage().toString()).into(viewHolder.image);
 
-        viewHolder.cell.setOnClickListener(view ->
+        if (!appointmentsList.get(i).getStatus().equals("active")) {
+            viewHolder.treatment.setTextColor(R.color.colorGrayLight);
+            viewHolder.careProviderName.setTextColor(R.color.colorGrayLight);
+            viewHolder.rating.setTextColor(R.color.colorGrayLight);
+            viewHolder.duration.setTextColor(R.color.colorGrayLight);
+            viewHolder.day.setTextColor(R.color.colorGrayLight);
 
-                new VigiAppointmentDetailsDialog(context).showDetails(appointmentsList.get(i).getPatientId(), appointmentsIds.get(i), appointmentsList.get(i).getPaymentCode())
+        }
+        viewHolder.cell.setOnClickListener(view -> {
 
+                if (appointmentsList.get(i).getStatus().equals("active")) {
+
+                    new VigiAppointmentDetailsDialog(context).showActiveDetails(appointmentsList.get(i).getPatientId(), appointmentsIds.get(i), appointmentsList.get(i).getPaymentCode());
+                }
+                else if(appointmentsList.get(i).getStatus().equals("scanned")){
+
+                    new VigiAppointmentDetailsDialog(context).showHistoryDetails(appointmentsList.get(i).getPatientId(), appointmentsIds.get(i), "scanned");
+
+                }
+                else if(appointmentsList.get(i).getStatus().equals("reviewed")){
+
+                    new VigiAppointmentDetailsDialog(context).showHistoryDetails(appointmentsList.get(i).getPatientId(), appointmentsIds.get(i), "reviewed");
+
+                }
+
+            }
         );
 
     }

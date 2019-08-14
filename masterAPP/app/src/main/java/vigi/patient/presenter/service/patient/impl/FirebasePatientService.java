@@ -1,13 +1,16 @@
 package vigi.patient.presenter.service.patient.impl;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -15,6 +18,7 @@ import com.google.firebase.storage.UploadTask;
 
 import vigi.patient.model.entities.Patient;
 import vigi.patient.model.firebase.FirebaseConstants;
+import vigi.patient.model.services.Appointment;
 import vigi.patient.presenter.service.patient.api.PatientService;
 
 
@@ -22,11 +26,12 @@ public class FirebasePatientService implements PatientService {
 
     FirebaseDatabase firebaseDatabase;
     FirebaseStorage firebaseStorage;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, databaseReferencePatient;
     StorageReference storageReference;
     StorageReference imageStorageReference;
 
     DatabaseReference currentReference;
+    private Query databaseQueryPatientAppointment;
 
     Patient patient;
 
@@ -35,6 +40,8 @@ public class FirebasePatientService implements PatientService {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         databaseReference = firebaseDatabase.getReference(Patient.class.getSimpleName());
+        databaseReferencePatient = firebaseDatabase.getReference(Patient.class.getSimpleName());
+
         storageReference = firebaseStorage.getReference();
         patient = new Patient();
     }
@@ -96,13 +103,23 @@ public class FirebasePatientService implements PatientService {
     }
 
     @Override
-    public Patient readPatient(Long patientId) {
-        return new Patient();
+    public void readPatient(ValueEventListener valueEventListener, String patientId) {
+
+        databaseQueryPatientAppointment = firebaseDatabase.getReference(Patient.class.getSimpleName())
+                .orderByChild("tokenid").equalTo(patientId);
+
+        databaseQueryPatientAppointment.addValueEventListener(valueEventListener);
     }
 
     @Override
-    public Patient updatePatient(Long patientId) {
-        return new Patient();
+    public void updatePatient(Context context, String patientKey, String parameter, String value) {
+
+        databaseReferencePatient.child(patientKey).child(parameter).setValue(value).addOnCompleteListener(task -> {
+            Toast.makeText(context,"New "+ parameter + " was saved!", Toast.LENGTH_LONG).show();
+
+        });
+
+
     }
 
     @Override

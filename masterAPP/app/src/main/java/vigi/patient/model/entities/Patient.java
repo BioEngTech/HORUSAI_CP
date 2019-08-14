@@ -13,7 +13,15 @@ public class Patient {
     private String name;
     private String image;
     private String email;
+    private String payment;
 
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
 
     private Position position;
 
@@ -67,10 +75,29 @@ public class Patient {
         this.position = coordinates;
     }
 
-    public class Position {
+    public static class Position {
         private String country;
         private String city;
+        private int number;
+        private String street;
         private double x;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public void setNumber(int number) {
+            this.number = number;
+        }
+
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
         private double y;
         private double z;
 
